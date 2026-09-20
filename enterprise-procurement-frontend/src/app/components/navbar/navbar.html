@@ -1,0 +1,60 @@
+<mat-toolbar class="navbar">
+
+  <!-- Application Logo / Title -->
+  <div class="brand">
+
+    <div class="brand-icon">
+      EPS
+    </div>
+
+    <div class="brand-text">
+      <span class="app-name">
+        Enterprise Procurement System
+      </span>
+
+      <span class="app-subtitle">
+        Management System
+      </span>
+    </div>
+
+  </div>
+
+
+  <span class="spacer"></span>
+
+
+  <!-- User Information -->
+  <div class="user-section">
+
+    <div class="avatar">
+      {{ userName?.charAt(0) }}
+    </div>
+
+    <div class="user-details">
+
+      <span class="user-name">
+        {{ userName }}
+      </span>
+
+      <span class="user-role">
+        {{ userRole }}
+      </span>
+
+    </div>
+
+
+    <div class="divider"></div>
+
+
+    <button
+      mat-stroked-button
+      class="logout-button"
+      (click)="logout()">
+
+      Logout
+
+    </button>
+
+  </div>
+
+</mat-toolbar>

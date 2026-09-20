@@ -1,0 +1,212 @@
+<aside class="sidebar">
+
+  @if (userRole === 'USER') {
+
+    <div class="menu-label">
+      MAIN MENU
+    </div>
+
+    <nav>
+
+      <a
+        routerLink="/dashboard"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }">
+
+        <mat-icon>dashboard</mat-icon>
+        <span>Dashboard</span>
+
+      </a>
+
+      <a
+        routerLink="/purchase-request"
+        routerLinkActive="active">
+
+        <mat-icon>shopping_cart</mat-icon>
+
+        <span>
+          Purchase Requests
+        </span>
+
+      </a>
+
+      <a
+        routerLink="/products"
+        routerLinkActive="active">
+
+        <mat-icon>inventory_2</mat-icon>
+        <span>Products</span>
+
+      </a>
+
+      <a 
+        routerLink="/my-orders"
+        routerLinkActive="active">
+        
+        <mat-icon>local_shipping</mat-icon>
+        <span>My Orders</span>
+      </a>
+
+      <a routerLink="/my-ratings"
+        routerLinkActive ="active">
+        <mat-icon>star</mat-icon>
+        <span>Ratings</span> 
+      </a>
+
+      <a
+  href="javascript:void(0)"
+  class="sidebar-item"
+  (click)="downloadPurchaseRequestsExcel()">
+
+  <mat-icon>
+    table_view
+  </mat-icon>
+
+  <span>
+    Download Purchase Requests
+  </span>
+
+</a>
+
+    </nav>
+
+  }
+
+  @if (userRole === 'ADMIN') {
+
+    <div class="menu-label">
+      MAIN MENU
+    </div>
+
+    <nav>
+
+      <a
+        routerLink="/dashboard"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }">
+
+        <mat-icon>dashboard</mat-icon>
+        <span>Dashboard</span>
+
+      </a>
+
+      <a href="#">
+        <mat-icon>shopping_cart</mat-icon>
+        <span>Purchase Requests</span>
+      </a>
+
+      <a
+        routerLink="/products"
+        routerLinkActive="active">
+
+        <mat-icon>inventory_2</mat-icon>
+        <span>Products</span>
+      </a>
+
+      <a href="#">
+        <mat-icon>local_shipping</mat-icon>
+        <span>Purchase Orders</span>
+      </a>
+
+      <a href="#">
+        <mat-icon>payments</mat-icon>
+        <span>Payments</span>
+      </a>
+
+    </nav>
+
+
+    <div class="menu-label management-label">
+      MANAGEMENT
+    </div>
+
+    <nav>
+
+      <a href="#">
+        <mat-icon>business</mat-icon>
+        <span>Suppliers</span>
+      </a>
+
+      <a href="#">
+        <mat-icon>people</mat-icon>
+        <span>Users</span>
+      </a>
+
+      <a href="#">
+        <mat-icon>category</mat-icon>
+        <span>Categories</span>
+      </a>
+
+      <a href="#">
+        <mat-icon>business_center</mat-icon>
+        <span>Departments</span>
+      </a>
+
+      <a
+  href="javascript:void(0)"
+  (click)="downloadExcel()">
+
+  <mat-icon>table_view</mat-icon>
+  <span>Download Payment Excel</span>
+
+</a>
+
+<a
+  href="javascript:void(0)"
+  (click)="downloadPdf()">
+
+  <mat-icon>picture_as_pdf</mat-icon>
+  <span>Download Payment PDF</span>
+
+</a>
+
+    </nav>
+
+  }
+
+  @if (userRole === 'SUPPLIER') {
+
+    <div class="menu-label">
+      SUPPLIER MENU
+    </div>
+
+    <nav>
+
+      <a
+        routerLink="/dashboard"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }">
+
+        <mat-icon>dashboard</mat-icon>
+        <span>Dashboard</span>
+
+      </a>
+
+      <a
+        routerLink="/products"
+        routerLinkActive="active">
+
+        <mat-icon>inventory_2</mat-icon>
+        <span>Products</span>
+
+      </a>
+
+      <a href="#">
+        <mat-icon>local_shipping</mat-icon>
+        <span>Purchase Orders</span>
+      </a>
+
+      <a href="#">
+        <mat-icon>payments</mat-icon>
+        <span>Payments</span>
+      </a>
+
+      <a href="#">
+        <mat-icon>star</mat-icon>
+        <span>Ratings & Feedback</span>
+      </a>
+
+    </nav>
+
+  }
+</aside>

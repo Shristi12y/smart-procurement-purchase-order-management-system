@@ -1,0 +1,576 @@
+<div class="rating-page">
+
+  <!-- =====================================================
+       PAGE HEADER
+  ====================================================== -->
+
+  <div class="page-header">
+
+    <div class="header-content">
+
+      <div class="header-left">
+
+        <div class="header-icon">
+
+          <mat-icon>
+            star
+          </mat-icon>
+
+        </div>
+
+        <div>
+
+          <h1>
+            Ratings
+          </h1>
+
+          <p>
+            View and analyze supplier product ratings and feedback
+          </p>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- =====================================================
+       SUMMARY CARDS
+  ====================================================== -->
+
+  <div class="summary-grid">
+
+
+    <!-- AVERAGE RATING -->
+
+    <div class="summary-card average-card">
+
+      <div class="summary-icon">
+
+        <mat-icon>
+          star
+        </mat-icon>
+
+      </div>
+
+      <div class="summary-info">
+
+        <span class="summary-label">
+          Average Rating
+        </span>
+
+        <h2>
+          {{ formatRating(averageRating) }}
+          <span class="small-star">★</span>
+        </h2>
+
+      </div>
+
+    </div>
+
+
+    <!-- TOTAL RATINGS -->
+
+    <div class="summary-card total-card">
+
+      <div class="summary-icon">
+
+        <mat-icon>
+          rate_review
+        </mat-icon>
+
+      </div>
+
+      <div class="summary-info">
+
+        <span class="summary-label">
+          Total Ratings
+        </span>
+
+        <h2>
+          {{ totalRatings }}
+        </h2>
+
+      </div>
+
+    </div>
+
+
+    <!-- FIVE STAR -->
+
+    <div class="summary-card excellent-card">
+
+      <div class="summary-icon">
+
+        <mat-icon>
+          stars
+        </mat-icon>
+
+      </div>
+
+      <div class="summary-info">
+
+        <span class="summary-label">
+          5-Star Ratings
+        </span>
+
+        <h2>
+          {{ fiveStarRatings }}
+        </h2>
+
+      </div>
+
+    </div>
+
+
+    <!-- LOW RATINGS -->
+
+    <div class="summary-card low-card">
+
+      <div class="summary-icon">
+
+        <mat-icon>
+          sentiment_dissatisfied
+        </mat-icon>
+
+      </div>
+
+      <div class="summary-info">
+
+        <span class="summary-label">
+          Low Ratings
+        </span>
+
+        <h2>
+          {{ lowRatings }}
+        </h2>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- =====================================================
+       RATING DISTRIBUTION
+  ====================================================== -->
+
+  <div class="chart-card">
+
+    <div class="chart-header">
+
+      <div>
+
+        <h2>
+          Rating Distribution
+        </h2>
+
+        <p>
+          Number of ratings received for each star level
+        </p>
+
+      </div>
+
+      <div class="chart-icon">
+
+        <mat-icon>
+          bar_chart
+        </mat-icon>
+
+      </div>
+
+    </div>
+
+
+    <!-- CHART -->
+
+    <div
+      class="chart-container"
+      *ngIf="ratingLabels.length > 0 && !loading">
+
+      <canvas
+        id="ratingDistributionChart">
+      </canvas>
+
+    </div>
+
+
+    <!-- EMPTY -->
+
+    <div
+      class="chart-empty"
+      *ngIf="!loading && totalRatings === 0">
+
+      <mat-icon>
+        bar_chart
+      </mat-icon>
+
+      <p>
+        No rating data available.
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <!-- FILTER CARD -->
+
+  <div class="filter-card">
+
+    <div class="search-box">
+
+      <mat-icon>
+        search
+      </mat-icon>
+
+      <input
+        type="text"
+        placeholder="Search by product, user, PO or remark..."
+        [(ngModel)]="searchText"
+        (input)="onSearch()"
+      />
+
+
+      <button
+        class="clear-btn"
+        *ngIf="searchText"
+        (click)="searchText=''; onSearch()">
+
+        <mat-icon>
+          close
+        </mat-icon>
+
+      </button>
+
+    </div>
+
+
+    <div class="rating-filter">
+
+      <label>
+        Rating
+      </label>
+
+      <select
+        [(ngModel)]="selectedRating"
+        (change)="onRatingChange()">
+
+        <option value="ALL">
+          All Ratings
+        </option>
+
+        <option value="5">
+          5 Stars
+        </option>
+
+        <option value="4">
+          4 Stars
+        </option>
+
+        <option value="3">
+          3 Stars
+        </option>
+
+        <option value="2">
+          2 Stars
+        </option>
+
+        <option value="1">
+          1 Star
+        </option>
+
+      </select>
+
+    </div>
+
+  </div>
+
+
+  <!--  LOADING -->
+
+  <div
+    class="loading-container"
+    *ngIf="loading">
+
+    <mat-icon class="loading-icon">
+      sync
+    </mat-icon>
+
+    <p>
+      Loading ratings...
+    </p>
+
+  </div>
+
+
+  <!-- TABLE -->
+
+  <div
+    class="table-card"
+    *ngIf="!loading">
+
+
+    <div class="table-header">
+
+      <div>
+
+        <h2>
+          Rating & Feedback
+        </h2>
+
+        <p>
+          {{ filteredRatings.length }}
+          rating(s) found
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <div
+      class="table-container"
+      *ngIf="filteredRatings.length > 0">
+
+      <table>
+
+        <thead>
+
+          <tr>
+
+            <th>
+              RATING ID
+            </th>
+
+            <th>
+              PRODUCT
+            </th>
+
+            <th>
+              USER
+            </th>
+
+            <th>
+              PURCHASE ORDER
+            </th>
+
+            <th>
+              RATING
+            </th>
+
+            <th>
+              REMARK
+            </th>
+
+            <th>
+              RATING DATE
+            </th>
+
+          </tr>
+
+        </thead>
+
+
+        <tbody>
+
+          <tr
+            *ngFor="
+              let item of filteredRatings
+            ">
+
+
+            <!-- RATING ID -->
+
+            <td>
+
+              <span class="rating-id">
+
+                #{{ item.ratingId }}
+
+              </span>
+
+            </td>
+
+
+            <!-- PRODUCT -->
+
+            <td>
+
+              <div class="product-cell">
+
+                <div class="product-icon">
+
+                  <mat-icon>
+                    inventory_2
+                  </mat-icon>
+
+                </div>
+
+                <span>
+
+                  {{
+                    item.productName
+                    || item.purchaseOrder
+                      ?.product?.name
+                    || 'N/A'
+                  }}
+
+                </span>
+
+              </div>
+
+            </td>
+
+
+            <!-- USER -->
+
+            <td>
+
+              <div class="user-cell">
+
+                <div class="user-icon">
+
+                  <mat-icon>
+                    person
+                  </mat-icon>
+
+                </div>
+
+                <span>
+
+                  {{
+                    item.userName
+                    || 'N/A'
+                  }}
+
+                </span>
+
+              </div>
+
+            </td>
+
+
+            <!-- PURCHASE ORDER -->
+
+            <td>
+
+              <span class="po-id">
+
+                PO-{{
+                  item.purchaseOrder
+                    ?.purchaseOrderId
+                    || 'N/A'
+                }}
+
+              </span>
+
+            </td>
+
+
+            <!-- RATING -->
+
+            <td>
+
+              <div
+                class="rating-cell"
+                [ngClass]="
+                  getRatingClass(
+                    item.rating
+                  )
+                ">
+
+                <span class="stars">
+
+                  {{
+                    getStars(
+                      item.rating
+                    )
+                  }}
+
+                </span>
+
+                <span class="rating-number">
+
+                  {{ item.rating }}/5
+
+                </span>
+
+              </div>
+
+            </td>
+
+
+            <!-- REMARK -->
+
+            <td>
+
+              <span class="remark">
+
+                {{
+                  item.remark
+                  || 'No remark'
+                }}
+
+              </span>
+
+            </td>
+
+
+            <!-- DATE -->
+
+            <td>
+
+              <span class="date">
+
+                {{
+                  formatDate(
+                    item.ratingDate
+                  )
+                }}
+
+              </span>
+
+            </td>
+
+
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+
+    <!-- EMPTY TABLE -->
+
+    <div
+      class="empty-state"
+      *ngIf="filteredRatings.length === 0">
+
+      <div class="empty-icon">
+
+        <mat-icon>
+          star_border
+        </mat-icon>
+
+      </div>
+
+      <h3>
+        No Ratings Found
+      </h3>
+
+      <p>
+        There are no ratings matching your search or filter.
+      </p>
+
+    </div>
+
+  </div>
+
+</div>

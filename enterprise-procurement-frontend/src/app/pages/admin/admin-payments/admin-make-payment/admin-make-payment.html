@@ -1,0 +1,808 @@
+<div class="make-payment-page">
+
+  <!-- HEADER -->
+
+  <div class="page-header">
+
+    <div>
+
+      <span class="page-label">
+        PAYMENT MANAGEMENT
+      </span>
+
+      <h1>
+        Make Payment
+      </h1>
+
+      <p>
+        Process payment for an accepted purchase order.
+      </p>
+
+    </div>
+
+    <button
+      type="button"
+      class="back-btn"
+      (click)="cancel()">
+
+      <mat-icon>
+        arrow_back
+      </mat-icon>
+
+      Back to Payments
+
+    </button>
+
+  </div>
+
+
+  <!-- SUCCESS -->
+
+  @if (paymentCompleted && paymentResponse) {
+
+    <section class="success-card">
+
+      <div class="success-icon">
+
+        <mat-icon>
+          check_circle
+        </mat-icon>
+
+      </div>
+
+      <span class="success-label">
+        PAYMENT CREATED
+      </span>
+
+      <h2>
+        Payment Initiated Successfully
+      </h2>
+
+      <p>
+        The payment record has been created successfully.
+      </p>
+
+
+      <div class="transaction-box">
+
+        <span>
+          Transaction ID
+        </span>
+
+        <strong>
+          {{ paymentResponse.transactionId }}
+        </strong>
+
+      </div>
+
+
+      <div class="success-details">
+
+        <div>
+          <span>
+            Purchase Order
+          </span>
+
+          <strong>
+            #{{ selectedPurchaseOrder?.purchaseOrderId }}
+          </strong>
+        </div>
+
+        <div>
+          <span>
+            Amount
+          </span>
+
+          <strong>
+            {{ paymentResponse.amount | currency:'INR':'symbol':'1.2-2' }}
+          </strong>
+        </div>
+
+        <div>
+          <span>
+            Payment Method
+          </span>
+
+          <strong>
+            {{ getPaymentMethodLabel(paymentResponse.paymentMethod) }}
+          </strong>
+        </div>
+
+        <div>
+          <span>
+            Status
+          </span>
+
+          <strong class="pending-status">
+            {{ paymentResponse.paymentStatus }}
+          </strong>
+        </div>
+
+      </div>
+
+
+      <div class="success-actions">
+
+        <button
+          type="button"
+          class="primary-btn"
+          (click)="goToPayments()">
+
+          <mat-icon>
+            receipt_long
+          </mat-icon>
+
+          View Payments
+
+        </button>
+
+        <button
+          type="button"
+          class="secondary-btn"
+          (click)="makeAnotherPayment()">
+
+          <mat-icon>
+            add
+          </mat-icon>
+
+          Make Another Payment
+
+        </button>
+
+      </div>
+
+    </section>
+
+  }
+
+
+  @else {
+
+    <!-- PAYMENT FORM -->
+
+    <div class="payment-layout">
+
+
+      <!-- LEFT -->
+
+      <section class="payment-form-card">
+
+        <div class="card-header">
+
+          <div>
+
+            <span class="section-label">
+              STEP 1
+            </span>
+
+            <h2>
+              Select Purchase Order
+            </h2>
+
+            <p>
+              Choose an accepted purchase order to make payment.
+            </p>
+
+          </div>
+
+          <div class="step-number">
+            01
+          </div>
+
+        </div>
+
+
+        @if (loadingOrders) {
+
+          <div class="loading-state">
+
+            <mat-icon>
+              sync
+            </mat-icon>
+
+            <span>
+              Loading purchase orders...
+            </span>
+
+          </div>
+
+        }
+
+        @else {
+
+          <div class="form-group">
+
+            <label>
+              Purchase Order
+              <span>*</span>
+            </label>
+
+            <div class="select-wrapper">
+
+              <mat-icon>
+                receipt_long
+              </mat-icon>
+
+              <select
+                [(ngModel)]="selectedPurchaseOrderId"
+                (change)="selectPurchaseOrder()">
+
+                <option
+                  [ngValue]="null">
+
+                  Select Purchase Order
+
+                </option>
+
+                @for (
+                  order of purchaseOrders;
+                  track order.purchaseOrderId
+                ) {
+
+                  <option
+                    [ngValue]="order.purchaseOrderId">
+
+                    PO #{{ order.purchaseOrderId }}
+
+                    -
+                    {{ order.product?.name || 'Product' }}
+
+                    -
+                    {{ order.totalAmount | currency:'INR':'symbol':'1.0-0' }}
+
+                  </option>
+
+                }
+
+              </select>
+
+            </div>
+
+          </div>
+
+
+          <!-- ORDER DETAILS -->
+
+          @if (selectedPurchaseOrder) {
+
+            <div class="order-summary">
+
+              <div class="order-summary-header">
+
+                <div>
+
+                  <span>
+                    PURCHASE ORDER
+                  </span>
+
+                  <strong>
+                    #{{ selectedPurchaseOrder.purchaseOrderId }}
+                  </strong>
+
+                </div>
+
+                <mat-icon>
+                  verified
+                </mat-icon>
+
+              </div>
+
+
+              <div class="order-product">
+
+                <div class="product-icon">
+
+                  <mat-icon>
+                    inventory_2
+                  </mat-icon>
+
+                </div>
+
+                <div>
+
+                  <strong>
+                    {{ selectedPurchaseOrder.product?.name || 'Product' }}
+                  </strong>
+
+                  <span>
+                    Quantity:
+                    {{ selectedPurchaseOrder.quantity }}
+                  </span>
+
+                </div>
+
+              </div>
+
+
+              <div class="order-details-grid">
+
+                <div>
+
+                  <span>
+                    Supplier
+                  </span>
+
+                  <strong>
+                    {{ selectedPurchaseOrder.supplier?.name || 'N/A' }}
+                  </strong>
+
+                </div>
+
+                <div>
+
+                  <span>
+                    Requested By
+                  </span>
+
+                  <strong>
+                    {{ selectedPurchaseOrder.createdBy?.name || 'N/A' }}
+                  </strong>
+
+                </div>
+
+                <div>
+
+                  <span>
+                    Supplier Email
+                  </span>
+
+                  <strong>
+                    {{ selectedPurchaseOrder.supplier?.email || 'N/A' }}
+                  </strong>
+
+                </div>
+
+                <div>
+
+                  <span>
+                    Order Amount
+                  </span>
+
+                  <strong class="amount">
+
+                    {{ selectedPurchaseOrder.totalAmount | currency:'INR':'symbol':'1.2-2' }}
+
+                  </strong>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          }
+
+        }
+
+
+        <!-- PAYMENT METHOD -->
+
+        <div class="card-header payment-method-header">
+
+          <div>
+
+            <span class="section-label">
+              STEP 2
+            </span>
+
+            <h2>
+              Choose Payment Method
+            </h2>
+
+            <p>
+              Select how the company will make this payment.
+            </p>
+
+          </div>
+
+          <div class="step-number">
+            02
+          </div>
+
+        </div>
+
+
+        <div class="payment-methods">
+
+          @for (
+            method of paymentMethods;
+            track method.value
+          ) {
+
+            <button
+              type="button"
+              class="payment-method"
+              [class.selected]="paymentMethod === method.value"
+              (click)="selectPaymentMethod(method.value)">
+
+              <div class="method-icon">
+
+                <mat-icon>
+                  {{ method.icon }}
+                </mat-icon>
+
+              </div>
+
+              <div class="method-content">
+
+                <strong>
+                  {{ method.label }}
+                </strong>
+
+                <span>
+                  {{ method.description }}
+                </span>
+
+              </div>
+
+              <div class="method-radio">
+
+                @if (paymentMethod === method.value) {
+
+                  <mat-icon>
+                    radio_button_checked
+                  </mat-icon>
+
+                }
+                @else {
+
+                  <mat-icon>
+                    radio_button_unchecked
+                  </mat-icon>
+
+                }
+
+              </div>
+
+            </button>
+
+          }
+
+        </div>
+
+
+        <!-- REMARKS -->
+
+        <div class="remarks-section">
+
+          <label>
+            Payment Remarks
+            <span class="optional">
+              Optional
+            </span>
+          </label>
+
+          <textarea
+            rows="4"
+            maxlength="500"
+            [(ngModel)]="remarks"
+            placeholder="Add any payment notes, reference details or remarks...">
+          </textarea>
+
+        </div>
+
+
+        <!-- ACTIONS -->
+
+        <div class="form-actions">
+
+          <button
+            type="button"
+            class="cancel-btn"
+            (click)="cancel()">
+
+            Cancel
+
+          </button>
+
+          <button
+            type="button"
+            class="proceed-btn"
+            [disabled]="
+              !selectedPurchaseOrder ||
+              !paymentMethod
+            "
+            (click)="proceedToPayment()">
+
+            <mat-icon>
+              lock
+            </mat-icon>
+
+            Review Payment
+
+            <mat-icon>
+              arrow_forward
+            </mat-icon>
+
+          </button>
+
+        </div>
+
+      </section>
+
+
+      <!-- RIGHT -->
+
+      <aside class="payment-sidebar">
+
+        <div class="secure-card">
+
+          <div class="secure-icon">
+
+            <mat-icon>
+              verified_user
+            </mat-icon>
+
+          </div>
+
+          <h3>
+            Secure Payment
+          </h3>
+
+          <p>
+            Payment information is processed securely through the procurement system.
+          </p>
+
+        </div>
+
+
+        @if (selectedPurchaseOrder) {
+
+          <div class="amount-card">
+
+            <span>
+              TOTAL PAYABLE
+            </span>
+
+            <strong>
+              {{ selectedPurchaseOrder.totalAmount | currency:'INR':'symbol':'1.2-2' }}
+            </strong>
+
+            <small>
+              Purchase Order #{{ selectedPurchaseOrder.purchaseOrderId }}
+            </small>
+
+          </div>
+
+        }
+
+
+        <div class="process-card">
+
+          <span class="section-label">
+            PAYMENT PROCESS
+          </span>
+
+          <div class="process-step">
+
+            <div class="process-icon">
+              1
+            </div>
+
+            <div>
+
+              <strong>
+                Select Order
+              </strong>
+
+              <span>
+                Choose the purchase order
+              </span>
+
+            </div>
+
+          </div>
+
+          <div class="process-line"></div>
+
+          <div class="process-step">
+
+            <div class="process-icon">
+              2
+            </div>
+
+            <div>
+
+              <strong>
+                Choose Method
+              </strong>
+
+              <span>
+                Select preferred payment method
+              </span>
+
+            </div>
+
+          </div>
+
+          <div class="process-line"></div>
+
+          <div class="process-step">
+
+            <div class="process-icon">
+              3
+            </div>
+
+            <div>
+
+              <strong>
+                Confirm
+              </strong>
+
+              <span>
+                Review and create payment
+              </span>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </aside>
+
+    </div>
+
+  }
+
+
+  <!-- CONFIRMATION MODAL -->
+
+  @if (showConfirmation) {
+
+    <div
+      class="modal-overlay"
+      (click)="editPaymentDetails()">
+
+      <div
+        class="confirmation-modal"
+        (click)="$event.stopPropagation()">
+
+        <div class="modal-icon">
+
+          <mat-icon>
+            payments
+          </mat-icon>
+
+        </div>
+
+        <span class="section-label">
+          CONFIRM PAYMENT
+        </span>
+
+        <h2>
+          Review Payment Details
+        </h2>
+
+        <p>
+          Please verify the details before creating the payment.
+        </p>
+
+
+        <div class="confirmation-details">
+
+          <div>
+
+            <span>
+              Purchase Order
+            </span>
+
+            <strong>
+              #{{ selectedPurchaseOrder?.purchaseOrderId }}
+            </strong>
+
+          </div>
+
+          <div>
+
+            <span>
+              Product
+            </span>
+
+            <strong>
+              {{ selectedPurchaseOrder?.product?.name }}
+            </strong>
+
+          </div>
+
+          <div>
+
+            <span>
+              Supplier
+            </span>
+
+            <strong>
+              {{ selectedPurchaseOrder?.supplier?.name || 'N/A' }}
+            </strong>
+
+          </div>
+
+          <div>
+
+            <span>
+              Payment Method
+            </span>
+
+            <strong>
+              {{ getPaymentMethodLabel(paymentMethod) }}
+            </strong>
+
+          </div>
+
+          <div class="total-row">
+
+            <span>
+              Total Amount
+            </span>
+
+            <strong>
+              {{ selectedPurchaseOrder?.totalAmount | currency:'INR':'symbol':'1.2-2' }}
+            </strong>
+
+          </div>
+
+        </div>
+
+
+        <div class="confirmation-warning">
+
+          <mat-icon>
+            info
+          </mat-icon>
+
+          <span>
+            This will create a payment record with
+            <strong>PENDING</strong> status.
+          </span>
+
+        </div>
+
+
+        <div class="modal-actions">
+
+          <button
+            type="button"
+            class="cancel-btn"
+            [disabled]="processingPayment"
+            (click)="editPaymentDetails()">
+
+            Go Back
+
+          </button>
+
+          <button
+            type="button"
+            class="confirm-btn"
+            [disabled]="processingPayment"
+            (click)="confirmPayment()">
+
+            @if (processingPayment) {
+
+              <mat-icon class="spin">
+                sync
+              </mat-icon>
+
+              Processing...
+
+            }
+            @else {
+
+              <mat-icon>
+                lock
+              </mat-icon>
+
+              Confirm Payment
+
+            }
+
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  }
+
+</div>

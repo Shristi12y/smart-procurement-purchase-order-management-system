@@ -1,0 +1,262 @@
+<div class="supplier-form-page">
+
+  <!-- Header -->
+  <div class="page-header">
+
+    <div class="header-left">
+
+      <button
+        mat-icon-button
+        class="back-btn"
+        routerLink="/admin/suppliers">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+
+      <div>
+        <h1>Add Supplier</h1>
+        <p>Create a new supplier account</p>
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- Form Card -->
+  <div class="form-card">
+
+    <div class="section-title">
+      <mat-icon>business</mat-icon>
+
+      <div>
+        <h2>Supplier Information</h2>
+        <p>Enter the supplier's basic information</p>
+      </div>
+    </div>
+
+
+    <form #supplierForm="ngForm" (ngSubmit)="addSupplier()">
+
+      <!-- Basic Information -->
+      <div class="form-section">
+
+        <h3>Basic Information</h3>
+
+        <div class="form-grid">
+
+          <!-- Name -->
+          <div class="form-group">
+            <label>
+              Supplier Name <span>*</span>
+            </label>
+
+            <input
+              type="text"
+              name="name"
+              [(ngModel)]="supplier.name"
+              placeholder="Enter supplier name"
+              required>
+          </div>
+
+
+          <!-- Phone -->
+          <div class="form-group">
+            <label>
+              Phone Number <span>*</span>
+            </label>
+
+            <input
+              type="text"
+              name="phone"
+              [(ngModel)]="supplier.phone"
+              placeholder="Enter 10-digit phone number"
+              maxlength="10"
+              required>
+          </div>
+
+
+          <!-- Email -->
+          <div class="form-group">
+            <label>
+              Email <span>*</span>
+            </label>
+
+            <input
+              type="email"
+              name="email"
+              [(ngModel)]="supplier.email"
+              placeholder="Enter supplier email"
+              required>
+          </div>
+
+
+          <!-- Password -->
+          <div class="form-group">
+            <label>
+              Password <span>*</span>
+            </label>
+
+            <input
+              type="password"
+              name="password"
+              [(ngModel)]="supplier.password"
+              placeholder="Enter password"
+              required>
+          </div>
+
+        </div>
+
+
+        <!-- Address -->
+        <div class="form-group full-width">
+
+          <label>
+            Address <span>*</span>
+          </label>
+
+          <textarea
+            name="address"
+            [(ngModel)]="supplier.address"
+            placeholder="Enter complete supplier address"
+            rows="3"
+            required>
+          </textarea>
+
+        </div>
+
+      </div>
+
+
+      <!-- Business Information -->
+      <div class="form-section">
+
+        <h3>Business Information</h3>
+
+        <div class="form-grid">
+
+          <!-- Account Number -->
+          <div class="form-group">
+
+            <label>
+              Account Number <span>*</span>
+            </label>
+
+            <input
+              type="text"
+              name="accountNo"
+              [(ngModel)]="supplier.accountNo"
+              placeholder="Enter account number"
+              required>
+
+          </div>
+
+
+          <!-- GST -->
+          <div class="form-group">
+
+            <label>
+              GST Number <span>*</span>
+            </label>
+
+            <input
+              type="text"
+              name="gstNumber"
+              [(ngModel)]="supplier.gstNumber"
+              placeholder="Enter GST number"
+              required>
+
+          </div>
+
+
+          <!-- Status -->
+          <div class="form-group">
+
+            <label>Status</label>
+
+            <select
+              name="status"
+              [(ngModel)]="supplier.status">
+
+              <option value="ACTIVE">Active</option>
+              <option value="INACTIVE">Inactive</option>
+
+            </select>
+
+          </div>
+
+
+          <!-- Rating -->
+          <div class="form-group">
+
+            <label>Rating</label>
+
+            <select
+              name="rating"
+              [(ngModel)]="supplier.rating">
+
+              <option [ngValue]="null">Not Rated</option>
+              <option [ngValue]="1">1 - Poor</option>
+              <option [ngValue]="2">2 - Fair</option>
+              <option [ngValue]="3">3 - Good</option>
+              <option [ngValue]="4">4 - Very Good</option>
+              <option [ngValue]="5">5 - Excellent</option>
+
+            </select>
+
+          </div>
+
+        </div>
+
+
+        <!-- Feedback -->
+        <div class="form-group full-width">
+
+          <label>Feedback</label>
+
+          <textarea
+            name="feedback"
+            [(ngModel)]="supplier.feedback"
+            placeholder="Enter supplier feedback"
+            rows="3">
+          </textarea>
+
+        </div>
+
+      </div>
+
+
+      <!-- Actions -->
+      <div class="form-actions">
+
+        <button
+          type="button"
+          mat-stroked-button
+          class="cancel-btn"
+          (click)="cancel()">
+
+          Cancel
+
+        </button>
+
+
+        <button
+          type="submit"
+          mat-raised-button
+          class="save-btn"
+          [disabled]="loading">
+
+          <mat-icon>
+            {{ loading ? 'hourglass_empty' : 'add_business' }}
+          </mat-icon>
+
+          {{ loading ? 'Adding...' : 'Add Supplier' }}
+
+        </button>
+
+      </div>
+
+    </form>
+
+  </div>
+
+</div>

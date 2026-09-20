@@ -1,0 +1,269 @@
+<div class="admin-category-form-page">
+
+
+  <!-- ========================================= -->
+  <!-- PAGE HEADER -->
+  <!-- ========================================= -->
+
+  <div class="page-header">
+
+    <div>
+
+      <span class="page-label">
+        CATEGORY MANAGEMENT
+      </span>
+
+      <h1>
+        Add Category
+      </h1>
+
+      <p>
+        Create a new product category and assign it to a department.
+      </p>
+
+    </div>
+
+
+    <button
+      type="button"
+      class="back-btn"
+      (click)="cancel()">
+
+      <mat-icon>
+        arrow_back
+      </mat-icon>
+
+      Back to Categories
+
+    </button>
+
+  </div>
+
+
+
+  <!-- ========================================= -->
+  <!-- FORM CARD -->
+  <!-- ========================================= -->
+
+  <section class="form-card">
+
+
+    <!-- CARD HEADER -->
+
+    <div class="form-card-header">
+
+      <div class="form-icon">
+
+        <mat-icon>
+          category
+        </mat-icon>
+
+      </div>
+
+      <div>
+
+        <span class="section-label">
+          CATEGORY DETAILS
+        </span>
+
+        <h2>
+          Create Category
+        </h2>
+
+        <p>
+          Enter the category information below.
+        </p>
+
+      </div>
+
+    </div>
+
+
+
+    <!-- FORM -->
+
+    <form
+      (ngSubmit)="addCategory()"
+      #categoryForm="ngForm">
+
+
+      <!-- ========================================= -->
+      <!-- CATEGORY NAME -->
+      <!-- ========================================= -->
+
+      <div class="form-group">
+
+        <label>
+          Category Name
+          <span>*</span>
+        </label>
+
+        <div class="input-wrapper">
+
+          <mat-icon>
+            category
+          </mat-icon>
+
+          <input
+            type="text"
+            name="categoryName"
+            [(ngModel)]="category.categoryName"
+            placeholder="Enter category name"
+            maxlength="100"
+            required>
+
+        </div>
+
+      </div>
+
+
+
+      <!-- ========================================= -->
+      <!-- DEPARTMENT -->
+      <!-- ========================================= -->
+
+      <div class="form-group">
+
+        <label>
+          Department
+          <span>*</span>
+        </label>
+
+        <div class="input-wrapper">
+
+          <mat-icon>
+            business
+          </mat-icon>
+
+          <select
+            name="department"
+            [(ngModel)]="category.departmentId"
+            required>
+
+            <option
+              [ngValue]="null">
+
+              Select Department
+
+            </option>
+
+            @for (
+              department of departments;
+              track department.departmentId
+            ) {
+
+              <option
+                [ngValue]="department.departmentId">
+
+                {{ department.departmentName }}
+
+              </option>
+
+            }
+
+          </select>
+
+        </div>
+
+      </div>
+
+
+
+      <!-- ========================================= -->
+      <!-- SELECTED DEPARTMENT INFO -->
+      <!-- ========================================= -->
+
+      @if (getSelectedDepartment()) {
+
+        <div class="department-preview">
+
+          <div class="preview-icon">
+
+            <mat-icon>
+              business
+            </mat-icon>
+
+          </div>
+
+          <div class="preview-content">
+
+            <span>
+              Selected Department
+            </span>
+
+            <strong>
+              {{ getSelectedDepartment()?.departmentName }}
+            </strong>
+
+            <small>
+
+              Manager:
+              {{ getSelectedDepartment()?.manager || 'Not Assigned' }}
+
+            </small>
+
+          </div>
+
+        </div>
+
+      }
+
+
+
+      <!-- ========================================= -->
+      <!-- ACTIONS -->
+      <!-- ========================================= -->
+
+      <div class="form-actions">
+
+
+        <button
+          type="button"
+          class="cancel-btn"
+          (click)="cancel()">
+
+          <mat-icon>
+            close
+          </mat-icon>
+
+          Cancel
+
+        </button>
+
+
+        <button
+          type="submit"
+          class="save-btn"
+          [disabled]="
+            loading ||
+            loadingDepartments ||
+            !categoryForm.valid
+          ">
+
+          @if (loading) {
+
+            <mat-icon>
+              hourglass_top
+            </mat-icon>
+
+            Saving...
+
+          } @else {
+
+            <mat-icon>
+              add
+            </mat-icon>
+
+            Add Category
+
+          }
+
+        </button>
+
+      </div>
+
+    </form>
+
+  </section>
+
+</div>

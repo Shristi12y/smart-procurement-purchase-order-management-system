@@ -1,0 +1,629 @@
+<div class="admin-dashboard">
+
+
+  <!-- ======================================
+       PAGE HEADER
+  ======================================= -->
+
+  <div class="dashboard-header">
+
+    <div>
+
+      <span class="page-label">
+        ADMINISTRATION
+      </span>
+
+      <h1>
+        Admin Dashboard
+      </h1>
+
+      <p>
+        Welcome back, {{ adminName }}.
+        Here's an overview of your procurement system.
+      </p>
+
+    </div>
+
+  </div>
+
+
+
+  <!-- ======================================
+       LOADING
+  ======================================= -->
+
+  @if (loading) {
+
+    <div class="loading-state">
+
+      <div class="loading-icon">
+        ⚙️
+      </div>
+
+      <p>
+        Loading dashboard...
+      </p>
+
+    </div>
+
+  }
+
+
+
+  @else {
+
+    <!-- ======================================
+         SUMMARY CARDS
+    ======================================= -->
+
+    <section class="summary-grid">
+
+
+      <!-- USERS -->
+
+      <div class="summary-card users-card">
+
+        <div class="summary-icon">
+
+          <span>
+            👥
+          </span>
+
+        </div>
+
+        <div class="summary-content">
+
+          <span>
+            Total Users
+          </span>
+
+          <strong>
+            {{ totalUsers }}
+          </strong>
+
+          <small>
+            Registered employees
+          </small>
+
+        </div>
+
+      </div>
+
+
+
+      <!-- SUPPLIERS -->
+
+      <div class="summary-card suppliers-card">
+
+        <div class="summary-icon">
+
+          <span>
+            🏢
+          </span>
+
+        </div>
+
+        <div class="summary-content">
+
+          <span>
+            Total Suppliers
+          </span>
+
+          <strong>
+            {{ totalSuppliers }}
+          </strong>
+
+          <small>
+            Active suppliers
+          </small>
+
+        </div>
+
+      </div>
+
+
+
+      <!-- PRODUCTS -->
+
+      <div class="summary-card products-card">
+
+        <div class="summary-icon">
+
+          <span>
+            📦
+          </span>
+
+        </div>
+
+        <div class="summary-content">
+
+          <span>
+            Total Products
+          </span>
+
+          <strong>
+            {{ totalProducts }}
+          </strong>
+
+          <small>
+            Products available
+          </small>
+
+        </div>
+
+      </div>
+
+
+
+      <!-- ORDERS -->
+
+      <div class="summary-card orders-card">
+
+        <div class="summary-icon">
+
+          <span>
+            🚚
+          </span>
+
+        </div>
+
+        <div class="summary-content">
+
+          <span>
+            Purchase Orders
+          </span>
+
+          <strong>
+            {{ totalPurchaseOrders }}
+          </strong>
+
+          <small>
+            Total orders
+          </small>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+
+    <!-- ======================================
+         SECOND ROW
+    ======================================= -->
+
+    <section class="dashboard-grid">
+
+
+      <!-- ORDER OVERVIEW -->
+
+      <div class="dashboard-card order-overview-card">
+
+        <div class="card-header">
+
+          <div>
+
+            <h2>
+              Purchase Order Overview
+            </h2>
+
+            <p>
+              Current status of all purchase orders.
+            </p>
+
+          </div>
+
+          <span class="card-icon">
+            📊
+          </span>
+
+        </div>
+
+
+
+        <div class="order-status-grid">
+
+
+          <div class="status-item">
+
+            <span class="status-dot created"></span>
+
+            <div>
+
+              <strong>
+                {{ createdOrders }}
+              </strong>
+
+              <span>
+                Created
+              </span>
+
+            </div>
+
+          </div>
+
+
+
+          <div class="status-item">
+
+            <span class="status-dot accepted"></span>
+
+            <div>
+
+              <strong>
+                {{ acceptedOrders }}
+              </strong>
+
+              <span>
+                Accepted
+              </span>
+
+            </div>
+
+          </div>
+
+
+
+          <div class="status-item">
+
+            <span class="status-dot packed"></span>
+
+            <div>
+
+              <strong>
+                {{ packedOrders }}
+              </strong>
+
+              <span>
+                Packed
+              </span>
+
+            </div>
+
+          </div>
+
+
+
+          <div class="status-item">
+
+            <span class="status-dot dispatched"></span>
+
+            <div>
+
+              <strong>
+                {{ dispatchedOrders }}
+              </strong>
+
+              <span>
+                Dispatched
+              </span>
+
+            </div>
+
+          </div>
+
+
+
+          <div class="status-item">
+
+            <span class="status-dot delivery"></span>
+
+            <div>
+
+              <strong>
+                {{ outForDeliveryOrders }}
+              </strong>
+
+              <span>
+                Out For Delivery
+              </span>
+
+            </div>
+
+          </div>
+
+
+
+          <div class="status-item">
+
+            <span class="status-dot delivered"></span>
+
+            <div>
+
+              <strong>
+                {{ deliveredOrders }}
+              </strong>
+
+              <span>
+                Delivered
+              </span>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+
+      <!-- APPROVAL -->
+
+      <div class="dashboard-card approval-card">
+
+        <div class="card-header">
+
+          <div>
+
+            <h2>
+              Approval Requests
+            </h2>
+
+            <p>
+              Requests waiting for action.
+            </p>
+
+          </div>
+
+          <span class="card-icon">
+            📋
+          </span>
+
+        </div>
+
+
+        <div class="approval-content">
+
+          <div class="approval-number">
+
+            {{ pendingApprovals }}
+
+          </div>
+
+          <div>
+
+            <strong>
+              Pending Approvals
+            </strong>
+
+            <span>
+              Purchase requests requiring review
+            </span>
+
+          </div>
+
+        </div>
+
+
+        <a
+          routerLink="/admin/purchase-requests"
+          class="view-all-btn">
+
+          View Purchase Requests
+
+          <span>
+            →
+          </span>
+
+        </a>
+
+      </div>
+
+    </section>
+
+
+
+    <!-- ======================================
+         RECENT PURCHASE ORDERS
+    ======================================= -->
+
+    <section class="dashboard-card recent-orders-card">
+
+
+      <div class="card-header">
+
+        <div>
+
+          <h2>
+            Recent Purchase Orders
+          </h2>
+
+          <p>
+            Latest orders created in the system.
+          </p>
+
+        </div>
+
+
+        <span class="recent-count">
+
+          {{ recentOrders.length }}
+
+          Recent
+
+        </span>
+
+      </div>
+
+
+
+      @if (recentOrders.length > 0) {
+
+        <div class="table-wrapper">
+
+          <table>
+
+            <thead>
+
+              <tr>
+
+                <th>
+                  Order ID
+                </th>
+
+                <th>
+                  Product
+                </th>
+
+                <th>
+                  Supplier
+                </th>
+
+                <th>
+                  Quantity
+                </th>
+
+                <th>
+                  Amount
+                </th>
+
+                <th>
+                  Date
+                </th>
+
+                <th>
+                  Status
+                </th>
+
+              </tr>
+
+            </thead>
+
+
+            <tbody>
+
+              @for (
+                order of recentOrders;
+                track order.purchaseOrderId
+              ) {
+
+                <tr>
+
+                  <td class="order-id">
+
+                    #{{ order.purchaseOrderId }}
+
+                  </td>
+
+
+                  <td>
+
+                    <div class="product-cell">
+
+                      <span class="product-icon">
+                        📦
+                      </span>
+
+                      <strong>
+
+                        {{
+                          order.product?.name ||
+                          'Product'
+
+                        }}
+
+                      </strong>
+
+                    </div>
+
+                  </td>
+
+
+                  <td>
+
+                    {{
+                      order.supplier?.name ||
+                      'Not Assigned'
+
+                    }}
+
+                  </td>
+
+
+                  <td>
+
+                    {{ order.quantity }}
+
+                  </td>
+
+
+                  <td class="amount">
+
+                    ₹{{
+                      order.totalAmount
+                      | number:'1.0-0'
+                    }}
+
+                  </td>
+
+
+                  <td>
+
+                    {{
+                      order.orderDate
+                      | date:'dd MMM yyyy'
+                    }}
+
+                  </td>
+
+
+                  <td>
+
+                    <span
+                      class="order-status"
+                      [ngClass]="
+                        getStatusClass(
+                          order.status
+                        )
+                      ">
+
+                      {{
+                        formatStatus(
+                          order.status
+                        )
+                      }}
+
+                    </span>
+
+                  </td>
+
+                </tr>
+
+              }
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      }
+
+
+      @else {
+
+        <div class="empty-table">
+
+          <div>
+            📦
+          </div>
+
+          <h3>
+            No Purchase Orders
+          </h3>
+
+          <p>
+            There are no purchase orders available yet.
+          </p>
+
+        </div>
+
+      }
+
+    </section>
+
+  }
+
+</div>

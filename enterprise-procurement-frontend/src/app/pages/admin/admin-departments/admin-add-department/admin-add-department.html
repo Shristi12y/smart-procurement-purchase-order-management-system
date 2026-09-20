@@ -1,0 +1,279 @@
+<div class="admin-add-department-page">
+
+
+  <!-- ========================================= -->
+  <!-- PAGE HEADER -->
+  <!-- ========================================= -->
+
+  <div class="page-header">
+
+    <div class="header-left">
+
+      <span class="page-label">
+        DEPARTMENT MANAGEMENT
+      </span>
+
+      <h1>
+        Add Department
+      </h1>
+
+      <p>
+        Create a new department and assign its manager.
+      </p>
+
+    </div>
+
+
+    <button
+      type="button"
+      class="back-btn"
+      (click)="cancel()">
+
+      <mat-icon>
+        arrow_back
+      </mat-icon>
+
+      Back to Departments
+
+    </button>
+
+  </div>
+
+
+
+  <!-- ========================================= -->
+  <!-- FORM CARD -->
+  <!-- ========================================= -->
+
+  <section class="department-form-card">
+
+
+    <!-- CARD HEADER -->
+
+    <div class="form-card-header">
+
+      <div class="header-icon">
+
+        <mat-icon>
+          business
+        </mat-icon>
+
+      </div>
+
+      <div>
+
+        <span class="section-label">
+          DEPARTMENT DETAILS
+        </span>
+
+        <h2>
+          Create Department
+        </h2>
+
+        <p>
+          Enter the basic information for the new department.
+        </p>
+
+      </div>
+
+    </div>
+
+
+
+    <!-- FORM -->
+
+    <form
+      #departmentForm="ngForm"
+      (ngSubmit)="addDepartment()">
+
+
+      <div class="form-grid">
+
+
+        <!-- DEPARTMENT NAME -->
+
+        <div class="form-group">
+
+          <label for="departmentName">
+
+            Department Name
+
+            <span>
+              *
+            </span>
+
+          </label>
+
+          <div class="input-wrapper">
+
+            <mat-icon>
+              apartment
+            </mat-icon>
+
+            <input
+              id="departmentName"
+              type="text"
+              name="departmentName"
+              placeholder="Enter department name"
+              [(ngModel)]="department.departmentName"
+              required
+              autocomplete="off">
+
+          </div>
+
+          <small>
+            Enter a unique department name.
+          </small>
+
+        </div>
+
+
+
+        <!-- MANAGER -->
+
+        <div class="form-group">
+
+          <label for="manager">
+
+            Department Manager
+
+            <span>
+              *
+            </span>
+
+          </label>
+
+          <div class="input-wrapper">
+
+            <mat-icon>
+              person
+            </mat-icon>
+
+            <input
+              id="manager"
+              type="text"
+              name="manager"
+              placeholder="Enter manager name"
+              [(ngModel)]="department.manager"
+              required
+              autocomplete="off">
+
+          </div>
+
+          <small>
+            Enter the person responsible for this department.
+          </small>
+
+        </div>
+
+
+      </div>
+
+
+
+      <!-- ========================================= -->
+      <!-- INFORMATION BOX -->
+      <!-- ========================================= -->
+
+      <div class="info-box">
+
+        <div class="info-icon">
+
+          <mat-icon>
+            info
+          </mat-icon>
+
+        </div>
+
+        <div>
+
+          <strong>
+            Department Information
+          </strong>
+
+          <p>
+            Department names must be unique. Make sure the manager
+            information is correct before creating the department.
+          </p>
+
+        </div>
+
+      </div>
+
+
+
+      <!-- ========================================= -->
+      <!-- FORM FOOTER -->
+      <!-- ========================================= -->
+
+      <div class="form-footer">
+
+
+        <button
+          type="button"
+          class="cancel-btn"
+          (click)="cancel()">
+
+          <mat-icon>
+            close
+          </mat-icon>
+
+          Cancel
+
+        </button>
+
+
+
+        <button
+          type="submit"
+          class="save-btn"
+          [disabled]="
+            loading ||
+            !departmentForm.valid
+          ">
+
+          @if (!loading) {
+
+            <mat-icon>
+              add
+            </mat-icon>
+
+            Add Department
+
+          }
+
+          @if (loading) {
+
+            <mat-icon class="loading-icon">
+              sync
+            </mat-icon>
+
+            Creating...
+
+          }
+
+        </button>
+
+
+      </div>
+
+    </form>
+
+  </section>
+
+
+
+  <!-- ========================================= -->
+  <!-- REQUIRED FIELD NOTE -->
+  <!-- ========================================= -->
+
+  <div class="required-note">
+
+    <span>*</span>
+
+    Required fields
+
+  </div>
+
+
+</div>

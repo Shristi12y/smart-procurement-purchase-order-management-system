@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f5f7f5;
+            font-family: Arial, Helvetica, sans-serif;
+            color: #333333;
+        }
+
+        .container {
+            width: 100%;
+            padding: 40px 0;
+        }
+
+        .card {
+            max-width: 650px;
+            margin: auto;
+            background: #ffffff;
+            border: 1px solid #e1e1e1;
+            border-radius: 4px;
+            padding: 30px;
+        }
+
+        .title {
+            color: #2e7d32;
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .divider {
+            height: 2px;
+            background-color: #5c9563;
+            margin-bottom: 25px;
+        }
+
+        .text {
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        .details {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+
+        .details td {
+            padding: 10px 8px;
+            border-bottom: 1px solid #dddddd;
+            font-size: 14px;
+        }
+
+        .details td:first-child {
+            font-weight: bold;
+            width: 35%;
+        }
+
+        .footer {
+            margin-top: 30px;
+            color: #777777;
+            font-size: 12px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="card">
+
+        <div class="title">
+            New Purchase Request
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="text">
+
+            Dear Admin,
+
+            <p>
+                A new purchase request has been created in the
+                Enterprise Procurement System.
+            </p>
+
+        </div>
+
+        <table class="details">
+
+            <tr>
+                <td>Product:</td>
+                <td>{{PRODUCT_NAME}}</td>
+            </tr>
+
+            <tr>
+                <td>Requested By:</td>
+                <td>{{REQUESTED_BY}}</td>
+            </tr>
+
+            <tr>
+                <td>Department:</td>
+                <td>{{DEPARTMENT}}</td>
+            </tr>
+
+            <tr>
+                <td>Quantity:</td>
+                <td>{{QUANTITY}}</td>
+            </tr>
+
+            <tr>
+                <td>Price:</td>
+                <td>{{PRICE}}</td>
+            </tr>
+
+        </table>
+
+        <div class="text">
+
+            <p>
+                Please review the request and take the necessary action.
+            </p>
+
+        </div>
+
+        <div class="footer">
+            Enterprise Procurement System<br>
+            Automated Notification
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

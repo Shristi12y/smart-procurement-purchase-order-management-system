@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f5f7f5;
+            font-family: Arial, Helvetica, sans-serif;
+            color: #333333;
+        }
+
+        .container {
+            width: 100%;
+            padding: 40px 0;
+        }
+
+        .card {
+            max-width: 650px;
+            margin: auto;
+            background: #ffffff;
+            border: 1px solid #e1e1e1;
+            border-radius: 6px;
+            padding: 30px;
+        }
+
+        .title {
+            color: #2e7d32;
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .divider {
+            height: 2px;
+            background-color: #5c9563;
+            margin: 15px 0 25px 0;
+        }
+
+        .text {
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        .details {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .details td {
+            padding: 11px 8px;
+            border-bottom: 1px solid #dddddd;
+            font-size: 14px;
+        }
+
+        .details td:first-child {
+            font-weight: bold;
+            width: 35%;
+        }
+
+        .success {
+            margin-top: 25px;
+            padding: 15px;
+            background-color: #eef7ee;
+            border-left: 4px solid #5c9563;
+            font-size: 14px;
+        }
+
+        .footer {
+            margin-top: 30px;
+            color: #777777;
+            font-size: 12px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="card">
+
+        <div class="title">
+            Purchase Order Created
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="text">
+
+            Dear {{SUPPLIER_NAME}},
+
+            <p>
+                A new Purchase Order has been created for you
+                through the Enterprise Procurement System.
+            </p>
+
+        </div>
+
+        <table class="details">
+
+            <tr>
+                <td>Purchase Order ID:</td>
+                <td>{{PURCHASE_ORDER_ID}}</td>
+            </tr>
+
+            <tr>
+                <td>Product:</td>
+                <td>{{PRODUCT_NAME}}</td>
+            </tr>
+
+            <tr>
+                <td>Quantity:</td>
+                <td>{{QUANTITY}}</td>
+            </tr>
+
+            <tr>
+                <td>Total Amount:</td>
+                <td>{{TOTAL_AMOUNT}}</td>
+            </tr>
+
+            <tr>
+                <td>Order Date:</td>
+                <td>{{ORDER_DATE}}</td>
+            </tr>
+
+            <tr>
+                <td>Status:</td>
+                <td>{{STATUS}}</td>
+            </tr>
+
+        </table>
+
+        <div class="success">
+            Please process the order accordingly and fulfill the
+            purchase request.
+        </div>
+
+        <div class="text">
+            <p>
+                Thank you for working with us.
+            </p>
+        </div>
+
+        <div class="footer">
+            Enterprise Procurement System<br>
+            Automated Notification
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

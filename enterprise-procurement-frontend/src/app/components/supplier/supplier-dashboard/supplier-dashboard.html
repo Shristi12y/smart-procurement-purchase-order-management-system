@@ -1,0 +1,719 @@
+<div class="supplier-dashboard">
+
+  <!-- ======================================
+       PAGE HEADER
+  ====================================== -->
+
+  <div class="dashboard-header">
+
+    <div>
+
+      <span class="page-label">
+        SUPPLIER PORTAL
+      </span>
+
+      <h1>
+        Supplier Dashboard
+      </h1>
+
+      <p>
+        Welcome back, {{ supplierName }}.
+        Here's an overview of your orders and payments.
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <!--LOADING -->
+
+  @if (loading) {
+
+    <div class="loading-state">
+
+      <div class="loading-icon">
+        ⚙️
+      </div>
+
+      <p>
+        Loading dashboard...
+      </p>
+
+    </div>
+
+  }
+
+  @else {
+
+    <!-- ======================================
+         SUMMARY CARDS
+    ====================================== -->
+
+    <section class="summary-grid">
+
+
+      <!-- TOTAL ORDERS -->
+
+      <div class="summary-card orders-card">
+
+        <div class="summary-icon">
+          <span>🛒</span>
+        </div>
+
+        <div class="summary-content">
+
+          <span>
+            Total Purchase Orders
+          </span>
+
+          <strong>
+            {{ totalOrders }}
+          </strong>
+
+          <small>
+            Orders received
+          </small>
+
+        </div>
+
+      </div>
+
+
+      <!-- PENDING ORDERS -->
+
+      <div class="summary-card pending-card">
+
+        <div class="summary-icon">
+          <span>⏳</span>
+        </div>
+
+        <div class="summary-content">
+
+          <span>
+            Pending Orders
+          </span>
+
+          <strong>
+            {{ pendingOrders }}
+          </strong>
+
+          <small>
+            Orders requiring action
+          </small>
+
+        </div>
+
+      </div>
+
+
+      <!-- DELIVERED ORDERS -->
+
+      <div class="summary-card delivered-card">
+
+        <div class="summary-icon">
+          <span>✅</span>
+        </div>
+
+        <div class="summary-content">
+
+          <span>
+            Delivered Orders
+          </span>
+
+          <strong>
+            {{ deliveredOrders }}
+          </strong>
+
+          <small>
+            Successfully completed
+          </small>
+
+        </div>
+
+      </div>
+
+
+      <!-- TOTAL PAYMENT -->
+
+      <div class="summary-card payment-card">
+
+        <div class="summary-icon">
+          <span>💰</span>
+        </div>
+
+        <div class="summary-content">
+
+          <span>
+            Total Payment Received
+          </span>
+
+          <strong>
+            ₹{{ totalPayment | number:'1.0-0' }}
+          </strong>
+
+          <small>
+            Amount paid to you
+          </small>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ======================================
+         SECOND ROW
+    ====================================== -->
+
+    <section class="dashboard-grid">
+
+
+      <!-- ORDER STATUS -->
+
+      <div class="dashboard-card order-overview-card">
+
+        <div class="card-header">
+
+          <div>
+
+            <h2>
+              Purchase Order Overview
+            </h2>
+
+            <p>
+              Current status of your purchase orders.
+            </p>
+
+          </div>
+
+          <span class="card-icon">
+            📊
+          </span>
+
+        </div>
+
+
+        <div class="order-status-grid">
+
+
+          <!-- ACCEPTED -->
+
+          <div class="status-item">
+
+            <span class="status-dot accepted"></span>
+
+            <div>
+
+              <strong>
+                {{ acceptedOrders }}
+              </strong>
+
+              <span>
+                Accepted
+              </span>
+
+            </div>
+
+          </div>
+
+
+          <!-- PACKED -->
+
+          <div class="status-item">
+
+            <span class="status-dot packed"></span>
+
+            <div>
+
+              <strong>
+                {{ packedOrders }}
+              </strong>
+
+              <span>
+                Packed
+              </span>
+
+            </div>
+
+          </div>
+
+
+          <!-- DISPATCHED -->
+
+          <div class="status-item">
+
+            <span class="status-dot dispatched"></span>
+
+            <div>
+
+              <strong>
+                {{ dispatchedOrders }}
+              </strong>
+
+              <span>
+                Dispatched
+              </span>
+
+            </div>
+
+          </div>
+
+
+          <!-- OUT FOR DELIVERY -->
+
+          <div class="status-item">
+
+            <span class="status-dot delivery"></span>
+
+            <div>
+
+              <strong>
+                {{ outForDeliveryOrders }}
+              </strong>
+
+              <span>
+                Out For Delivery
+              </span>
+
+            </div>
+
+          </div>
+
+
+          <!-- DELIVERED -->
+
+          <div class="status-item">
+
+            <span class="status-dot delivered"></span>
+
+            <div>
+
+              <strong>
+                {{ deliveredOrders }}
+              </strong>
+
+              <span>
+                Delivered
+              </span>
+
+            </div>
+
+          </div>
+
+
+          <!-- CREATED -->
+
+          <div class="status-item">
+
+            <span class="status-dot created"></span>
+
+            <div>
+
+              <strong>
+                {{ createdOrders }}
+              </strong>
+
+              <span>
+                Created
+              </span>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- PAYMENT SUMMARY -->
+
+      <div class="dashboard-card payment-summary-card">
+
+        <div class="card-header">
+
+          <div>
+
+            <h2>
+              Payment Summary
+            </h2>
+
+            <p>
+              Overview of your payments.
+            </p>
+
+          </div>
+
+          <span class="card-icon">
+            💳
+          </span>
+
+        </div>
+
+
+        <div class="payment-content">
+
+
+          <div class="payment-main">
+
+            <span>
+              Total Received
+            </span>
+
+            <strong>
+              ₹{{ totalPayment | number:'1.0-0' }}
+            </strong>
+
+          </div>
+
+
+          <div class="payment-stats">
+
+
+            <div>
+
+              <span class="payment-dot paid"></span>
+
+              <div>
+
+                <strong>
+                  {{ completedPayments }}
+                </strong>
+
+                <span>
+                  Completed
+                </span>
+
+              </div>
+
+            </div>
+
+
+            <div>
+
+              <span class="payment-dot pending"></span>
+
+              <div>
+
+                <strong>
+                  {{ pendingPayments }}
+                </strong>
+
+                <span>
+                  Pending
+                </span>
+
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <a
+            routerLink="/supplier/payment-history"
+            class="view-all-btn">
+
+            View Payment History
+
+            <span>
+              →
+            </span>
+
+          </a>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ======================================
+         RATING
+    ====================================== -->
+
+    <section class="dashboard-card rating-card">
+
+      <div class="card-header">
+
+        <div>
+
+          <h2>
+            Supplier Rating
+          </h2>
+
+          <p>
+            Your performance rating from the organization.
+          </p>
+
+        </div>
+
+        <span class="card-icon">
+          ⭐
+        </span>
+
+      </div>
+
+
+      <div class="rating-content">
+
+
+        <div class="rating-score">
+
+          <strong>
+            {{ supplierRating }}
+          </strong>
+
+          <span>
+            / 5
+          </span>
+
+        </div>
+
+
+        <div class="rating-stars">
+
+          @for (star of [1,2,3,4,5]; track star) {
+
+            <span
+              [class.filled]="star <= supplierRating">
+
+              ★
+
+            </span>
+
+          }
+
+        </div>
+
+
+        <div class="rating-info">
+
+          <strong>
+            {{ totalReviews }} Reviews
+          </strong>
+
+          <span>
+            Keep providing excellent service.
+          </span>
+
+        </div>
+
+
+        <a
+          routerLink="/supplier/rating"
+          class="rating-btn">
+
+          View Rating
+
+          <span>
+            →
+          </span>
+
+        </a>
+
+      </div>
+
+    </section>
+
+
+    <!-- ======================================
+         RECENT PURCHASE ORDERS
+    ====================================== -->
+
+    <section class="dashboard-card recent-orders-card">
+
+
+      <div class="card-header">
+
+        <div>
+
+          <h2>
+            Recent Purchase Orders
+          </h2>
+
+          <p>
+            Latest purchase orders assigned to you.
+          </p>
+
+        </div>
+
+
+        <span class="recent-count">
+
+          {{ recentOrders.length }}
+
+          Recent
+
+        </span>
+
+      </div>
+
+
+      @if (recentOrders.length > 0) {
+
+        <div class="table-wrapper">
+
+          <table>
+
+            <thead>
+
+              <tr>
+
+                <th>
+                  Order ID
+                </th>
+
+                <th>
+                  Product
+                </th>
+
+                <th>
+                  Quantity
+                </th>
+
+                <th>
+                  Amount
+                </th>
+
+                <th>
+                  Order Date
+                </th>
+
+                <th>
+                  Status
+                </th>
+
+              </tr>
+
+            </thead>
+
+
+            <tbody>
+
+              @for (
+                order of recentOrders;
+                track order.purchaseOrderId
+              ) {
+
+                <tr>
+
+
+                  <td class="order-id">
+
+                    #{{ order.purchaseOrderId }}
+
+                  </td>
+
+
+                  <td>
+
+                    <div class="product-cell">
+
+                      <span class="product-icon">
+                        📦
+                      </span>
+
+                      <strong>
+
+                        {{
+                          order.product?.name ||
+                          'Product'
+
+                        }}
+
+                      </strong>
+
+                    </div>
+
+                  </td>
+
+
+                  <td>
+
+                    {{ order.quantity }}
+
+                  </td>
+
+
+                  <td class="amount">
+
+                    ₹{{
+                      order.totalAmount
+                      | number:'1.0-0'
+                    }}
+
+                  </td>
+
+
+                  <td>
+
+                    {{
+                      order.orderDate
+                      | date:'dd MMM yyyy'
+                    }}
+
+                  </td>
+
+
+                  <td>
+
+                    <span
+                      class="order-status"
+                      [ngClass]="
+                        getStatusClass(
+                          order.status
+                        )
+                      ">
+
+                      {{
+                        formatStatus(
+                          order.status
+                        )
+                      }}
+
+                    </span>
+
+                  </td>
+
+                </tr>
+
+              }
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      }
+
+
+      @else {
+
+        <div class="empty-table">
+
+          <div>
+            📦
+          </div>
+
+          <h3>
+            No Purchase Orders
+          </h3>
+
+          <p>
+            You don't have any purchase orders yet.
+          </p>
+
+        </div>
+
+      }
+
+    </section>
+
+  }
+
+</div>

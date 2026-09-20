@@ -1,0 +1,862 @@
+<div class="admin-departments-page">
+
+
+  <!-- ========================================= -->
+  <!-- PAGE HEADER -->
+  <!-- ========================================= -->
+
+  <div class="page-header">
+
+    <div>
+
+      <span class="page-label">
+        DEPARTMENT MANAGEMENT
+      </span>
+
+      <h1>
+        Departments
+      </h1>
+
+      <p>
+        Manage departments and their assigned managers.
+      </p>
+
+    </div>
+
+
+    <button
+      type="button"
+      class="add-department-btn"
+      (click)="addDepartment()">
+
+      <mat-icon>
+        add
+      </mat-icon>
+
+      Add Department
+
+    </button>
+
+  </div>
+
+
+
+  <!-- ========================================= -->
+  <!-- SUMMARY -->
+  <!-- ========================================= -->
+
+  @if (!loading) {
+
+    <section class="departments-summary">
+
+
+      <!-- TOTAL -->
+
+      <div class="summary-card total-card">
+
+        <div class="summary-icon">
+
+          <mat-icon>
+            business
+          </mat-icon>
+
+        </div>
+
+        <div class="summary-content">
+
+          <span>
+            Total Departments
+          </span>
+
+          <strong>
+            {{ getTotalDepartmentsCount() }}
+          </strong>
+
+          <small>
+            Registered departments
+          </small>
+
+        </div>
+
+      </div>
+
+
+
+      <!-- WITH MANAGER -->
+
+      <div class="summary-card manager-card">
+
+        <div class="summary-icon">
+
+          <mat-icon>
+            supervisor_account
+          </mat-icon>
+
+        </div>
+
+        <div class="summary-content">
+
+          <span>
+            Assigned Managers
+          </span>
+
+          <strong>
+            {{ getDepartmentsWithManagerCount() }}
+          </strong>
+
+          <small>
+            Departments with managers
+          </small>
+
+        </div>
+
+      </div>
+
+
+
+      <!-- UNIQUE MANAGERS -->
+
+      <div class="summary-card unique-manager-card">
+
+        <div class="summary-icon">
+
+          <mat-icon>
+            groups
+          </mat-icon>
+
+        </div>
+
+        <div class="summary-content">
+
+          <span>
+            Unique Managers
+          </span>
+
+          <strong>
+            {{ getManagerCount() }}
+          </strong>
+
+          <small>
+            Managers assigned
+          </small>
+
+        </div>
+
+      </div>
+
+
+
+      <!-- WITHOUT MANAGER -->
+
+      <div class="summary-card unassigned-card">
+
+        <div class="summary-icon">
+
+          <mat-icon>
+            person_off
+          </mat-icon>
+
+        </div>
+
+        <div class="summary-content">
+
+          <span>
+            Unassigned
+          </span>
+
+          <strong>
+            {{ getDepartmentsWithoutManagerCount() }}
+          </strong>
+
+          <small>
+            Departments without manager
+          </small>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  }
+
+
+
+  <!-- ========================================= -->
+  <!-- LOADING -->
+  <!-- ========================================= -->
+
+  @if (loading) {
+
+    <div class="loading-state">
+
+      <div class="loading-icon">
+
+        <mat-icon>
+          business
+        </mat-icon>
+
+      </div>
+
+      <h3>
+        Loading Departments
+      </h3>
+
+      <p>
+        Please wait while we load department information.
+      </p>
+
+    </div>
+
+  }
+
+
+
+  <!-- ========================================= -->
+  <!-- MAIN CONTENT -->
+  <!-- ========================================= -->
+
+  @else {
+
+    <section class="departments-table-card">
+
+
+      <!-- TABLE HEADER -->
+
+      <div class="table-header">
+
+        <div>
+
+          <span class="section-label">
+            DEPARTMENT DIRECTORY
+          </span>
+
+          <h2>
+            All Departments
+          </h2>
+
+          <p>
+
+            {{ filteredDepartments.length }}
+
+            of
+
+            {{ departments.length }}
+
+            departments shown
+
+          </p>
+
+        </div>
+
+
+        <div class="table-count">
+
+          <mat-icon>
+            business
+          </mat-icon>
+
+          {{ filteredDepartments.length }}
+
+          Departments
+
+        </div>
+
+      </div>
+
+
+
+      <!-- ========================================= -->
+      <!-- SEARCH -->
+      <!-- ========================================= -->
+
+      <div class="filter-section">
+
+        <div class="search-box">
+
+          <mat-icon>
+            search
+          </mat-icon>
+
+          <input
+            type="text"
+            placeholder="Search by department name or manager..."
+            [(ngModel)]="searchText"
+            (input)="filterDepartments()">
+
+        </div>
+
+
+        @if (searchText) {
+
+          <button
+            type="button"
+            class="clear-filter-btn"
+            (click)="clearSearch()">
+
+            <mat-icon>
+              close
+            </mat-icon>
+
+            Clear
+
+          </button>
+
+        }
+
+      </div>
+
+
+
+      <!-- ========================================= -->
+      <!-- TABLE -->
+      <!-- ========================================= -->
+
+      @if (filteredDepartments.length > 0) {
+
+        <div class="table-wrapper">
+
+          <table>
+
+            <thead>
+
+              <tr>
+
+                <th>
+                  Department
+                </th>
+
+                <th>
+                  Manager
+                </th>
+
+                <th>
+                  Department ID
+                </th>
+
+                <th>
+                  Status
+                </th>
+
+                <th>
+                  Actions
+                </th>
+
+              </tr>
+
+            </thead>
+
+
+            <tbody>
+
+              @for (
+
+                department of filteredDepartments;
+
+                track department.departmentId
+
+              ) {
+
+                <tr>
+
+
+                  <!-- DEPARTMENT -->
+
+                  <td>
+
+                    <div class="department-cell">
+
+                      <div class="department-avatar">
+
+                        {{
+                          getDepartmentInitial(
+                            department.departmentName
+                          )
+                        }}
+
+                      </div>
+
+
+                      <div class="department-info">
+
+                        <strong>
+
+                          {{
+                            department.departmentName ||
+                            'Unknown Department'
+                          }}
+
+                        </strong>
+
+                        <span>
+
+                          Department
+
+                        </span>
+
+                      </div>
+
+                    </div>
+
+                  </td>
+
+
+
+                  <!-- MANAGER -->
+
+                  <td>
+
+                    @if (department.manager) {
+
+                      <div class="manager-cell">
+
+                        <div class="manager-icon">
+
+                          <mat-icon>
+                            person
+                          </mat-icon>
+
+                        </div>
+
+                        <div>
+
+                          <strong>
+                            {{ department.manager }}
+                          </strong>
+
+                          <span>
+                            Department Manager
+                          </span>
+
+                        </div>
+
+                      </div>
+
+                    }
+
+                    @else {
+
+                      <span class="no-manager">
+
+                        <mat-icon>
+                          person_off
+                        </mat-icon>
+
+                        Not Assigned
+
+                      </span>
+
+                    }
+
+                  </td>
+
+
+
+                  <!-- ID -->
+
+                  <td>
+
+                    <span class="department-id">
+
+                      #{{ department.departmentId }}
+
+                    </span>
+
+                  </td>
+
+
+
+                  <!-- STATUS -->
+
+                  <td>
+
+                    @if (department.manager) {
+
+                      <span class="status-badge status-assigned">
+
+                        <span class="status-dot"></span>
+
+                        ACTIVE
+
+                      </span>
+
+                    }
+
+                    @else {
+
+                      <span class="status-badge status-unassigned">
+
+                        <span class="status-dot"></span>
+
+                        UNASSIGNED
+
+                      </span>
+
+                    }
+
+                  </td>
+
+
+
+                  <!-- ACTIONS -->
+
+                  <td>
+
+                    <div class="action-buttons">
+
+
+                      <!-- VIEW -->
+
+                      <button
+                        type="button"
+                        class="view-btn"
+                        title="View Department"
+                        (click)="
+                          viewDepartment(
+                            department
+                          )
+                        ">
+
+                        <mat-icon>
+                          visibility
+                        </mat-icon>
+
+                      </button>
+
+
+
+                      <!-- EDIT -->
+
+                      <button
+                        type="button"
+                        class="edit-btn"
+                        title="Edit Department"
+                        (click)="
+                          editDepartment(
+                            department.departmentId
+                          )
+                        ">
+
+                        <mat-icon>
+                          edit
+                        </mat-icon>
+
+                      </button>
+
+
+
+                      <!-- DELETE -->
+
+                      <button
+                        type="button"
+                        class="delete-btn"
+                        title="Delete Department"
+                        (click)="
+                          deleteDepartment(
+                            department
+                          )
+                        ">
+
+                        <mat-icon>
+                          delete
+                        </mat-icon>
+
+                      </button>
+
+                    </div>
+
+                  </td>
+
+                </tr>
+
+              }
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      }
+
+
+
+      <!-- ========================================= -->
+      <!-- NO RESULTS -->
+      <!-- ========================================= -->
+
+      @else {
+
+        <div class="no-results">
+
+          <div class="no-results-icon">
+
+            <mat-icon>
+              search_off
+            </mat-icon>
+
+          </div>
+
+          <h3>
+            No Departments Found
+          </h3>
+
+          <p>
+            No departments match your current search.
+          </p>
+
+          <button
+            type="button"
+            class="reset-btn"
+            (click)="clearSearch()">
+
+            <mat-icon>
+              refresh
+            </mat-icon>
+
+            Reset Search
+
+          </button>
+
+        </div>
+
+      }
+
+    </section>
+
+  }
+
+
+
+  <!-- ========================================= -->
+  <!-- DEPARTMENT DETAILS MODAL -->
+  <!-- ========================================= -->
+
+  @if (
+
+    showDepartmentDetails &&
+
+    selectedDepartment
+
+  ) {
+
+    <div
+      class="modal-overlay"
+      (click)="closeDepartmentDetails()">
+
+
+      <div
+        class="department-details-modal"
+        (click)="$event.stopPropagation()">
+
+
+        <!-- HEADER -->
+
+        <div class="modal-header">
+
+          <div>
+
+            <span class="page-label">
+              DEPARTMENT PROFILE
+            </span>
+
+            <h2>
+
+              {{
+                selectedDepartment.departmentName
+              }}
+
+            </h2>
+
+            <p>
+              View department information and manager details.
+            </p>
+
+          </div>
+
+
+          <button
+            type="button"
+            class="close-modal-btn"
+            (click)="closeDepartmentDetails()">
+
+            <mat-icon>
+              close
+            </mat-icon>
+
+          </button>
+
+        </div>
+
+
+
+        <!-- PROFILE -->
+
+        <div class="department-profile">
+
+          <div class="large-department-avatar">
+
+            {{
+              getDepartmentInitial(
+                selectedDepartment.departmentName
+              )
+            }}
+
+          </div>
+
+
+          <div class="profile-content">
+
+            <h3>
+
+              {{
+                selectedDepartment.departmentName
+              }}
+
+            </h3>
+
+            <p>
+
+              Department ID:
+
+              #{{ selectedDepartment.departmentId }}
+
+            </p>
+
+          </div>
+
+        </div>
+
+
+
+        <!-- DETAILS -->
+
+        <div class="details-grid">
+
+
+          <!-- ID -->
+
+          <div class="detail-card">
+
+            <span>
+              Department ID
+            </span>
+
+            <strong>
+
+              #{{ selectedDepartment.departmentId }}
+
+            </strong>
+
+          </div>
+
+
+
+          <!-- NAME -->
+
+          <div class="detail-card">
+
+            <span>
+              Department Name
+            </span>
+
+            <strong>
+
+              {{
+                selectedDepartment.departmentName ||
+                'Not Available'
+              }}
+
+            </strong>
+
+          </div>
+
+
+
+          <!-- MANAGER -->
+
+          <div class="detail-card">
+
+            <span>
+              Department Manager
+            </span>
+
+            <strong>
+
+              {{
+                selectedDepartment.manager ||
+                'Not Assigned'
+              }}
+
+            </strong>
+
+          </div>
+
+
+
+          <!-- STATUS -->
+
+          <div class="detail-card">
+
+            <span>
+              Assignment Status
+            </span>
+
+            <strong>
+
+              {{
+                selectedDepartment.manager
+                  ? 'ACTIVE'
+                  : 'UNASSIGNED'
+              }}
+
+            </strong>
+
+          </div>
+
+        </div>
+
+
+
+        <!-- FOOTER -->
+
+        <div class="modal-footer">
+
+
+          <button
+            type="button"
+            class="edit-department-btn"
+            (click)="
+              editDepartment(
+                selectedDepartment.departmentId
+              )
+            ">
+
+            <mat-icon>
+              edit
+            </mat-icon>
+
+            Edit Department
+
+          </button>
+
+
+          <button
+            type="button"
+            class="close-btn"
+            (click)="closeDepartmentDetails()">
+
+            Close
+
+          </button>
+
+        </div>
+
+
+      </div>
+
+    </div>
+
+  }
+
+</div>

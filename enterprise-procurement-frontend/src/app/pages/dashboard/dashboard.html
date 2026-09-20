@@ -1,0 +1,468 @@
+@if (userRole === 'USER') {
+
+  <div class="dashboard-layout">
+
+    <main class="dashboard-content">
+
+      <!-- Welcome Section -->
+
+      <section class="welcome-section">
+
+        <div>
+
+          <span class="welcome-label">
+            USER DASHBOARD
+          </span>
+
+          <h1>
+            Hello,
+            {{ userName || 'User' }} 👋
+          </h1>
+
+          <p>
+            Here's an overview of your procurement
+            activity and purchase requests.
+          </p>
+
+        </div>
+
+        <div class="welcome-actions">
+
+          <a
+            routerLink="/products"
+            class="browse-btn">
+
+            📦 Browse Products
+
+          </a>
+
+          <a
+            routerLink="/purchase-request"
+            class="request-btn">
+
+            + New Request
+
+          </a>
+
+        </div>
+
+      </section>
+
+
+      <!-- Statistics Cards -->
+
+      <section class="stats-grid">
+
+        <div class="stat-card">
+
+          <div class="stat-icon products-icon">
+            📦
+          </div>
+
+          <div class="stat-info">
+
+            <span>Available Products</span>
+
+            <h2>
+              {{ totalProducts }}
+            </h2>
+
+            <small>
+              Products available to order
+            </small>
+
+          </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+          <div class="stat-icon requests-icon">
+            🛒
+          </div>
+
+          <div class="stat-info">
+
+            <span>My Requests</span>
+
+            <h2>
+              {{ totalRequests }}
+            </h2>
+
+            <small>
+              Total purchase requests
+            </small>
+
+          </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+          <div class="stat-icon pending-icon">
+            ⏳
+          </div>
+
+          <div class="stat-info">
+
+            <span>Pending Requests</span>
+
+            <h2>
+              {{ pendingRequests }}
+            </h2>
+
+            <small>
+              Waiting for processing
+            </small>
+
+          </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+          <div class="stat-icon amount-icon">
+            ₹
+          </div>
+
+          <div class="stat-info">
+
+            <span>Total Requested</span>
+
+            <h2>
+              ₹{{ totalAmountRequested | number:'1.0-0' }}
+            </h2>
+
+            <small>
+              Total request value
+            </small>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- Dashboard Bottom -->
+
+      <section class="dashboard-grid">
+
+        <!-- Recent Requests -->
+
+        <div class="recent-card">
+
+          <div class="section-header">
+
+            <div>
+
+              <h2>
+                Recent Purchase Requests
+              </h2>
+
+              <p>
+                Your latest procurement requests
+              </p>
+
+            </div>
+
+            <a
+              routerLink="/my-requests"
+              class="view-all">
+
+              View All →
+
+            </a>
+
+          </div>
+
+
+          <div class="requests-table-wrapper">
+
+            @if (recentRequests.length > 0) {
+
+              <table>
+
+                <thead>
+
+                  <tr>
+
+                    <th>Request ID</th>
+                    <th>Product</th>
+                    <th>Quantity</th>
+                    <th>Amount</th>
+                    <th>Date</th>
+                    <th>Status</th>
+
+                  </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                  @for (
+                    request of recentRequests;
+                    track request.purchaseOrderId
+                  ) {
+
+                    <tr>
+
+                      <td>
+                        #{{ request.purchaseOrderId }}
+                      </td>
+
+                      <td>
+
+                        <div class="product-name">
+
+                          <span class="table-product-icon">
+                            📦
+                          </span>
+
+                          {{ request.product?.name }}
+
+                        </div>
+
+                      </td>
+
+                      <td>
+                        {{ request.quantity }}
+                      </td>
+
+                      <td>
+
+                        ₹{{
+                          request.totalAmount
+                          | number:'1.0-0'
+                        }}
+
+                      </td>
+
+                      <td>
+
+                        {{
+                          request.orderDate
+                          | date:'dd MMM yyyy'
+                        }}
+
+                      </td>
+
+                      <td>
+
+                        <span
+                          class="status"
+                          [ngClass]="getStatusClass(request.status)">
+
+                          {{ request.status }}
+
+                        </span>
+
+                      </td>
+
+                    </tr>
+
+                  }
+
+                </tbody>
+
+              </table>
+
+            } @else {
+
+              <div class="empty-state">
+
+                <div class="empty-icon">
+                  🛒
+                </div>
+
+                <h3>
+                  No Purchase Requests Yet
+                </h3>
+
+                <p>
+                  Start by browsing products and
+                  creating your first purchase request.
+                </p>
+
+                <a
+                  routerLink="/products"
+                  class="empty-action">
+
+                  Browse Products
+
+                </a>
+
+              </div>
+
+            }
+
+          </div>
+
+        </div>
+
+
+        <!-- Quick Actions -->
+
+        <div class="quick-actions-card">
+
+          <h2>
+            Quick Actions
+          </h2>
+
+          <p>
+            Manage your procurement quickly
+          </p>
+
+
+          <a
+            routerLink="/products"
+            class="quick-action">
+
+            <div class="quick-icon">
+              📦
+            </div>
+
+            <div>
+
+              <strong>
+                Browse Products
+              </strong>
+
+              <span>
+                View available products
+              </span>
+
+            </div>
+
+            <b>→</b>
+
+          </a>
+
+
+          <a
+            routerLink="/purchase-request"
+            class="quick-action">
+
+            <div class="quick-icon">
+              🛒
+            </div>
+
+            <div>
+
+              <strong>
+                Create Request
+              </strong>
+
+              <span>
+                Request a product
+              </span>
+
+            </div>
+
+            <b>→</b>
+
+          </a>
+
+
+          <a
+            routerLink="/my-requests"
+            class="quick-action">
+
+            <div class="quick-icon">
+              📋
+            </div>
+
+            <div>
+
+              <strong>
+                My Requests
+              </strong>
+
+              <span>
+                Track your requests
+              </span>
+
+            </div>
+
+            <b>→</b>
+
+          </a>
+
+        </div>
+
+      </section>
+
+    </main>
+
+  </div>
+
+}
+
+@if (userRole === 'ADMIN') {
+
+  <div class="dashboard-layout">
+
+    <main class="dashboard-content">
+
+      <section class="welcome-section">
+
+        <div>
+
+          <span class="welcome-label">
+            ADMIN DASHBOARD
+          </span>
+
+          <h1>
+            Hello, {{ userName || 'Admin' }} 👋
+          </h1>
+
+          <p>
+            Manage your enterprise procurement system from one place.
+          </p>
+
+        </div>
+
+      </section>
+
+    </main>
+
+  </div>
+
+}
+
+
+@if (userRole === 'SUPPLIER') {
+
+  <div class="dashboard-layout">
+
+    <main class="dashboard-content">
+
+      <section class="welcome-section">
+
+        <div>
+
+          <span class="welcome-label">
+            SUPPLIER DASHBOARD
+          </span>
+
+          <h1>
+            Hello, {{ userName || 'Supplier' }} 👋
+          </h1>
+
+          <p>
+            Manage your products, orders, and procurement activities.
+          </p>
+
+        </div>
+
+      </section>
+
+    </main>
+
+  </div>
+
+}

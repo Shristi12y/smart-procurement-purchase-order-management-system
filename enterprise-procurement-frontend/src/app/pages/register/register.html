@@ -1,0 +1,304 @@
+<div class="register-page">
+
+  <!-- Background Effects -->
+
+  <div class="background-shape shape-1"></div>
+  <div class="background-shape shape-2"></div>
+  <div class="background-shape shape-3"></div>
+
+  <div class="register-wrapper">
+
+    <!-- Left Side -->
+
+    <div class="register-info">
+
+      <div class="brand">
+
+        <div class="brand-icon">
+          🏢
+        </div>
+
+        <span>
+          Enterprise Procurement
+        </span>
+
+      </div>
+
+      <span class="welcome-tag">
+        GET STARTED
+      </span>
+
+      <h1>
+        Join the Future of
+        <span> Procurement.</span>
+      </h1>
+
+      <p>
+        Create your account and manage products,
+        purchase requests, suppliers, and orders
+        from one centralized platform.
+      </p>
+
+      <div class="info-points">
+
+        <div class="info-point">
+          <span>✓</span>
+          Easy product management
+        </div>
+
+        <div class="info-point">
+          <span>✓</span>
+          Smart purchase requests
+        </div>
+
+        <div class="info-point">
+          <span>✓</span>
+          Track procurement orders
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- Registration Card -->
+
+    <div class="register-card">
+
+      <div class="register-header">
+
+        <div class="logo">
+          EPS
+        </div>
+
+        <h2>Create Account</h2>
+
+        <p>
+          Join the Enterprise Procurement System
+        </p>
+
+      </div>
+
+
+      <!-- Role Selection -->
+
+      <div class="role-selection">
+
+        <button
+          type="button"
+          class="role-btn"
+          [class.active]="selectedRole === 'USER'"
+          (click)="selectRole('USER')">
+
+          <span class="role-icon">👤</span>
+
+          <span>User</span>
+
+          <small>
+            Employee Account
+          </small>
+
+        </button>
+
+
+        <button
+          type="button"
+          class="role-btn"
+          [class.active]="selectedRole === 'SUPPLIER'"
+          (click)="selectRole('SUPPLIER')">
+
+          <span class="role-icon">🏢</span>
+
+          <span>Supplier</span>
+
+          <small>
+            Business Account
+          </small>
+
+        </button>
+
+      </div>
+
+
+      <div class="role-text">
+
+        Creating account as
+
+        <strong>
+          {{ selectedRole }}
+        </strong>
+
+      </div>
+
+
+      <form (ngSubmit)="register()">
+
+        <!-- NAME -->
+
+        <div class="form-group">
+
+          <label>Name</label>
+
+          <input
+            type="text"
+            name="name"
+            placeholder="Enter your name"
+            [(ngModel)]="name"
+            required>
+
+        </div>
+
+
+        <!-- EMAIL -->
+
+        <div class="form-group">
+
+          <label>Email Address</label>
+
+          <input
+            type="email"
+            name="email"
+            placeholder="Enter your email"
+            [(ngModel)]="email"
+            required>
+
+        </div>
+
+
+        <!-- PHONE -->
+
+        <div class="form-group">
+
+          <label>Phone Number</label>
+
+          <input
+            type="text"
+            name="phone"
+            placeholder="Enter your phone number"
+            [(ngModel)]="phone"
+            required>
+
+        </div>
+
+
+        <!-- PASSWORD -->
+
+        <div class="form-group">
+
+          <label>Password</label>
+
+          <input
+            type="password"
+            name="password"
+            placeholder="Create a password"
+            [(ngModel)]="password"
+            required>
+
+        </div>
+
+
+        <!-- USER FIELDS -->
+
+        @if (selectedRole === 'USER') {
+
+          <div class="form-group">
+
+            <label>Designation</label>
+
+            <input
+              type="text"
+              name="designation"
+              placeholder="Enter your designation"
+              [(ngModel)]="designation">
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label>Department ID</label>
+
+            <input
+              type="number"
+              name="departmentId"
+              placeholder="Enter department ID"
+              [(ngModel)]="departmentId"
+              required>
+
+          </div>
+
+        }
+
+
+        <!-- SUPPLIER FIELDS -->
+
+        @if (selectedRole === 'SUPPLIER') {
+
+          <div class="form-group">
+
+            <label>Company Address</label>
+
+            <textarea
+              name="address"
+              placeholder="Enter company address"
+              [(ngModel)]="address">
+            </textarea>
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label>Account Number</label>
+
+            <input
+              type="text"
+              name="accountNo"
+              placeholder="Enter account number"
+              [(ngModel)]="accountNo">
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label>GST Number</label>
+
+            <input
+              type="text"
+              name="gstNumber"
+              placeholder="Enter GST number"
+              [(ngModel)]="gstNumber">
+
+          </div>
+
+        }
+
+
+        <button
+          type="submit"
+          class="register-btn">
+
+          Create {{ selectedRole }} Account
+          <span>→</span>
+
+        </button>
+
+      </form>
+
+
+      <div class="login-option">
+
+        <span>Already have an account?</span>
+
+        <a routerLink="/login">
+          Login
+        </a>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

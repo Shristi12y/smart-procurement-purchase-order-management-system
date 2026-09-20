@@ -1,0 +1,890 @@
+<div class="admin-purchase-requests-page">
+
+
+  <!-- ================================================= -->
+  <!-- PAGE HEADER -->
+  <!-- ================================================= -->
+
+  <div class="page-header">
+
+    <div>
+
+      <span class="page-label">
+        PROCUREMENT MANAGEMENT
+      </span>
+
+      <h1>
+        Purchase Requests
+      </h1>
+
+      <p>
+        Review and manage purchase requests submitted by employees.
+      </p>
+
+    </div>
+
+  </div>
+
+  <!-- SUMMARY CARDS -->
+
+  @if (!loading) {
+
+    <section class="requests-summary">
+
+
+      <!-- TOTAL -->
+
+      <div class="summary-card total-card">
+
+        <div class="summary-icon">
+
+          <mat-icon>
+            shopping_cart
+          </mat-icon>
+
+        </div>
+
+        <div class="summary-content">
+
+          <span>
+            Total Requests
+          </span>
+
+          <strong>
+            {{ getTotalRequestsCount() }}
+          </strong>
+
+          <small>
+            All purchase requests
+          </small>
+
+        </div>
+
+      </div>
+
+
+      <!-- CREATED -->
+
+      <div class="summary-card created-card">
+
+        <div class="summary-icon">
+
+          <mat-icon>
+            pending_actions
+          </mat-icon>
+
+        </div>
+
+        <div class="summary-content">
+
+          <span>
+            Pending Approval
+          </span>
+
+          <strong>
+            {{ getCreatedRequestsCount() }}
+          </strong>
+
+          <small>
+            Waiting for admin approval
+          </small>
+
+        </div>
+
+      </div>
+
+
+      <!-- ACCEPTED -->
+
+      <div class="summary-card accepted-card">
+
+        <div class="summary-icon">
+
+          <mat-icon>
+            task_alt
+          </mat-icon>
+
+        </div>
+
+        <div class="summary-content">
+
+          <span>
+            Accepted
+          </span>
+
+          <strong>
+            {{ getAcceptedRequestsCount() }}
+          </strong>
+
+          <small>
+            Approved requests
+          </small>
+
+        </div>
+
+      </div>
+
+
+      <!-- DELIVERED -->
+
+      <div class="summary-card delivered-card">
+
+        <div class="summary-icon">
+
+          <mat-icon>
+            inventory
+          </mat-icon>
+
+        </div>
+
+        <div class="summary-content">
+
+          <span>
+            Delivered
+          </span>
+
+          <strong>
+            {{ getDeliveredRequestsCount() }}
+          </strong>
+
+          <small>
+            Successfully delivered
+          </small>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  }
+  <!-- LOADING -->
+
+  @if (loading) {
+
+    <div class="loading-state">
+
+      <div class="loading-icon">
+
+        <mat-icon>
+          shopping_cart
+        </mat-icon>
+
+      </div>
+
+      <h3>
+        Loading Purchase Requests
+      </h3>
+
+      <p>
+        Please wait while we load the requests.
+      </p>
+
+    </div>
+
+  }
+
+  <!-- MAIN CONTENT -->
+
+  @else {
+
+    <section class="requests-table-card">
+
+
+      <!-- TABLE HEADER -->
+
+      <div class="table-header">
+
+        <div>
+
+          <span class="section-label">
+            PURCHASE REQUESTS
+          </span>
+
+          <h2>
+            All Requests
+          </h2>
+
+          <p>
+
+            {{ filteredOrders.length }}
+
+            of
+
+            {{ orders.length }}
+
+            requests shown
+
+          </p>
+
+        </div>
+
+
+        <div class="table-count">
+
+          <mat-icon>
+            shopping_cart
+          </mat-icon>
+
+          {{ filteredOrders.length }}
+
+          Requests
+
+        </div>
+
+      </div>
+
+      <!-- FILTER SECTION -->
+
+      <div class="filter-section">
+
+
+        <!-- SEARCH -->
+
+        <div class="search-box">
+
+          <mat-icon>
+            search
+          </mat-icon>
+
+          <input
+            type="text"
+            placeholder="Search by PO ID, product, supplier or user..."
+            [(ngModel)]="searchText"
+            (input)="filterOrders()">
+
+        </div>
+
+
+        <!-- STATUS -->
+
+        <div class="filter-box">
+
+          <mat-icon>
+            filter_alt
+          </mat-icon>
+
+          <select
+            [(ngModel)]="selectedStatus"
+            (change)="filterOrders()">
+
+            <option value="ALL">
+              All Statuses
+            </option>
+
+            <option value="CREATED">
+              Created
+            </option>
+
+            <option value="ACCEPTED">
+              Accepted
+            </option>
+
+            <option value="PACKED">
+              Packed
+            </option>
+
+            <option value="DISPATCHED">
+              Dispatched
+            </option>
+
+            <option value="OUT_FOR_DELIVERY">
+              Out For Delivery
+            </option>
+
+            <option value="DELIVERED">
+              Delivered
+            </option>
+
+          </select>
+
+        </div>
+
+
+        <!-- CLEAR -->
+
+        @if (
+          searchText ||
+          selectedStatus !== 'ALL'
+        ) {
+
+          <button
+            type="button"
+            class="clear-filter-btn"
+            (click)="clearFilters()">
+
+            <mat-icon>
+              close
+            </mat-icon>
+
+            Clear
+
+          </button>
+
+        }
+
+      </div>
+
+      <!-- TABLE -->
+
+      @if (filteredOrders.length > 0) {
+
+        <div class="table-wrapper">
+
+          <table>
+
+            <thead>
+
+              <tr>
+
+                <th>
+                  PO ID
+                </th>
+
+                <th>
+                  Product
+                </th>
+
+                <th>
+                  Supplier
+                </th>
+
+                <th>
+                  Requested By
+                </th>
+
+                <th>
+                  Quantity
+                </th>
+
+                <th>
+                  Total Amount
+                </th>
+
+                <th>
+                  Order Date
+                </th>
+
+                <th>
+                  Status
+                </th>
+
+                <th>
+                  Actions
+                </th>
+
+              </tr>
+
+            </thead>
+
+
+            <tbody>
+
+              @for (
+                order of filteredOrders;
+                track order.purchaseOrderId
+              ) {
+
+                <tr>
+
+
+                  <!-- PO ID -->
+
+                  <td>
+
+                    <span class="po-id">
+
+                      #{{ order.purchaseOrderId }}
+
+                    </span>
+
+                  </td>
+
+
+                  <!-- PRODUCT -->
+
+                  <td>
+
+                    <div class="product-cell">
+
+                      <div class="product-icon">
+
+                        <mat-icon>
+                          inventory_2
+                        </mat-icon>
+
+                      </div>
+
+                      <div>
+
+                        <strong>
+
+                          {{
+                            order.product?.name
+                            || 'Unknown Product'
+                          }}
+
+                        </strong>
+
+                        <span>
+
+                          {{
+                            order.product?.category?.categoryName
+                            || 'Product'
+                          }}
+
+                        </span>
+
+                      </div>
+
+                    </div>
+
+                  </td>
+
+
+                  <!-- SUPPLIER -->
+
+                  <td>
+
+                    <div class="supplier-cell">
+
+                      <mat-icon>
+                        business
+                      </mat-icon>
+
+                      <span>
+
+                        {{
+                          order.supplier?.name
+                          || 'Unknown Supplier'
+                        }}
+
+                      </span>
+
+                    </div>
+
+                  </td>
+
+
+                  <!-- USER -->
+
+                  <td>
+
+                    <div class="user-cell">
+
+                      <div class="user-avatar">
+
+                        {{
+                          order.createdBy?.name
+                          ? order.createdBy.name
+                              .charAt(0)
+                              .toUpperCase()
+                          : 'U'
+                        }}
+
+                      </div>
+
+                      <span>
+
+                        {{
+                          order.createdBy?.name
+                          || 'Unknown User'
+                        }}
+
+                      </span>
+
+                    </div>
+
+                  </td>
+
+
+                  <!-- QUANTITY -->
+
+                  <td>
+
+                    <strong>
+                      {{ order.quantity || 0 }}
+                    </strong>
+
+                  </td>
+
+                  <!-- TOTAL -->
+                  <td>
+
+                    <span class="amount">
+                      ₹{{ order.totalAmount | number:'1.2-2' }}
+                    </span>
+
+                  </td>
+
+                  <!-- DATE -->
+                  <td>
+
+                    <span class="order-date">
+
+                      {{ order.orderDate | date:'dd MMM yyyy' }}
+
+                    </span>
+
+                  </td>
+
+                  <!-- STATUS -->
+                  <td>
+
+                    <span
+                      class="status-badge"
+                      [ngClass]="getStatusClass(order.status)">
+
+                      <span class="status-dot"></span>
+
+                      {{ formatStatus(order.status) }}
+
+                    </span>
+
+                  </td>
+
+
+                  <!-- ACTIONS -->
+
+                  <td>
+
+                    <div class="action-buttons">
+
+
+                      <!-- VIEW -->
+
+                      <button
+                        type="button"
+                        class="view-btn"
+                        title="View Request"
+                        (click)="viewOrder(order)">
+
+                        <mat-icon>
+                          visibility
+                        </mat-icon>
+
+                      </button>
+
+
+                      <!-- ACCEPT -->
+
+                      @if (isCreated(order)) {
+
+                        <button
+                          type="button"
+                          class="accept-btn"
+                          title="Accept Request"
+                          (click)="acceptOrder(order)">
+
+                          <mat-icon>
+                            check
+                          </mat-icon>
+
+                        </button>
+
+                      }
+
+                    </div>
+
+                  </td>
+
+                </tr>
+
+              }
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      }
+
+      <!-- NO RESULTS -->
+
+      @else {
+
+        <div class="no-results">
+
+          <div class="no-results-icon">
+
+            <mat-icon>
+              search_off
+            </mat-icon>
+
+          </div>
+
+          <h3>
+            No Purchase Requests Found
+          </h3>
+
+          <p>
+            No requests match your current search or filter.
+          </p>
+
+          <button
+            type="button"
+            class="reset-btn"
+            (click)="clearFilters()">
+
+            <mat-icon>
+              refresh
+            </mat-icon>
+
+            Reset Filters
+
+          </button>
+
+        </div>
+
+      }
+
+    </section>
+
+  }
+
+
+  <!-- ORDER DETAILS MODAL -->
+
+  @if (
+    showOrderDetails &&
+    selectedOrder
+  ) {
+
+    <div
+      class="modal-overlay"
+      (click)="closeOrderDetails()">
+
+
+      <div
+        class="order-details-modal"
+        (click)="$event.stopPropagation()">
+
+
+        <!-- HEADER -->
+
+        <div class="modal-header">
+
+          <div>
+
+            <span class="page-label">
+              PURCHASE REQUEST
+            </span>
+
+            <h2>
+              Request #{{ selectedOrder.purchaseOrderId }}
+            </h2>
+
+            <p>
+              View purchase request details.
+            </p>
+
+          </div>
+
+
+          <button
+            type="button"
+            class="close-modal-btn"
+            (click)="closeOrderDetails()">
+
+            <mat-icon>
+              close
+            </mat-icon>
+
+          </button>
+
+        </div>
+
+
+        <!-- STATUS -->
+
+        <div class="modal-status">
+
+          <span>
+            Current Status
+          </span>
+
+          <span
+            class="status-badge"
+            [ngClass]="getStatusClass(selectedOrder.status)">
+
+            <span class="status-dot"></span>
+
+            {{ formatStatus(selectedOrder.status) }}
+
+          </span>
+
+        </div>
+
+
+        <!-- DETAILS -->
+
+        <div class="details-grid">
+
+
+          <div class="detail-card">
+
+            <span>
+              Product
+            </span>
+
+            <strong>
+
+              {{
+                selectedOrder.product?.name
+                || 'Not Available'
+              }}
+
+            </strong>
+
+          </div>
+
+
+          <div class="detail-card">
+
+            <span>
+              Supplier
+            </span>
+
+            <strong>
+
+              {{
+                selectedOrder.supplier?.name
+                || 'Not Available'
+              }}
+
+            </strong>
+
+          </div>
+
+
+          <div class="detail-card">
+
+            <span>
+              Requested By
+            </span>
+
+            <strong>
+
+              {{
+                selectedOrder.createdBy?.name
+                || 'Not Available'
+              }}
+
+            </strong>
+
+          </div>
+
+
+          <div class="detail-card">
+
+            <span>
+              Quantity
+            </span>
+
+            <strong>
+
+              {{ selectedOrder.quantity || 0 }}
+
+            </strong>
+
+          </div>
+
+
+          <div class="detail-card">
+
+            <span>
+              Price Per Product
+            </span>
+
+            <strong>
+
+              ₹{{
+                selectedOrder.product?.pricePerProduct
+                | number:'1.2-2'
+              }}
+
+            </strong>
+
+          </div>
+
+
+          <div class="detail-card">
+
+            <span>
+              Total Amount
+            </span>
+
+            <strong>
+
+              ₹{{
+                selectedOrder.totalAmount
+                | number:'1.2-2'
+              }}
+
+            </strong>
+
+          </div>
+
+
+          <div class="detail-card">
+
+            <span>
+              Order Date
+            </span>
+
+            <strong>
+
+              {{
+                selectedOrder.orderDate
+                | date:'dd MMM yyyy'
+              }}
+
+            </strong>
+
+          </div>
+
+
+        </div>
+
+
+        <!-- FOOTER -->
+
+        <div class="modal-footer">
+
+          @if (isCreated(selectedOrder)) {
+
+  <button
+    type="button"
+    class="accept-request-btn"
+    (click)="acceptOrder(selectedOrder)">
+
+    <mat-icon>
+      check
+    </mat-icon>
+
+    Accept Request
+
+  </button>
+
+}
+
+          <button
+            type="button"
+            class="close-btn"
+            (click)="closeOrderDetails()">
+
+            Close
+
+          </button>
+
+        </div>
+
+
+      </div>
+
+    </div>
+
+  }
+
+</div>

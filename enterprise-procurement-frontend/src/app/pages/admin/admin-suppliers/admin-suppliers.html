@@ -1,0 +1,1091 @@
+<div class="admin-suppliers-page">
+
+
+  <!-- PAGE HEADER -->
+
+  <div class="page-header">
+
+    <div>
+
+      <span class="page-label">
+        SUPPLIER MANAGEMENT
+      </span>
+
+      <h1>
+        Suppliers
+      </h1>
+
+      <p>
+        Manage supplier information, contact details and performance.
+      </p>
+
+    </div>
+
+
+    <button
+  type="button"
+  class="add-supplier-btn"
+  (click)="addSupplier()">
+
+  <mat-icon>
+    add
+  </mat-icon>
+
+  Add Supplier
+
+</button>
+
+  </div>
+
+
+
+  <!-- ========================================= -->
+  <!-- SUMMARY -->
+  <!-- ========================================= -->
+
+  @if (!loading) {
+
+    <section class="suppliers-summary">
+
+
+      <!-- TOTAL -->
+
+      <div class="summary-card total-card">
+
+        <div class="summary-icon">
+
+          <mat-icon>
+            groups
+          </mat-icon>
+
+        </div>
+
+        <div class="summary-content">
+
+          <span>
+            Total Suppliers
+          </span>
+
+          <strong>
+            {{ getTotalSuppliersCount() }}
+          </strong>
+
+          <small>
+            Registered suppliers
+          </small>
+
+        </div>
+
+      </div>
+
+
+      <!-- ACTIVE -->
+
+      <div class="summary-card active-card">
+
+        <div class="summary-icon">
+
+          <mat-icon>
+            check_circle
+          </mat-icon>
+
+        </div>
+
+        <div class="summary-content">
+
+          <span>
+            Active Suppliers
+          </span>
+
+          <strong>
+            {{ getActiveSuppliersCount() }}
+          </strong>
+
+          <small>
+            Currently active
+          </small>
+
+        </div>
+
+      </div>
+
+
+      <!-- INACTIVE -->
+
+      <div class="summary-card inactive-card">
+
+        <div class="summary-icon">
+
+          <mat-icon>
+            block
+          </mat-icon>
+
+        </div>
+
+        <div class="summary-content">
+
+          <span>
+            Inactive Suppliers
+          </span>
+
+          <strong>
+            {{ getInactiveSuppliersCount() }}
+          </strong>
+
+          <small>
+            Currently inactive
+          </small>
+
+        </div>
+
+      </div>
+
+
+      <!-- RATING -->
+
+      <div class="summary-card rating-card">
+
+        <div class="summary-icon">
+
+          <mat-icon>
+            star
+          </mat-icon>
+
+        </div>
+
+        <div class="summary-content">
+
+          <span>
+            Average Rating
+          </span>
+
+          <strong>
+
+            {{ getAverageRating() | number:'1.1-1' }}
+
+            <span class="rating-star">
+              ★
+            </span>
+
+          </strong>
+
+          <small>
+            Supplier performance
+          </small>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  }
+
+
+
+  <!-- ========================================= -->
+  <!-- LOADING -->
+  <!-- ========================================= -->
+
+  @if (loading) {
+
+    <div class="loading-state">
+
+      <div class="loading-icon">
+
+        <mat-icon>
+          groups
+        </mat-icon>
+
+      </div>
+
+      <h3>
+        Loading Suppliers
+      </h3>
+
+      <p>
+        Please wait while we load the supplier information.
+      </p>
+
+    </div>
+
+  }
+
+
+
+  <!-- ========================================= -->
+  <!-- MAIN CONTENT -->
+  <!-- ========================================= -->
+
+  @else {
+
+    <section class="suppliers-table-card">
+
+
+      <!-- TABLE HEADER -->
+
+      <div class="table-header">
+
+        <div>
+
+          <span class="section-label">
+            SUPPLIER DIRECTORY
+          </span>
+
+          <h2>
+            All Suppliers
+          </h2>
+
+          <p>
+
+            {{ filteredSuppliers.length }}
+
+            of
+
+            {{ suppliers.length }}
+
+            suppliers shown
+
+          </p>
+
+        </div>
+
+
+        <div class="table-count">
+
+          <mat-icon>
+            groups
+          </mat-icon>
+
+          {{ filteredSuppliers.length }}
+
+          Suppliers
+
+        </div>
+
+      </div>
+
+
+
+      <!-- ========================================= -->
+      <!-- FILTERS -->
+      <!-- ========================================= -->
+
+      <div class="filter-section">
+
+
+        <!-- SEARCH -->
+
+        <div class="search-box">
+
+          <mat-icon>
+            search
+          </mat-icon>
+
+          <input
+            type="text"
+            placeholder="Search by name, email, phone, GST or account..."
+            [(ngModel)]="searchText"
+            (input)="filterSuppliers()">
+
+        </div>
+
+
+
+        <!-- STATUS -->
+
+        <div class="filter-box">
+
+          <mat-icon>
+            filter_alt
+          </mat-icon>
+
+          <select
+            [(ngModel)]="selectedStatus"
+            (change)="filterSuppliers()">
+
+            <option value="ALL">
+              All Statuses
+            </option>
+
+            <option value="ACTIVE">
+              Active
+            </option>
+
+            <option value="INACTIVE">
+              Inactive
+            </option>
+
+          </select>
+
+        </div>
+
+
+
+        <!-- CLEAR -->
+
+        @if (
+
+          searchText ||
+
+          selectedStatus !== 'ALL'
+
+        ) {
+
+          <button
+            type="button"
+            class="clear-filter-btn"
+            (click)="clearFilters()">
+
+            <mat-icon>
+              close
+            </mat-icon>
+
+            Clear
+
+          </button>
+
+        }
+
+      </div>
+
+
+
+      <!-- ========================================= -->
+      <!-- TABLE -->
+      <!-- ========================================= -->
+
+      @if (filteredSuppliers.length > 0) {
+
+        <div class="table-wrapper">
+
+          <table>
+
+            <thead>
+
+              <tr>
+
+                <th>
+                  Supplier
+                </th>
+
+                <th>
+                  Contact
+                </th>
+
+                <th>
+                  Address
+                </th>
+
+                <th>
+                  GST Number
+                </th>
+
+                <th>
+                  Account Number
+                </th>
+
+                <th>
+                  Rating
+                </th>
+
+                <th>
+                  Status
+                </th>
+
+                <th>
+                  Actions
+                </th>
+
+              </tr>
+
+            </thead>
+
+
+            <tbody>
+
+              @for (
+
+                supplier of filteredSuppliers;
+
+                track supplier.supplierId
+
+              ) {
+
+                <tr>
+
+
+                  <!-- SUPPLIER -->
+
+                  <td>
+
+                    <div class="supplier-cell">
+
+                      <div class="supplier-avatar">
+
+                        {{
+                          getSupplierInitial(
+                            supplier.name
+                          )
+                        }}
+
+                      </div>
+
+
+                      <div class="supplier-info">
+
+                        <strong>
+
+                          {{
+                            supplier.name ||
+                            'Unknown Supplier'
+                          }}
+
+                        </strong>
+
+                        <span>
+
+                          #{{ supplier.supplierId }}
+
+                        </span>
+
+                      </div>
+
+                    </div>
+
+                  </td>
+
+
+
+                  <!-- CONTACT -->
+
+                  <td>
+
+                    <div class="contact-cell">
+
+                      <span>
+
+                        <mat-icon>
+                          email
+                        </mat-icon>
+
+                        {{
+                          supplier.email ||
+                          'Not Available'
+                        }}
+
+                      </span>
+
+
+                      <span>
+
+                        <mat-icon>
+                          phone
+                        </mat-icon>
+
+                        {{
+                          supplier.phone ||
+                          'Not Available'
+                        }}
+
+                      </span>
+
+                    </div>
+
+                  </td>
+
+
+
+                  <!-- ADDRESS -->
+
+                  <td>
+
+                    <div class="address-cell">
+
+                      <mat-icon>
+                        location_on
+                      </mat-icon>
+
+                      <span>
+
+                        {{
+                          supplier.address ||
+                          'Not Available'
+                        }}
+
+                      </span>
+
+                    </div>
+
+                  </td>
+
+
+
+                  <!-- GST -->
+
+                  <td>
+
+                    <span class="gst-number">
+
+                      {{
+                        supplier.gstNumber ||
+                        'Not Available'
+                      }}
+
+                    </span>
+
+                  </td>
+
+
+
+                  <!-- ACCOUNT -->
+
+                  <td>
+
+                    <span class="account-number">
+
+                      {{
+                        supplier.accountNo ||
+                        'Not Available'
+                      }}
+
+                    </span>
+
+                  </td>
+
+
+
+                  <!-- RATING -->
+
+                  <td>
+
+                    <div
+                      class="rating-cell"
+                      [ngClass]="
+                        getRatingClass(
+                          supplier.rating
+                        )
+                      ">
+
+                      <span class="stars">
+
+                        {{
+                          getRatingStars(
+                            supplier.rating
+                          )
+                        }}
+
+                      </span>
+
+                      <strong>
+
+                        {{
+                          supplier.rating ||
+                          'N/A'
+                        }}
+
+                      </strong>
+
+                    </div>
+
+                  </td>
+
+
+
+                  <!-- STATUS -->
+
+                  <td>
+
+                    <span
+                      class="status-badge"
+                      [ngClass]="
+                        getStatusClass(
+                          supplier.status
+                        )
+                      ">
+
+                      <span class="status-dot"></span>
+
+                      {{
+                        supplier.status ||
+                        'UNKNOWN'
+                      }}
+
+                    </span>
+
+                  </td>
+
+
+
+                  <!-- ACTIONS -->
+
+                  <td>
+
+                    <div class="action-buttons">
+
+
+                      <!-- VIEW -->
+
+                      <button
+                        type="button"
+                        class="view-btn"
+                        title="View Supplier"
+                        (click)="
+                          viewSupplier(
+                            supplier
+                          )
+                        ">
+
+                        <mat-icon>
+                          visibility
+                        </mat-icon>
+
+                      </button>
+
+
+
+                      <!-- EDIT -->
+
+                      <button
+                        type="button"
+                        class="edit-btn"
+                        title="Edit Supplier"
+                        (click)="
+                          editSupplier(
+                            supplier.supplierId
+                          )
+                        ">
+
+                        <mat-icon>
+                          edit
+                        </mat-icon>
+
+                      </button>
+
+
+
+                      <!-- DELETE -->
+
+                      <button
+                        type="button"
+                        class="delete-btn"
+                        title="Delete Supplier"
+                        (click)="
+                          deleteSupplier(
+                            supplier
+                          )
+                        ">
+
+                        <mat-icon>
+                          delete
+                        </mat-icon>
+
+                      </button>
+
+                    </div>
+
+                  </td>
+
+                </tr>
+
+              }
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      }
+
+
+
+      <!-- ========================================= -->
+      <!-- NO RESULTS -->
+      <!-- ========================================= -->
+
+      @else {
+
+        <div class="no-results">
+
+          <div class="no-results-icon">
+
+            <mat-icon>
+              search_off
+            </mat-icon>
+
+          </div>
+
+          <h3>
+            No Suppliers Found
+          </h3>
+
+          <p>
+            No suppliers match your current search or filters.
+          </p>
+
+          <button
+            type="button"
+            class="reset-btn"
+            (click)="clearFilters()">
+
+            <mat-icon>
+              refresh
+            </mat-icon>
+
+            Reset Filters
+
+          </button>
+
+        </div>
+
+      }
+
+    </section>
+
+  }
+
+
+
+  <!-- ========================================= -->
+  <!-- SUPPLIER DETAILS MODAL -->
+  <!-- ========================================= -->
+
+  @if (
+
+    showSupplierDetails &&
+
+    selectedSupplier
+
+  ) {
+
+    <div
+      class="modal-overlay"
+      (click)="closeSupplierDetails()">
+
+
+      <div
+        class="supplier-details-modal"
+        (click)="$event.stopPropagation()">
+
+
+        <!-- HEADER -->
+
+        <div class="modal-header">
+
+          <div>
+
+            <span class="page-label">
+              SUPPLIER PROFILE
+            </span>
+
+            <h2>
+
+              {{
+                selectedSupplier.name
+              }}
+
+            </h2>
+
+            <p>
+              View supplier information and performance.
+            </p>
+
+          </div>
+
+
+          <button
+            type="button"
+            class="close-modal-btn"
+            (click)="closeSupplierDetails()">
+
+            <mat-icon>
+              close
+            </mat-icon>
+
+          </button>
+
+        </div>
+
+
+
+        <!-- SUPPLIER PROFILE -->
+
+        <div class="supplier-profile">
+
+          <div class="large-supplier-avatar">
+
+            {{
+              getSupplierInitial(
+                selectedSupplier.name
+              )
+            }}
+
+          </div>
+
+
+          <div class="profile-content">
+
+            <h3>
+
+              {{
+                selectedSupplier.name
+              }}
+
+            </h3>
+
+            <p>
+
+              {{
+                selectedSupplier.email ||
+                'Email not available'
+              }}
+
+            </p>
+
+            <span
+              class="status-badge"
+              [ngClass]="
+                getStatusClass(
+                  selectedSupplier.status
+                )
+              ">
+
+              <span class="status-dot"></span>
+
+              {{
+                selectedSupplier.status ||
+                'UNKNOWN'
+              }}
+
+            </span>
+
+          </div>
+
+        </div>
+
+
+
+        <!-- DETAILS -->
+
+        <div class="details-grid">
+
+
+          <!-- SUPPLIER ID -->
+
+          <div class="detail-card">
+
+            <span>
+              Supplier ID
+            </span>
+
+            <strong>
+
+              #{{ selectedSupplier.supplierId }}
+
+            </strong>
+
+          </div>
+
+
+
+          <!-- PHONE -->
+
+          <div class="detail-card">
+
+            <span>
+              Phone
+            </span>
+
+            <strong>
+
+              {{
+                selectedSupplier.phone ||
+                'Not Available'
+              }}
+
+            </strong>
+
+          </div>
+
+
+
+          <!-- EMAIL -->
+
+          <div class="detail-card">
+
+            <span>
+              Email
+            </span>
+
+            <strong>
+
+              {{
+                selectedSupplier.email ||
+                'Not Available'
+              }}
+
+            </strong>
+
+          </div>
+
+
+
+          <!-- ADDRESS -->
+
+          <div class="detail-card">
+
+            <span>
+              Address
+            </span>
+
+            <strong>
+
+              {{
+                selectedSupplier.address ||
+                'Not Available'
+              }}
+
+            </strong>
+
+          </div>
+
+
+
+          <!-- GST -->
+
+          <div class="detail-card">
+
+            <span>
+              GST Number
+            </span>
+
+            <strong>
+
+              {{
+                selectedSupplier.gstNumber ||
+                'Not Available'
+              }}
+
+            </strong>
+
+          </div>
+
+
+
+          <!-- ACCOUNT -->
+
+          <div class="detail-card">
+
+            <span>
+              Account Number
+            </span>
+
+            <strong>
+
+              {{
+                selectedSupplier.accountNo ||
+                'Not Available'
+              }}
+
+            </strong>
+
+          </div>
+
+
+
+          <!-- RATING -->
+
+          <div class="detail-card">
+
+            <span>
+              Rating
+            </span>
+
+            <strong class="detail-rating">
+
+              {{
+                selectedSupplier.rating ||
+                'Not Rated'
+              }}
+
+              @if (selectedSupplier.rating) {
+
+                <span>
+                  ★
+                </span>
+
+              }
+
+            </strong>
+
+          </div>
+
+
+
+          <!-- FEEDBACK -->
+
+          <div class="detail-card feedback-card">
+
+            <span>
+              Feedback
+            </span>
+
+            <strong>
+
+              {{
+                selectedSupplier.feedback ||
+                'No feedback available.'
+              }}
+
+            </strong>
+
+          </div>
+
+
+        </div>
+
+
+
+        <!-- FOOTER -->
+
+        <div class="modal-footer">
+
+
+          <button
+            type="button"
+            class="edit-supplier-btn"
+            (click)="
+              editSupplier(
+                selectedSupplier.supplierId
+              )
+            ">
+
+            <mat-icon>
+              edit
+            </mat-icon>
+
+            Edit Supplier
+
+          </button>
+
+
+          <button
+            type="button"
+            class="close-btn"
+            (click)="closeSupplierDetails()">
+
+            Close
+
+          </button>
+
+        </div>
+
+
+      </div>
+
+    </div>
+
+  }
+
+</div>

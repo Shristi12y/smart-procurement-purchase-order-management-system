@@ -1,0 +1,211 @@
+<div class="add-product-page">
+
+  <div class="add-product-card">
+
+    <div class="form-header">
+
+      <div>
+        <h1>Add Product</h1>
+
+        <p>
+          Add a new product to the Enterprise Procurement System
+        </p>
+      </div>
+
+      <button
+        type="button"
+        class="back-btn"
+        routerLink="/products">
+
+        ← Back
+
+      </button>
+
+    </div>
+
+    <form (ngSubmit)="addProduct()">
+
+      <div class="form-grid">
+
+        <div class="form-group">
+
+          <label>Product Name</label>
+
+          <input
+            type="text"
+            name="name"
+            placeholder="Enter product name"
+            [(ngModel)]="name"
+            required>
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label>Price Per Product</label>
+
+          <input
+            type="number"
+            name="price"
+            placeholder="Enter price"
+            [(ngModel)]="pricePerProduct"
+            required>
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label>Quantity</label>
+
+          <input
+            type="number"
+            name="quantity"
+            placeholder="Enter quantity"
+            [(ngModel)]="numberOfQuantities"
+            required>
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label>Department ID</label>
+
+          <select
+            name="departmentId"
+            [(ngModel)]="departmentId"
+            required>
+
+            <option [ngValue]="null" disabled>
+              Select Department
+            </option>
+
+            @for (department of departments; track department.departmentId) {
+
+              <option [ngValue]="department.departmentId">
+                {{ department.departmentName }}
+              </option>
+
+            }
+
+          </select>
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label>Category ID</label>
+
+          <div class="form-group">
+
+  <label>Category</label>
+
+  <select
+    name="categoryId"
+    [(ngModel)]="categoryId"
+    required>
+
+    <option [ngValue]="null" disabled>
+      Select Category
+    </option>
+
+    @for (
+      category of categories;
+      track category.categoryId
+    ) {
+      <option [ngValue]="category.categoryId">
+        {{ category.categoryName }}
+      </option>
+    }
+  </select>
+</div>
+
+        </div>
+
+        @if (userRole === 'ADMIN') {
+        <div class="form-group">
+            <label>Supplier ID</label>
+            @if (userRole === 'ADMIN') {
+
+  <div class="form-group">
+
+    <label>Supplier</label>
+
+    <select
+      name="supplierId"
+      [(ngModel)]="selectedSupplierId"
+      required>
+
+      <option [ngValue]="null" disabled>
+        Select Supplier
+      </option>
+
+      @for (
+        supplier of suppliers;
+        track supplier.supplierId
+      ) {
+
+        <option [ngValue]="supplier.supplierId">
+
+          {{ supplier.name }}
+
+        </option>
+
+      }
+
+    </select>
+
+  </div>
+
+}
+        </div>
+
+}
+
+      </div>
+
+
+      <div class="form-group full-width">
+
+        <label>Description</label>
+
+        <textarea
+          name="description"
+          placeholder="Enter product description"
+          [(ngModel)]="description">
+
+        </textarea>
+
+      </div>
+
+
+      <div class="form-actions">
+
+        <button
+          type="button"
+          class="cancel-btn"
+          routerLink="/products">
+
+          Cancel
+
+        </button>
+
+
+        <button
+          type="submit"
+          class="submit-btn">
+
+          Add Product
+
+        </button>
+
+      </div>
+
+    </form>
+
+  </div>
+
+</div>

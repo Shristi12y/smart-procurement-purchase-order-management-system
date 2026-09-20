@@ -1,0 +1,455 @@
+<div class="payments-page">
+
+  <!-- PAGE HEADER -->
+  <div class="page-header">
+
+<div class="header-content">
+
+  <div class="header-icon">
+    <mat-icon>payments</mat-icon>
+  </div>
+
+  <div>
+    <h1>Payments</h1>
+    <p>Track and manage your payment transactions</p>
+  </div>
+  <div class="export-buttons">
+
+      <button
+        mat-raised-button
+        class="excel-btn"
+        (click)="exportExcel()">
+
+        <mat-icon>table_view</mat-icon>
+
+        Export Excel
+
+      </button>
+
+
+      <button
+        mat-raised-button
+        class="pdf-btn"
+        (click)="exportPdf()">
+
+        <mat-icon>picture_as_pdf</mat-icon>
+
+        Export PDF
+
+      </button>
+
+    </div>
+</div>
+
+
+  </div>
+
+
+  <!-- SUMMARY CARDS -->
+
+  <div class="summary-grid">
+
+<!-- Total Paid -->
+
+<div class="summary-card total-card">
+
+  <div class="summary-icon">
+    <mat-icon>account_balance_wallet</mat-icon>
+  </div>
+
+  <div class="summary-info">
+
+    <span class="summary-label">
+      Total Paid
+    </span>
+
+    <h2>
+      {{ formatAmount(getTotalAmount()) }}
+    </h2>
+
+  </div>
+
+</div>
+
+
+<!-- Successful -->
+
+<div class="summary-card success-card">
+
+  <div class="summary-icon">
+    <mat-icon>check_circle</mat-icon>
+  </div>
+
+  <div class="summary-info">
+
+    <span class="summary-label">
+      Successful
+    </span>
+
+    <h2>
+      {{ getSuccessfulCount() }}
+    </h2>
+
+  </div>
+
+</div>
+
+
+<!-- Pending -->
+
+<div class="summary-card pending-card">
+
+  <div class="summary-icon">
+    <mat-icon>pending</mat-icon>
+  </div>
+
+  <div class="summary-info">
+
+    <span class="summary-label">
+      Pending
+    </span>
+
+    <h2>
+      {{ getPendingCount() }}
+    </h2>
+
+  </div>
+
+</div>
+
+
+<!-- Failed -->
+
+<div class="summary-card failed-card">
+
+  <div class="summary-icon">
+    <mat-icon>cancel</mat-icon>
+  </div>
+
+  <div class="summary-info">
+
+    <span class="summary-label">
+      Failed
+    </span>
+
+    <h2>
+      {{ getFailedCount() }}
+    </h2>
+
+  </div>
+
+</div>
+
+
+  </div>
+
+  <!-- FILTER SECTION -->
+
+  <div class="filter-card">
+
+<div class="search-box">
+
+  <mat-icon>search</mat-icon>
+
+  <input
+    type="text"
+    placeholder="Search by PO, product or transaction ID"
+    [(ngModel)]="searchText"
+    (input)="onSearch()"
+  />
+
+  <button
+    *ngIf="searchText"
+    class="clear-btn"
+    (click)="searchText = ''; onSearch()"
+    type="button">
+
+    <mat-icon>close</mat-icon>
+
+  </button>
+
+</div>
+
+
+<div class="status-filter">
+
+  <label>
+    Payment Status
+  </label>
+
+  <select
+    [(ngModel)]="selectedStatus"
+    (change)="onStatusChange()">
+
+    <option value="ALL">
+      All Status
+    </option>
+
+    <option value="SUCCESS">
+      Success
+    </option>
+
+    <option value="PENDING">
+      Pending
+    </option>
+
+    <option value="FAILED">
+      Failed
+    </option>
+
+    <option value="REFUNDED">
+      Refunded
+    </option>
+
+  </select>
+
+</div>
+
+
+  </div>
+
+  <!-- LOADING -->
+
+  <div
+    class="loading-container"
+    *ngIf="loading">
+
+
+<mat-icon class="loading-icon">
+  sync
+</mat-icon>
+
+<p>
+  Loading payments...
+</p>
+
+
+  </div>
+
+  <!-- PAYMENT TABLE -->
+
+  <div
+    class="table-card"
+    *ngIf="!loading">
+
+
+<div class="table-header">
+
+  <div>
+
+    <h2>
+      Payment Transactions
+    </h2>
+
+    <p>
+      {{ filteredPayments.length }} payment(s) found
+    </p>
+
+  </div>
+
+</div>
+
+
+<div
+  class="table-container"
+  *ngIf="filteredPayments.length > 0">
+
+  <table>
+
+    <thead>
+
+      <tr>
+
+        <th>Payment ID</th>
+
+        <th>Purchase Order</th>
+
+        <th>Product</th>
+
+        <th>Quantity</th>
+
+        <th>Amount</th>
+
+        <th>Payment Date</th>
+
+        <th>Method</th>
+
+        <th>Status</th>
+
+        <th>Transaction ID</th>
+
+      </tr>
+
+    </thead>
+
+
+    <tbody>
+
+      <tr
+        *ngFor="let payment of filteredPayments">
+
+        <!-- Payment ID -->
+
+        <td>
+
+          <span class="payment-id">
+
+            #{{ payment.paymentId }}
+
+          </span>
+
+        </td>
+
+
+        <!-- Purchase Order -->
+
+        <td>
+
+          <span class="po-id">
+
+            PO-{{ payment.purchaseOrder?.purchaseOrderId }}
+
+          </span>
+
+        </td>
+
+
+        <!-- Product -->
+
+        <td>
+
+          <div class="product-cell">
+
+            <div class="product-icon">
+
+              <mat-icon>
+                inventory_2
+              </mat-icon>
+
+            </div>
+
+            <span>
+
+              {{ payment.purchaseOrder?.product?.name || 'N/A' }}
+
+            </span>
+
+          </div>
+
+        </td>
+
+
+        <!-- Quantity -->
+
+        <td>
+
+          {{ payment.purchaseOrder?.quantity || 0 }}
+
+        </td>
+
+
+        <!-- Amount -->
+
+        <td>
+
+          <span class="amount">
+
+            {{ formatAmount(payment.amount) }}
+
+          </span>
+
+        </td>
+
+
+        <!-- Payment Date -->
+
+        <td>
+
+          <span class="date">
+
+            {{ formatDate(payment.paymentDate) }}
+
+          </span>
+
+        </td>
+
+
+        <!-- Payment Method -->
+
+        <td>
+
+          <span class="payment-method">
+
+            {{ getPaymentMethodLabel(payment.paymentMethod) }}
+
+          </span>
+
+        </td>
+
+
+        <!-- Status -->
+
+        <td>
+
+          <span
+            class="status-badge"
+            [ngClass]="getStatusClass(payment.paymentStatus)">
+
+            <span class="status-dot"></span>
+
+            {{ payment.paymentStatus }}
+
+          </span>
+
+        </td>
+
+
+        <!-- Transaction -->
+
+        <td>
+
+          <span class="transaction-id">
+
+            {{ payment.transactionId || 'N/A' }}
+
+          </span>
+
+        </td>
+
+      </tr>
+
+    </tbody>
+
+  </table>
+
+</div>
+
+
+<!-- NO DATA -->
+
+<div
+  class="empty-state"
+  *ngIf="filteredPayments.length === 0">
+
+  <div class="empty-icon">
+
+    <mat-icon>
+      receipt_long
+    </mat-icon>
+
+  </div>
+
+  <h3>
+    No Payments Found
+  </h3>
+
+  <p>
+    There are no payment transactions matching your search.
+  </p>
+
+</div>
+
+
+  </div>
+
+</div>

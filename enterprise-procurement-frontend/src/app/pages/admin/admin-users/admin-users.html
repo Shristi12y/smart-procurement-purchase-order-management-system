@@ -1,0 +1,810 @@
+<div class="admin-users-page">
+
+  <!-- ========================================= -->
+  <!-- PAGE HEADER -->
+  <!-- ========================================= -->
+
+  <div class="page-header">
+
+    <div>
+
+      <span class="page-label">
+        USER MANAGEMENT
+      </span>
+
+      <h1>
+        Users
+      </h1>
+
+      <p>
+        Manage registered employees and their account information.
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <!-- ========================================= -->
+  <!-- SUMMARY CARDS -->
+  <!-- ========================================= -->
+
+  @if (!loading) {
+
+    <section class="users-summary">
+
+
+      <!-- TOTAL USERS -->
+
+      <div class="summary-card total-card">
+
+        <div class="summary-icon">
+
+          <mat-icon>
+            people
+          </mat-icon>
+
+        </div>
+
+        <div class="summary-content">
+
+          <span>
+            Total Users
+          </span>
+
+          <strong>
+            {{ totalUsers }}
+          </strong>
+
+          <small>
+            Registered users
+          </small>
+
+        </div>
+
+      </div>
+
+
+      <!-- DEPARTMENTS -->
+
+      <div class="summary-card department-card">
+
+        <div class="summary-icon">
+
+          <mat-icon>
+            business
+          </mat-icon>
+
+        </div>
+
+        <div class="summary-content">
+
+          <span>
+            Departments
+          </span>
+
+          <strong>
+            {{ getDepartmentCount() }}
+          </strong>
+
+          <small>
+            Active departments
+          </small>
+
+        </div>
+
+      </div>
+
+
+      <!-- DESIGNATIONS -->
+
+      <div class="summary-card designation-card">
+
+        <div class="summary-icon">
+
+          <mat-icon>
+            badge
+          </mat-icon>
+
+        </div>
+
+        <div class="summary-content">
+
+          <span>
+            Designations
+          </span>
+
+          <strong>
+            {{ getUniqueDesignationCount() }}
+          </strong>
+
+          <small>
+            User roles
+          </small>
+
+        </div>
+
+      </div>
+
+
+      <!-- RECENT USERS -->
+
+      <div class="summary-card recent-card">
+
+        <div class="summary-icon">
+
+          <mat-icon>
+            person_add
+          </mat-icon>
+
+        </div>
+
+        <div class="summary-content">
+
+          <span>
+            Recent Users
+          </span>
+
+          <strong>
+            {{ getRecentlyRegisteredCount() }}
+          </strong>
+
+          <small>
+            Latest registrations
+          </small>
+
+        </div>
+
+      </div>
+
+
+    </section>
+
+  }
+
+
+  <!-- ========================================= -->
+  <!-- LOADING -->
+  <!-- ========================================= -->
+
+  @if (loading) {
+
+    <div class="loading-state">
+
+      <div class="loading-icon">
+
+        <mat-icon>
+          people
+        </mat-icon>
+
+      </div>
+
+      <h3>
+        Loading Users
+      </h3>
+
+      <p>
+        Please wait while we load the users.
+      </p>
+
+    </div>
+
+  }
+
+
+  <!-- ========================================= -->
+  <!-- USERS CONTENT -->
+  <!-- ========================================= -->
+
+  @else {
+
+    <section class="users-table-card">
+
+
+      <!-- TABLE HEADER -->
+
+      <div class="table-header">
+
+        <div>
+
+          <span class="section-label">
+            REGISTERED USERS
+          </span>
+
+          <h2>
+            All Users
+          </h2>
+
+          <p>
+            {{ filteredUsers.length }}
+            of
+            {{ users.length }}
+            users shown
+          </p>
+
+        </div>
+
+
+        <div class="table-count">
+
+          <mat-icon>
+            people
+          </mat-icon>
+
+          {{ filteredUsers.length }}
+
+          Users
+
+        </div>
+
+      </div>
+
+
+      <!-- ===================================== -->
+      <!-- FILTER SECTION -->
+      <!-- ===================================== -->
+
+      <div class="filter-section">
+
+
+        <!-- SEARCH -->
+
+        <div class="search-box">
+
+          <mat-icon>
+            search
+          </mat-icon>
+
+          <input
+            type="text"
+            placeholder="Search by name, email or phone..."
+            [(ngModel)]="searchText"
+            (input)="filterUsers()">
+
+        </div>
+
+
+        <!-- DEPARTMENT -->
+
+        <div class="filter-box">
+
+  <mat-icon>
+    business
+  </mat-icon>
+
+  <select
+    [(ngModel)]="selectedDepartment"
+    (change)="filterUsers()">
+
+    <option value="ALL">
+      All Departments
+    </option>
+
+    @for (
+      department of departments;
+      track department
+    ) {
+
+      <option [value]="department">
+
+        {{ department }}
+
+      </option>
+
+    }
+
+  </select>
+
+</div>
+
+
+        <!-- DESIGNATION -->
+
+        <div class="filter-box">
+
+          <mat-icon>
+            badge
+          </mat-icon>
+
+          <select
+            [(ngModel)]="selectedDesignation"
+            (change)="filterUsers()">
+
+            <option value="ALL">
+              All Designations
+            </option>
+
+            @for (
+              designation of designations;
+              track designation
+            ) {
+
+              <option [value]="designation">
+
+                {{ designation }}
+
+              </option>
+
+            }
+
+          </select>
+
+        </div>
+
+
+        <!-- CLEAR -->
+
+        @if (
+          searchText ||
+          selectedDepartment !== 'ALL' ||
+          selectedDesignation !== 'ALL'
+        ) {
+
+          <button
+            type="button"
+            class="clear-filter-btn"
+            (click)="clearFilters()">
+
+            <mat-icon>
+              close
+            </mat-icon>
+
+            Clear
+
+          </button>
+
+        }
+
+      </div>
+
+
+      <!-- ===================================== -->
+      <!-- USERS TABLE -->
+      <!-- ===================================== -->
+
+      @if (filteredUsers.length > 0) {
+
+        <div class="table-wrapper">
+
+          <table>
+
+            <thead>
+
+              <tr>
+
+                <th>
+                  User
+                </th>
+
+                <th>
+                  Contact
+                </th>
+
+                <th>
+                  Department
+                </th>
+
+                <th>
+                  Designation
+                </th>
+
+                <th>
+                  User ID
+                </th>
+
+                <th>
+                  Actions
+                </th>
+
+              </tr>
+
+            </thead>
+
+
+            <tbody>
+
+              @for (
+                user of filteredUsers;
+                track getUserId(user)
+              ) {
+
+                <tr>
+
+
+                  <!-- USER -->
+
+                  <td>
+
+                    <div class="user-cell">
+
+                      <div class="user-avatar">
+
+                        {{
+                          user.name
+                            ? user.name.charAt(0).toUpperCase()
+                            : 'U'
+                        }}
+
+                      </div>
+
+                      <div class="user-info">
+
+                        <strong>
+                          {{ user.name || 'Unknown User' }}
+                        </strong>
+
+                        <span>
+                          {{ user.email || 'No email' }}
+                        </span>
+
+                      </div>
+
+                    </div>
+
+                  </td>
+
+
+                  <!-- CONTACT -->
+
+                  <td>
+
+                    <div class="contact-cell">
+
+                      <mat-icon>
+                        phone
+                      </mat-icon>
+
+                      <span>
+                        {{ user.phoneNumber || 'Not Provided' }}
+                      </span>
+
+                    </div>
+
+                  </td>
+
+
+                  <!-- DEPARTMENT -->
+
+                  <td>
+
+  @if (user.department?.departmentName) {
+
+    <span class="department-badge">
+
+      {{ user.department.departmentName }}
+
+    </span>
+
+  } @else {
+
+    <span class="not-available">
+      Not Assigned
+    </span>
+
+  }
+
+</td>
+
+
+                  <!-- DESIGNATION -->
+
+                  <td>
+
+                    @if (user.designation) {
+
+                      <span class="designation-badge">
+
+                        {{ user.designation }}
+
+                      </span>
+
+                    } @else {
+
+                      <span class="not-available">
+                        Not Assigned
+                      </span>
+
+                    }
+
+                  </td>
+
+
+                  <!-- USER ID -->
+
+                  <td>
+
+                    <span class="user-id">
+
+                      #{{ getUserId(user) }}
+
+                    </span>
+
+                  </td>
+
+
+                  <!-- ACTIONS -->
+
+                  <td>
+
+                    <div class="action-buttons">
+
+
+                      <!-- VIEW -->
+
+                      <button
+                        type="button"
+                        class="view-btn"
+                        title="View User"
+                        (click)="viewUser(user)">
+
+                        <mat-icon>
+                          visibility
+                        </mat-icon>
+
+                      </button>
+
+
+                      <!-- DELETE -->
+
+                      <button
+                        type="button"
+                        class="delete-btn"
+                        title="Delete User"
+                        (click)="deleteUser(user)">
+
+                        <mat-icon>
+                          delete
+                        </mat-icon>
+
+                      </button>
+
+                    </div>
+
+                  </td>
+
+
+                </tr>
+
+              }
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      }
+
+
+      <!-- NO USERS -->
+
+      @else {
+
+        <div class="no-results">
+
+          <div class="no-results-icon">
+
+            <mat-icon>
+              search_off
+            </mat-icon>
+
+          </div>
+
+          <h3>
+            No Users Found
+          </h3>
+
+          <p>
+            No users match your current search or filters.
+          </p>
+
+          <button
+            type="button"
+            class="reset-btn"
+            (click)="clearFilters()">
+
+            <mat-icon>
+              refresh
+            </mat-icon>
+
+            Reset Filters
+
+          </button>
+
+        </div>
+
+      }
+
+
+    </section>
+
+  }
+
+
+  <!-- USER DETAILS MODAL -->
+
+  @if (
+    showUserDetails &&
+    selectedUser
+  ) {
+
+    <div
+      class="modal-overlay"
+      (click)="closeUserDetails()">
+
+
+      <div
+        class="user-details-modal"
+        (click)="$event.stopPropagation()">
+
+
+        <!-- MODAL HEADER -->
+
+        <div class="modal-header">
+
+          <div>
+
+            <span class="page-label">
+              USER PROFILE
+            </span>
+
+            <h2>
+              User Details
+            </h2>
+
+            <p>
+              View account information.
+            </p>
+
+          </div>
+
+
+          <button
+            type="button"
+            class="close-modal-btn"
+            (click)="closeUserDetails()">
+
+            <mat-icon>
+              close
+            </mat-icon>
+
+          </button>
+
+        </div>
+
+
+        <!-- USER PROFILE -->
+
+        <div class="profile-section">
+
+
+          <div class="large-avatar">
+
+            {{
+              selectedUser.name
+                ? selectedUser.name.charAt(0).toUpperCase()
+                : 'U'
+            }}
+
+          </div>
+
+
+          <div class="profile-name">
+
+            <h3>
+
+              {{
+                selectedUser.name
+                || 'Unknown User'
+              }}
+
+            </h3>
+
+            <p>
+
+              {{
+                selectedUser.designation
+                || 'Employee'
+              }}
+
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <!-- DETAILS -->
+
+        <div class="details-grid">
+
+
+          <div class="detail-card">
+
+            <span>
+              User ID
+            </span>
+
+            <strong>
+              #{{ getUserId(selectedUser) }}
+            </strong>
+
+          </div>
+
+
+          <div class="detail-card">
+
+            <span>
+              Email
+            </span>
+
+            <strong>
+              {{ selectedUser.email || 'Not Provided' }}
+            </strong>
+
+          </div>
+
+
+          <div class="detail-card">
+
+            <span>
+              Phone Number
+            </span>
+
+            <strong>
+              {{ selectedUser.phoneNumber || 'Not Provided' }}
+            </strong>
+
+          </div>
+
+
+          <div class="detail-card">
+
+            <span>
+              Department
+            </span>
+
+            <strong>
+              {{ selectedUser.department?.departmentName || 'Not Assigned' }}
+            </strong>
+
+          </div>
+
+
+          <div class="detail-card">
+
+            <span>
+              Designation
+            </span>
+
+            <strong>
+              {{ selectedUser.designation || 'Not Assigned' }}
+            </strong>
+
+          </div>
+
+
+        </div>
+
+
+        <!-- FOOTER -->
+
+        <div class="modal-footer">
+
+          <button
+            type="button"
+            class="close-btn"
+            (click)="closeUserDetails()">
+
+            Close
+
+          </button>
+
+        </div>
+      </div>
+
+    </div>
+
+  }
+
+</div>

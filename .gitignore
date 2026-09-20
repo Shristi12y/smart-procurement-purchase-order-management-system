@@ -1,0 +1,91 @@
+# ==============================
+# Angular / Node
+# ==============================
+
+node_modules/
+.npm/
+.angular/
+dist/
+coverage/
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# ==============================
+# Spring Boot / Java
+# ==============================
+
+target/
+*.class
+*.jar
+*.war
+*.ear
+
+# Maven
+.mvn/timing.properties
+
+# ==============================
+# IDE
+# ==============================
+
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# ==============================
+# OS
+# ==============================
+
+.DS_Store
+Thumbs.db
+
+# ==============================
+# Logs
+# ==============================
+
+*.log
+logs/
+
+# ==============================
+# Temporary files
+# ==============================
+
+*.tmp
+*.temp
+*.swp
+*.swo
+
+# ==============================
+# Build files
+# ==============================
+
+bin/
+out/
+
+# ==============================
+# Local / Secret Configuration
+# ==============================
+
+application-local.properties
+application-local.yml
+application-local.yaml
+
+# Local database / credential files
+*.pem
+*.key
+*.p12
+*.jks
+
+# Local application configuration
+application-local.properties
+application-local.yml
+
+
+enterpriseApp - Backend/src/main/resources/application.properties
+

@@ -1,0 +1,426 @@
+<div class="login-page">
+
+  <!-- Background -->
+
+  <div class="background-shape shape-1"></div>
+  <div class="background-shape shape-2"></div>
+  <div class="background-shape shape-3"></div>
+
+
+  <!-- Top Logo -->
+
+  <header class="login-navbar">
+
+    <a
+      routerLink="/"
+      class="brand">
+
+      <div class="brand-icon">
+
+        <mat-icon>
+          business_center
+        </mat-icon>
+
+      </div>
+
+      <span>
+        Enterprise Procurement
+      </span>
+
+    </a>
+
+
+    <a
+      routerLink="/"
+      class="home-btn">
+
+      <mat-icon>
+        home
+      </mat-icon>
+
+      Home
+
+    </a>
+
+  </header>
+
+
+  <!-- Main Content -->
+
+  <main class="login-content">
+
+
+    <!-- Left Section -->
+
+    <section class="welcome-section">
+
+      <div class="welcome-badge">
+
+        <mat-icon>
+          verified
+        </mat-icon>
+
+        Smart Procurement Platform
+
+      </div>
+
+
+      <h1>
+
+        Manage Procurement
+
+        <span>
+          Smarter & Faster
+        </span>
+
+      </h1>
+
+
+      <p>
+
+        Access your procurement workspace and manage
+        products, purchase requests, orders, suppliers,
+        and payments from one centralized platform.
+
+      </p>
+
+
+      <div class="login-features">
+
+
+        <div class="login-feature">
+
+          <div class="feature-icon">
+
+            <mat-icon>
+              inventory_2
+            </mat-icon>
+
+          </div>
+
+          <div>
+
+            <strong>
+              Manage Products
+            </strong>
+
+            <span>
+              Track products and available inventory
+            </span>
+
+          </div>
+
+        </div>
+
+
+        <div class="login-feature">
+
+          <div class="feature-icon">
+
+            <mat-icon>
+              shopping_cart
+            </mat-icon>
+
+          </div>
+
+          <div>
+
+            <strong>
+              Purchase Requests
+            </strong>
+
+            <span>
+              Create and track procurement requests
+            </span>
+
+          </div>
+
+        </div>
+
+
+        <div class="login-feature">
+
+          <div class="feature-icon">
+
+            <mat-icon>
+              local_shipping
+            </mat-icon>
+
+          </div>
+
+          <div>
+
+            <strong>
+              Order Management
+            </strong>
+
+            <span>
+              Monitor orders throughout the process
+            </span>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- Login Card -->
+
+    <section class="form-section">
+
+      <mat-card class="login-card">
+
+
+        <div class="form-header">
+
+          <div class="form-icon">
+
+            <mat-icon>
+              login
+            </mat-icon>
+
+          </div>
+
+          <h2>
+            Welcome Back
+          </h2>
+
+          <p>
+            Sign in to your account to continue
+          </p>
+
+        </div>
+
+
+        <mat-card-content>
+
+
+          <form
+            [formGroup]="loginForm"
+            (ngSubmit)="login()">
+
+
+            <!-- Role Selection -->
+
+            <div class="role-label">
+
+              Select Login Role
+
+            </div>
+
+
+            <div class="role-selection">
+
+
+              <!-- User -->
+
+              <div
+                class="role-card"
+                [class.selected]="selectedRole === 'USER'"
+                (click)="selectRole('USER')">
+
+                <mat-icon>
+                  person
+                </mat-icon>
+
+                <strong>
+                  User
+                </strong>
+
+                <span>
+                  Employee
+                </span>
+
+              </div>
+
+
+              <!-- Admin -->
+
+              <div
+                class="role-card"
+                [class.selected]="selectedRole === 'ADMIN'"
+                (click)="selectRole('ADMIN')">
+
+                <mat-icon>
+                  admin_panel_settings
+                </mat-icon>
+
+                <strong>
+                  Admin
+                </strong>
+
+                <span>
+                  Administrator
+                </span>
+
+              </div>
+
+
+              <!-- Supplier -->
+
+              <div
+                class="role-card"
+                [class.selected]="selectedRole === 'SUPPLIER'"
+                (click)="selectRole('SUPPLIER')">
+
+                <mat-icon>
+                  business
+                </mat-icon>
+
+                <strong>
+                  Supplier
+                </strong>
+
+                <span>
+                  Partner
+                </span>
+
+              </div>
+
+            </div>
+
+
+            <!-- Email -->
+
+            <mat-form-field appearance="outline">
+
+              <mat-label>
+                Email Address
+              </mat-label>
+
+              <mat-icon matPrefix>
+                email
+              </mat-icon>
+
+              <input
+                matInput
+                type="email"
+                placeholder="Enter your email"
+                formControlName="email">
+
+
+              @if (
+                loginForm.get('email')?.hasError('required') &&
+                loginForm.get('email')?.touched
+              ) {
+
+                <mat-error>
+                  Email is required
+                </mat-error>
+
+              }
+
+
+              @if (
+                loginForm.get('email')?.hasError('email') &&
+                loginForm.get('email')?.touched
+              ) {
+
+                <mat-error>
+                  Enter a valid email
+                </mat-error>
+
+              }
+
+            </mat-form-field>
+
+
+            <!-- Password -->
+
+            <mat-form-field appearance="outline">
+
+              <mat-label>
+                Password
+              </mat-label>
+
+              <mat-icon matPrefix>
+                lock
+              </mat-icon>
+
+              <input
+                matInput
+                type="password"
+                placeholder="Enter your password"
+                formControlName="password">
+
+
+              @if (
+                loginForm.get('password')?.hasError('required') &&
+                loginForm.get('password')?.touched
+              ) {
+
+                <mat-error>
+                  Password is required
+                </mat-error>
+
+              }
+
+
+              @if (
+                loginForm.get('password')?.hasError('minlength') &&
+                loginForm.get('password')?.touched
+              ) {
+
+                <mat-error>
+                  Password must be at least 6 characters
+                </mat-error>
+
+              }
+
+            </mat-form-field>
+
+
+            <!-- Login Button -->
+
+            <button
+              mat-raised-button
+              class="login-button"
+              type="submit">
+
+              Login as {{ selectedRole }}
+
+              <mat-icon>
+                arrow_forward
+              </mat-icon>
+
+            </button>
+
+          </form>
+
+
+          <div class="form-divider">
+
+            <span>
+              New to Enterprise Procurement?
+            </span>
+
+          </div>
+
+
+          <div class="register-link">
+
+            <a routerLink="/register">
+
+              Create an Account
+
+              <mat-icon>
+                arrow_forward
+              </mat-icon>
+
+            </a>
+
+          </div>
+
+
+        </mat-card-content>
+
+      </mat-card>
+
+    </section>
+
+  </main>
+
+</div>

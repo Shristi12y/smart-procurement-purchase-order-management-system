@@ -1,0 +1,792 @@
+/* PAGE*/
+
+.history-page {
+  padding: 28px;
+  background: #f6f7fb;
+  min-height: 100vh;
+}
+
+
+/* PAGE HEADER */
+
+.page-header {
+  margin-bottom: 28px;
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.header-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 12px;
+  background: #eef2ff;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.header-icon mat-icon {
+  font-size: 28px;
+  width: 28px;
+  height: 28px;
+  color: #4f46e5;
+}
+
+.page-header h1 {
+  margin: 0;
+  font-size: 27px;
+  font-weight: 700;
+}
+
+.page-header p {
+  margin: 5px 0 0;
+  color: #737783;
+  font-size: 14px;
+}
+
+
+/* =========================================================
+   EXPORT BUTTONS
+========================================================= */
+
+.export-buttons {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-left: auto;
+}
+
+.excel-btn,
+.pdf-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+
+  padding: 8px 16px;
+  border-radius: 7px;
+
+  font-weight: 500;
+  min-height: 40px;
+}
+
+.excel-btn {
+  background: #198754;
+  color: white;
+}
+
+.pdf-btn {
+  background: #dc3545;
+  color: white;
+}
+
+.excel-btn:hover {
+  background: #157347;
+}
+
+.pdf-btn:hover {
+  background: #bb2d3b;
+}
+
+
+/* =========================================================
+   SUMMARY CARDS
+========================================================= */
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+  margin-bottom: 24px;
+}
+
+.summary-card {
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 20px;
+
+  display: flex;
+  align-items: center;
+  gap: 15px;
+
+  box-shadow:
+    0 2px 10px rgba(0, 0, 0, 0.05);
+
+  border: 1px solid #eeeeee;
+}
+
+.summary-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.summary-icon mat-icon {
+  font-size: 25px;
+  width: 25px;
+  height: 25px;
+}
+
+.summary-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.summary-label {
+  font-size: 13px;
+  color: #777;
+  margin-bottom: 5px;
+}
+
+.summary-info h2 {
+  margin: 0;
+  font-size: 21px;
+  font-weight: 700;
+}
+
+
+/* Total */
+
+.total-card .summary-icon {
+  background: #eef2ff;
+}
+
+.total-card .summary-icon mat-icon {
+  color: #4f46e5;
+}
+
+
+/* Successful */
+
+.success-card .summary-icon {
+  background: #e9f8ef;
+}
+
+.success-card .summary-icon mat-icon {
+  color: #198754;
+}
+
+
+/* Transactions */
+
+.transaction-card .summary-icon {
+  background: #e9f3ff;
+}
+
+.transaction-card .summary-icon mat-icon {
+  color: #1976d2;
+}
+
+
+/* Average */
+
+.average-card .summary-icon {
+  background: #fff5dc;
+}
+
+.average-card .summary-icon mat-icon {
+  color: #d99400;
+}
+
+
+/* =========================================================
+   MONTHLY PAYMENT CHART
+========================================================= */
+
+.chart-card {
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 22px;
+  margin-bottom: 24px;
+
+  border: 1px solid #eeeeee;
+
+  box-shadow:
+    0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+
+.chart-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-bottom: 20px;
+}
+
+
+.chart-header h2 {
+  margin: 0;
+
+  font-size: 18px;
+  font-weight: 650;
+}
+
+
+.chart-header p {
+  margin: 5px 0 0;
+
+  color: #777;
+
+  font-size: 13px;
+}
+
+
+.chart-icon {
+  width: 42px;
+  height: 42px;
+
+  border-radius: 10px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #eef2ff;
+}
+
+
+.chart-icon mat-icon {
+  font-size: 23px;
+  width: 23px;
+  height: 23px;
+}
+
+
+.chart-container {
+  position: relative;
+
+  width: 100%;
+
+  height: 360px;
+}
+
+
+.chart-container canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+
+/* =========================================================
+   EMPTY GRAPH
+========================================================= */
+
+.chart-empty {
+  height: 300px;
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+
+  color: #888;
+}
+
+
+.chart-empty mat-icon {
+  font-size: 42px;
+
+  width: 42px;
+  height: 42px;
+
+  margin-bottom: 12px;
+}
+
+
+.chart-empty p {
+  margin: 0;
+
+  font-size: 13px;
+}
+
+/* =========================================================
+   FILTER CARD
+========================================================= */
+
+.filter-card {
+  background: #ffffff;
+
+  border-radius: 14px;
+
+  padding: 18px;
+  margin-bottom: 20px;
+
+  display: flex;
+  align-items: flex-end;
+
+  gap: 20px;
+
+  box-shadow:
+    0 2px 10px rgba(0, 0, 0, 0.05);
+
+  border: 1px solid #eeeeee;
+}
+
+.search-box {
+  flex: 1;
+
+  height: 44px;
+
+  border: 1px solid #dddddd;
+  border-radius: 9px;
+
+  display: flex;
+  align-items: center;
+
+  padding: 0 12px;
+  gap: 8px;
+
+  background: #ffffff;
+}
+
+.search-box mat-icon {
+  color: #777;
+  font-size: 21px;
+}
+
+.search-box input {
+  border: none;
+  outline: none;
+
+  width: 100%;
+
+  font-size: 14px;
+  background: transparent;
+}
+
+.search-box input::placeholder {
+  color: #999;
+}
+
+.clear-btn {
+  border: none;
+  background: transparent;
+
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.clear-btn mat-icon {
+  font-size: 19px;
+}
+
+.status-filter {
+  width: 190px;
+}
+
+.status-filter label {
+  display: block;
+
+  font-size: 12px;
+  color: #666;
+
+  margin-bottom: 6px;
+}
+
+.status-filter select {
+  width: 100%;
+  height: 44px;
+
+  border: 1px solid #dddddd;
+  border-radius: 9px;
+
+  padding: 0 12px;
+
+  outline: none;
+
+  background: #ffffff;
+
+  font-size: 14px;
+
+  cursor: pointer;
+}
+
+
+/* =========================================================
+   TABLE
+========================================================= */
+
+.table-card {
+  background: #ffffff;
+
+  border-radius: 14px;
+
+  box-shadow:
+    0 2px 10px rgba(0, 0, 0, 0.05);
+
+  border: 1px solid #eeeeee;
+
+  overflow: hidden;
+}
+
+.table-header {
+  padding: 20px 22px;
+
+  border-bottom:
+    1px solid #eeeeee;
+}
+
+.table-header h2 {
+  margin: 0;
+
+  font-size: 18px;
+  font-weight: 650;
+}
+
+.table-header p {
+  margin: 5px 0 0;
+
+  color: #777;
+  font-size: 13px;
+}
+
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+
+  border-collapse: collapse;
+
+  min-width: 1100px;
+}
+
+thead {
+  background: #f8f9fc;
+}
+
+th {
+  padding: 14px 16px;
+
+  text-align: left;
+
+  font-size: 12px;
+  font-weight: 650;
+
+  color: #666;
+
+  white-space: nowrap;
+}
+
+td {
+  padding: 15px 16px;
+
+  border-top:
+    1px solid #eeeeee;
+
+  font-size: 13px;
+
+  color: #333;
+
+  white-space: nowrap;
+}
+
+tbody tr {
+  transition:
+    background 0.2s ease;
+}
+
+tbody tr:hover {
+  background: #fafbff;
+}
+
+
+/* =========================================================
+   TABLE CONTENT
+========================================================= */
+
+.payment-id {
+  font-weight: 650;
+}
+
+.po-id {
+  font-weight: 600;
+}
+
+.product-cell {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.product-icon {
+  width: 32px;
+  height: 32px;
+
+  border-radius: 8px;
+
+  background: #f0f2f7;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.product-icon mat-icon {
+  font-size: 18px;
+
+  width: 18px;
+  height: 18px;
+}
+
+.amount {
+  font-weight: 650;
+}
+
+.date {
+  color: #666;
+}
+
+.payment-method {
+  font-weight: 500;
+}
+
+.transaction-id {
+  font-family: monospace;
+  font-size: 12px;
+}
+
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+.status-badge {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 6px;
+
+  padding: 5px 10px;
+
+  border-radius: 20px;
+
+  font-size: 11px;
+
+  font-weight: 650;
+}
+
+.status-dot {
+  width: 6px;
+  height: 6px;
+
+  border-radius: 50%;
+}
+
+.status-success {
+  background: #e8f7ed;
+  color: #198754;
+}
+
+.status-success .status-dot {
+  background: #198754;
+}
+
+.status-pending {
+  background: #fff4d6;
+  color: #a66a00;
+}
+
+.status-pending .status-dot {
+  background: #d99400;
+}
+
+.status-failed {
+  background: #fde8e8;
+  color: #c82333;
+}
+
+.status-failed .status-dot {
+  background: #dc3545;
+}
+
+.status-refunded {
+  background: #e9e9ec;
+  color: #555;
+}
+
+.status-refunded .status-dot {
+  background: #666;
+}
+
+
+/* =========================================================
+   LOADING
+========================================================= */
+
+.loading-container {
+  min-height: 300px;
+
+  background: #ffffff;
+
+  border-radius: 14px;
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  color: #777;
+}
+
+.loading-icon {
+  animation:
+    spin 1s linear infinite;
+
+  margin-bottom: 10px;
+}
+
+@keyframes spin {
+
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+
+}
+
+
+/* =========================================================
+   EMPTY
+========================================================= */
+
+.empty-state {
+  min-height: 300px;
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+
+  padding: 40px;
+}
+
+.empty-icon {
+  width: 65px;
+  height: 65px;
+
+  border-radius: 50%;
+
+  background: #f1f2f6;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-bottom: 15px;
+}
+
+.empty-icon mat-icon {
+  font-size: 30px;
+
+  width: 30px;
+  height: 30px;
+
+  color: #777;
+}
+
+.empty-state h3 {
+  margin: 0 0 6px;
+
+  font-size: 17px;
+}
+
+.empty-state p {
+  margin: 0;
+
+  color: #888;
+
+  font-size: 13px;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1100px) {
+
+  .summary-grid {
+    grid-template-columns:
+      repeat(2, 1fr);
+  }
+
+}
+
+
+@media (max-width: 700px) {
+
+  .history-page {
+    padding: 18px;
+  }
+
+  .header-content {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .header-left {
+    width: 100%;
+  }
+
+  .export-buttons {
+    margin-left: 0;
+    justify-content: flex-end;
+  }
+
+  .summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .filter-card {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .status-filter {
+    width: 100%;
+  }
+
+  .page-header h1 {
+    font-size: 23px;
+  }
+
+  .chart-card {
+    padding: 16px;
+  }
+
+}
+

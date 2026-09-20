@@ -1,0 +1,865 @@
+<div class="admin-categories-page">
+
+
+  <!-- ========================================= -->
+  <!-- PAGE HEADER -->
+  <!-- ========================================= -->
+
+  <div class="page-header">
+
+    <div>
+
+      <span class="page-label">
+        CATEGORY MANAGEMENT
+      </span>
+
+      <h1>
+        Categories
+      </h1>
+
+      <p>
+        Manage product categories and their departments.
+      </p>
+
+    </div>
+
+
+    <button
+      type="button"
+      class="add-category-btn"
+      (click)="addCategory()">
+
+      <mat-icon>
+        add
+      </mat-icon>
+
+      Add Category
+
+    </button>
+
+  </div>
+
+
+
+  <!-- ========================================= -->
+  <!-- SUMMARY -->
+  <!-- ========================================= -->
+
+  @if (!loading) {
+
+    <section class="categories-summary">
+
+
+      <!-- TOTAL -->
+
+      <div class="summary-card total-card">
+
+        <div class="summary-icon">
+
+          <mat-icon>
+            category
+          </mat-icon>
+
+        </div>
+
+        <div class="summary-content">
+
+          <span>
+            Total Categories
+          </span>
+
+          <strong>
+            {{ getTotalCategoriesCount() }}
+          </strong>
+
+          <small>
+            Categories in catalog
+          </small>
+
+        </div>
+
+      </div>
+
+
+      <!-- DEPARTMENTS -->
+
+      <div class="summary-card department-card">
+
+        <div class="summary-icon">
+
+          <mat-icon>
+            business
+          </mat-icon>
+
+        </div>
+
+        <div class="summary-content">
+
+          <span>
+            Departments
+          </span>
+
+          <strong>
+            {{ getDepartmentCount() }}
+          </strong>
+
+          <small>
+            Using categories
+          </small>
+
+        </div>
+
+      </div>
+
+
+      <!-- ASSIGNED -->
+
+      <div class="summary-card assigned-card">
+
+        <div class="summary-icon">
+
+          <mat-icon>
+            link
+          </mat-icon>
+
+        </div>
+
+        <div class="summary-content">
+
+          <span>
+            Assigned
+          </span>
+
+          <strong>
+            {{ getAssignedCategoriesCount() }}
+          </strong>
+
+          <small>
+            Linked to departments
+          </small>
+
+        </div>
+
+      </div>
+
+
+      <!-- UNASSIGNED -->
+
+      <div class="summary-card unassigned-card">
+
+        <div class="summary-icon">
+
+          <mat-icon>
+            link_off
+          </mat-icon>
+
+        </div>
+
+        <div class="summary-content">
+
+          <span>
+            Unassigned
+          </span>
+
+          <strong>
+            {{ getUnassignedCategoriesCount() }}
+          </strong>
+
+          <small>
+            Need department
+          </small>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  }
+
+
+
+  <!-- ========================================= -->
+  <!-- LOADING -->
+  <!-- ========================================= -->
+
+  @if (loading) {
+
+    <div class="loading-state">
+
+      <div class="loading-icon">
+
+        <mat-icon>
+          category
+        </mat-icon>
+
+      </div>
+
+      <h3>
+        Loading Categories
+      </h3>
+
+      <p>
+        Please wait while we load the category information.
+      </p>
+
+    </div>
+
+  }
+
+
+
+  <!-- ========================================= -->
+  <!-- CONTENT -->
+  <!-- ========================================= -->
+
+  @else {
+
+    <section class="categories-table-card">
+
+
+      <!-- TABLE HEADER -->
+
+      <div class="table-header">
+
+        <div>
+
+          <span class="section-label">
+            CATEGORY DIRECTORY
+          </span>
+
+          <h2>
+            All Categories
+          </h2>
+
+          <p>
+
+            {{ filteredCategories.length }}
+
+            of
+
+            {{ categories.length }}
+
+            categories shown
+
+          </p>
+
+        </div>
+
+
+        <div class="table-count">
+
+          <mat-icon>
+            category
+          </mat-icon>
+
+          {{ filteredCategories.length }}
+
+          Categories
+
+        </div>
+
+      </div>
+
+
+
+      <!-- ========================================= -->
+      <!-- FILTERS -->
+      <!-- ========================================= -->
+
+      <div class="filter-section">
+
+
+        <!-- SEARCH -->
+
+        <div class="search-box">
+
+          <mat-icon>
+            search
+          </mat-icon>
+
+          <input
+            type="text"
+            placeholder="Search by category or department..."
+            [(ngModel)]="searchText"
+            (input)="filterCategories()">
+
+        </div>
+
+
+
+        <!-- DEPARTMENT -->
+
+        <div class="filter-box">
+
+          <mat-icon>
+            business
+          </mat-icon>
+
+          <select
+            [(ngModel)]="selectedDepartment"
+            (change)="filterCategories()">
+
+            <option value="ALL">
+              All Departments
+            </option>
+
+            @for (
+              department of departments;
+              track department.departmentId
+            ) {
+
+              <option
+                [value]="department.departmentId">
+
+                {{ department.departmentName }}
+
+              </option>
+
+            }
+
+          </select>
+
+        </div>
+
+
+
+        <!-- CLEAR -->
+
+        @if (
+
+          searchText ||
+
+          selectedDepartment !== 'ALL'
+
+        ) {
+
+          <button
+            type="button"
+            class="clear-filter-btn"
+            (click)="clearFilters()">
+
+            <mat-icon>
+              close
+            </mat-icon>
+
+            Clear
+
+          </button>
+
+        }
+
+      </div>
+
+
+
+      <!-- ========================================= -->
+      <!-- TABLE -->
+      <!-- ========================================= -->
+
+      @if (filteredCategories.length > 0) {
+
+        <div class="table-wrapper">
+
+          <table>
+
+            <thead>
+
+              <tr>
+
+                <th>
+                  Category
+                </th>
+
+                <th>
+                  Department
+                </th>
+
+                <th>
+                  Manager
+                </th>
+
+                <th>
+                  Category ID
+                </th>
+
+                <th>
+                  Actions
+                </th>
+
+              </tr>
+
+            </thead>
+
+
+            <tbody>
+
+              @for (
+
+                category of filteredCategories;
+
+                track category.categoryId
+
+              ) {
+
+                <tr>
+
+
+                  <!-- CATEGORY -->
+
+                  <td>
+
+                    <div class="category-cell">
+
+                      <div class="category-icon">
+
+                        <mat-icon>
+                          category
+                        </mat-icon>
+
+                      </div>
+
+
+                      <div class="category-info">
+
+                        <strong>
+
+                          {{
+                            category.categoryName ||
+                            'Unknown Category'
+                          }}
+
+                        </strong>
+
+                        <span>
+
+                          Category
+
+                        </span>
+
+                      </div>
+
+                    </div>
+
+                  </td>
+
+
+
+                  <!-- DEPARTMENT -->
+
+                  <td>
+
+                    <div class="department-cell">
+
+                      <mat-icon>
+                        business
+                      </mat-icon>
+
+                      <span>
+
+                        {{
+                          getDepartmentName(
+                            category
+                          )
+                        }}
+
+                      </span>
+
+                    </div>
+
+                  </td>
+
+
+
+                  <!-- MANAGER -->
+
+                  <td>
+
+                    <span class="manager-name">
+
+                      {{
+                        getDepartmentManager(
+                          category
+                        )
+                      }}
+
+                    </span>
+
+                  </td>
+
+
+
+                  <!-- ID -->
+
+                  <td>
+
+                    <span class="category-id">
+
+                      #{{ category.categoryId }}
+
+                    </span>
+
+                  </td>
+
+
+
+                  <!-- ACTIONS -->
+
+                  <td>
+
+                    <div class="action-buttons">
+
+
+                      <!-- VIEW -->
+
+                      <button
+                        type="button"
+                        class="view-btn"
+                        title="View Category"
+                        (click)="
+                          viewCategory(
+                            category
+                          )
+                        ">
+
+                        <mat-icon>
+                          visibility
+                        </mat-icon>
+
+                      </button>
+
+
+
+                      <!-- EDIT -->
+
+                      <button
+                        type="button"
+                        class="edit-btn"
+                        title="Edit Category"
+                        (click)="
+                          editCategory(
+                            category.categoryId
+                          )
+                        ">
+
+                        <mat-icon>
+                          edit
+                        </mat-icon>
+
+                      </button>
+
+
+
+                      <!-- DELETE -->
+
+                      <button
+                        type="button"
+                        class="delete-btn"
+                        title="Delete Category"
+                        (click)="
+                          deleteCategory(
+                            category
+                          )
+                        ">
+
+                        <mat-icon>
+                          delete
+                        </mat-icon>
+
+                      </button>
+
+                    </div>
+
+                  </td>
+
+                </tr>
+
+              }
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      }
+
+
+
+      <!-- ========================================= -->
+      <!-- NO RESULTS -->
+      <!-- ========================================= -->
+
+      @else {
+
+        <div class="no-results">
+
+          <div class="no-results-icon">
+
+            <mat-icon>
+              search_off
+            </mat-icon>
+
+          </div>
+
+          <h3>
+            No Categories Found
+          </h3>
+
+          <p>
+            No categories match your current search or filters.
+          </p>
+
+          <button
+            type="button"
+            class="reset-btn"
+            (click)="clearFilters()">
+
+            <mat-icon>
+              refresh
+            </mat-icon>
+
+            Reset Filters
+
+          </button>
+
+        </div>
+
+      }
+
+    </section>
+
+  }
+
+
+
+  <!-- ========================================= -->
+  <!-- CATEGORY DETAILS MODAL -->
+  <!-- ========================================= -->
+
+  @if (
+
+    showCategoryDetails &&
+
+    selectedCategory
+
+  ) {
+
+    <div
+      class="modal-overlay"
+      (click)="closeCategoryDetails()">
+
+
+      <div
+        class="category-details-modal"
+        (click)="$event.stopPropagation()">
+
+
+        <!-- HEADER -->
+
+        <div class="modal-header">
+
+          <div>
+
+            <span class="page-label">
+              CATEGORY PROFILE
+            </span>
+
+            <h2>
+
+              {{
+                selectedCategory.categoryName
+              }}
+
+            </h2>
+
+            <p>
+              View category information and department details.
+            </p>
+
+          </div>
+
+
+          <button
+            type="button"
+            class="close-modal-btn"
+            (click)="closeCategoryDetails()">
+
+            <mat-icon>
+              close
+            </mat-icon>
+
+          </button>
+
+        </div>
+
+
+
+        <!-- CATEGORY PROFILE -->
+
+        <div class="category-profile">
+
+          <div class="large-category-icon">
+
+            <mat-icon>
+              category
+            </mat-icon>
+
+          </div>
+
+
+          <div class="profile-content">
+
+            <h3>
+
+              {{
+                selectedCategory.categoryName
+              }}
+
+            </h3>
+
+            <p>
+
+              Category ID:
+              #{{ selectedCategory.categoryId }}
+
+            </p>
+
+          </div>
+
+        </div>
+
+
+
+        <!-- DETAILS -->
+
+        <div class="details-grid">
+
+
+          <!-- CATEGORY ID -->
+
+          <div class="detail-card">
+
+            <span>
+              Category ID
+            </span>
+
+            <strong>
+
+              #{{ selectedCategory.categoryId }}
+
+            </strong>
+
+          </div>
+
+
+
+          <!-- CATEGORY NAME -->
+
+          <div class="detail-card">
+
+            <span>
+              Category Name
+            </span>
+
+            <strong>
+
+              {{
+                selectedCategory.categoryName
+              }}
+
+            </strong>
+
+          </div>
+
+
+
+          <!-- DEPARTMENT -->
+
+          <div class="detail-card">
+
+            <span>
+              Department
+            </span>
+
+            <strong>
+
+              {{
+                getDepartmentName(
+                  selectedCategory
+                )
+              }}
+
+            </strong>
+
+          </div>
+
+
+
+          <!-- MANAGER -->
+
+          <div class="detail-card">
+
+            <span>
+              Department Manager
+            </span>
+
+            <strong>
+
+              {{
+                getDepartmentManager(
+                  selectedCategory
+                )
+              }}
+
+            </strong>
+
+          </div>
+
+
+        </div>
+
+
+
+        <!-- FOOTER -->
+
+        <div class="modal-footer">
+
+
+          <button
+            type="button"
+            class="edit-category-btn"
+            (click)="
+              editCategory(
+                selectedCategory.categoryId
+              )
+            ">
+
+            <mat-icon>
+              edit
+            </mat-icon>
+
+            Edit Category
+
+          </button>
+
+
+          <button
+            type="button"
+            class="close-btn"
+            (click)="closeCategoryDetails()">
+
+            Close
+
+          </button>
+
+        </div>
+
+
+      </div>
+
+    </div>
+
+  }
+
+</div>

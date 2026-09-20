@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f5f7f5;
+            font-family: Arial, Helvetica, sans-serif;
+            color: #333333;
+        }
+
+        .email-container {
+            width: 100%;
+            padding: 40px 0;
+        }
+
+        .email-card {
+            max-width: 650px;
+            margin: auto;
+            background-color: #ffffff;
+            border: 1px solid #e1e1e1;
+            border-radius: 4px;
+            padding: 30px;
+            box-sizing: border-box;
+        }
+
+        .title {
+            color: #2e7d32;
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .divider {
+            height: 2px;
+            background-color: #5c9563;
+            margin-bottom: 25px;
+        }
+
+        .greeting {
+            font-size: 15px;
+            margin-bottom: 20px;
+        }
+
+        .description {
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .details {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            margin-bottom: 25px;
+        }
+
+        .details td {
+            padding: 12px 8px;
+            border-bottom: 1px solid #dddddd;
+            font-size: 14px;
+        }
+
+        .details td:first-child {
+            width: 40%;
+            font-weight: bold;
+        }
+
+        .amount {
+            color: #2e7d32;
+            font-weight: bold;
+        }
+
+        .message {
+            font-size: 14px;
+            line-height: 1.6;
+            margin-top: 20px;
+        }
+
+        .footer {
+            margin-top: 35px;
+            color: #777777;
+            font-size: 12px;
+        }
+
+        a {
+            color: #1976d2;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="email-container">
+
+    <div class="email-card">
+
+        <div class="title">
+            Payment Confirmed - Order Ready to Ship
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="greeting">
+            Dear <strong>{{SUPPLIER_NAME}}</strong>,
+        </div>
+
+        <div class="description">
+            Payment has been successfully processed and transferred by
+            Admin for the following procurement request:
+        </div>
+
+        <table class="details">
+
+            <tr>
+                <td>Request ID:</td>
+                <td>#{{PURCHASE_ORDER_ID}}</td>
+            </tr>
+
+            <tr>
+                <td>Product:</td>
+                <td>{{PRODUCT_NAME}}</td>
+            </tr>
+
+            <tr>
+                <td>Quantity:</td>
+                <td>{{QUANTITY}} units</td>
+            </tr>
+
+            <tr>
+                <td>Total Amount Paid:</td>
+                <td class="amount">₹{{AMOUNT}}</td>
+            </tr>
+
+            <tr>
+                <td>Transaction ID:</td>
+                <td>{{TRANSACTION_ID}}</td>
+            </tr>
+
+            <tr>
+                <td>Requesting User:</td>
+                <td>
+                    {{USER_NAME}}
+                    (<a href="mailto:{{USER_EMAIL}}">{{USER_EMAIL}}</a>)
+                </td>
+            </tr>
+
+        </table>
+
+        <div class="message">
+            Please process and ship this item to the requesting department
+            at your earliest convenience.
+        </div>
+
+        <div class="footer">
+            Enterprise Procurement System - Automated Notification
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

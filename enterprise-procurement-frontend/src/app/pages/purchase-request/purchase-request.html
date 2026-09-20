@@ -1,0 +1,1069 @@
+<div class="purchase-request-page">
+
+  <!-- ================================= -->
+  <!-- MY REQUESTS PAGE -->
+  <!-- ================================= -->
+
+  @if (isMyRequestsPage) {
+
+    <div class="my-requests-container">
+
+      <div class="requests-header">
+
+        <div>
+
+          <span class="page-label">
+            PURCHASE MANAGEMENT
+          </span>
+
+          <h1>
+            My Purchase Requests
+          </h1>
+
+          <p>
+            View and track all your purchase requests.
+          </p>
+
+        </div>
+
+
+        <a
+          routerLink="/purchase-request"
+          class="new-request-btn">
+
+          + New Request
+
+        </a>
+
+      </div>
+
+
+      @if (requestsLoading) {
+
+        <div class="loading-state">
+
+          <div class="loading-icon">
+            ⏳
+          </div>
+
+          Loading your purchase requests...
+
+        </div>
+
+      }
+
+      @else if (purchaseRequests.length > 0) {
+
+        <!-- SUMMARY -->
+
+        <div class="requests-summary">
+
+          <div class="summary-item">
+
+            <div class="summary-icon total-icon">
+              📋
+            </div>
+
+            <div>
+
+              <span>
+                Total Requests
+              </span>
+
+              <strong>
+                {{ purchaseRequests.length }}
+              </strong>
+
+            </div>
+
+          </div>
+
+
+          <div class="summary-item">
+
+            <div class="summary-icon pending-summary-icon">
+              ⏳
+            </div>
+
+            <div>
+
+              <span>
+                Pending
+              </span>
+
+              <strong>
+                {{ getPendingRequestsCount() }}
+              </strong>
+
+            </div>
+
+          </div>
+
+
+          <div class="summary-item">
+
+            <div class="summary-icon delivered-summary-icon">
+              ✓
+            </div>
+
+            <div>
+
+              <span>
+                Delivered
+              </span>
+
+              <strong>
+                {{ getDeliveredRequestsCount() }}
+              </strong>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <!-- REQUEST TABLE -->
+
+        <div class="requests-table-card">
+
+          <div class="table-header">
+
+            <div>
+
+              <h2>
+                All Requests
+              </h2>
+
+              <p>
+                Complete history of your purchase requests
+              </p>
+
+            </div>
+
+            <span>
+
+              {{ purchaseRequests.length }}
+              Requests
+
+            </span>
+
+          </div>
+
+
+          <div class="table-wrapper">
+
+            <table>
+
+              <thead>
+
+                <tr>
+
+                  <th>
+                    Request ID
+                  </th>
+
+                  <th>
+                    Product
+                  </th>
+
+                  <th>
+                    Supplier
+                  </th>
+
+                  <th>
+                    Quantity
+                  </th>
+
+                  <th>
+                    Amount
+                  </th>
+
+                  <th>
+                    Date
+                  </th>
+
+                  <th>
+                    Status
+                  </th>
+
+                </tr>
+
+              </thead>
+
+
+              <tbody>
+
+                @for (
+                  request of purchaseRequests;
+                  track request.purchaseOrderId
+                ) {
+
+                  <tr>
+
+                    <td class="request-id">
+
+                      #{{ request.purchaseOrderId }}
+
+                    </td>
+
+
+                    <td>
+
+                      <div class="product-cell">
+
+                        <span class="product-table-icon">
+                          📦
+                        </span>
+
+                        <strong>
+                          {{ request.product?.name }}
+                        </strong>
+
+                      </div>
+
+                    </td>
+
+
+                    <td>
+
+                      {{
+                        request.supplier?.name
+                        || 'Not Assigned'
+                      }}
+
+                    </td>
+
+
+                    <td>
+
+                      <span class="quantity-badge">
+
+                        {{ request.quantity }}
+
+                      </span>
+
+                    </td>
+
+
+                    <td class="amount">
+
+                      ₹{{
+                        request.totalAmount
+                        | number:'1.0-0'
+                      }}
+
+                    </td>
+
+
+                    <td>
+
+                      {{
+                        request.orderDate
+                        | date:'dd MMM yyyy'
+                      }}
+
+                    </td>
+
+
+                    <td>
+
+                      <span
+                        class="request-status"
+                        [ngClass]="
+                          getStatusClass(
+                            request.status
+                          )
+                        ">
+
+                        {{ request.status }}
+
+                      </span>
+
+                    </td>
+
+                  </tr>
+
+                }
+
+              </tbody>
+
+            </table>
+
+          </div>
+
+        </div>
+
+      }
+
+      @else {
+
+        <!-- EMPTY STATE -->
+
+        <div class="no-requests">
+
+          <div class="no-request-icon">
+            🛒
+          </div>
+
+          <span class="empty-label">
+            NO REQUESTS
+          </span>
+
+          <h2>
+            No Purchase Requests Yet
+          </h2>
+
+          <p>
+            You haven't created any purchase requests yet.
+            Browse available products and create your first request.
+          </p>
+
+          <a
+            routerLink="/purchase-request"
+            class="new-request-btn">
+
+            + Create Your First Request
+
+          </a>
+
+        </div>
+
+      }
+
+    </div>
+
+  }
+
+
+  <!-- ================================= -->
+  <!-- CREATE PURCHASE REQUEST PAGE -->
+  <!-- ================================= -->
+
+  @else {
+
+    <div class="create-request-container">
+
+
+      <!-- PAGE HEADER -->
+
+      <div class="create-request-header">
+
+        <div>
+
+          <span class="page-label">
+            PROCUREMENT MANAGEMENT
+          </span>
+
+          <h1>
+            Create Purchase Request
+          </h1>
+
+          <p>
+            Select a product, specify the quantity,
+            and submit your procurement request.
+          </p>
+
+        </div>
+
+
+        <a
+          routerLink="/my-requests"
+          class="my-requests-btn">
+
+          📋 My Requests
+
+        </a>
+
+      </div>
+
+
+      <!-- STEPS -->
+
+      <div class="request-steps">
+
+        <div class="step active">
+
+          <span>
+            1
+          </span>
+
+          <div>
+
+            <strong>
+              Select Product
+            </strong>
+
+            <small>
+              Choose what you need
+            </small>
+
+          </div>
+
+        </div>
+
+
+        <div class="step-line"></div>
+
+
+        <div
+          class="step"
+          [class.active]="selectedProduct">
+
+          <span>
+            2
+          </span>
+
+          <div>
+
+            <strong>
+              Enter Quantity
+            </strong>
+
+            <small>
+              Specify required units
+            </small>
+
+          </div>
+
+        </div>
+
+
+        <div class="step-line"></div>
+
+
+        <div
+          class="step"
+          [class.active]="
+            selectedProduct &&
+            quantity &&
+            quantity > 0
+          ">
+
+          <span>
+            3
+          </span>
+
+          <div>
+
+            <strong>
+              Submit Request
+            </strong>
+
+            <small>
+              Review and submit
+            </small>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- MAIN CONTENT -->
+
+      <div class="request-content-grid">
+
+
+        <!-- LEFT SIDE -->
+
+        <div class="purchase-request-card">
+
+
+          <div class="card-heading">
+
+            <div class="heading-icon">
+
+              🛒
+
+            </div>
+
+            <div>
+
+              <h2>
+                Request Details
+              </h2>
+
+              <p>
+                Provide the details for your purchase request.
+              </p>
+
+            </div>
+
+          </div>
+
+
+          <form
+            (ngSubmit)="createPurchaseRequest()">
+
+
+            <!-- PRODUCT SELECTION -->
+
+            <div class="form-section">
+
+              <div class="section-title">
+
+                <span class="section-number">
+                  01
+                </span>
+
+                <div>
+
+                  <h3>
+                    Select Product
+                  </h3>
+
+                  <p>
+                    Choose a product from the available inventory.
+                  </p>
+
+                </div>
+
+              </div>
+
+
+              <div class="form-group">
+
+                <label>
+
+                  Product
+
+                  <span class="required">
+                    *
+                  </span>
+
+                </label>
+
+
+                <select
+                  name="product"
+                  [(ngModel)]="selectedProductId"
+                  (change)="onProductChange()"
+                  required>
+
+                  <option
+                    [ngValue]="null"
+                    disabled>
+
+                    Select Product
+
+                  </option>
+
+
+                  @for (
+                    product of products;
+                    track product.productId
+                  ) {
+
+                    <option
+                      [ngValue]="product.productId">
+
+                      {{ product.name }}
+
+                    </option>
+
+                  }
+
+                </select>
+
+                <small class="field-hint">
+
+                  Select the product you want to request.
+
+                </small>
+
+              </div>
+
+            </div>
+
+
+            <!-- PRODUCT PREVIEW -->
+
+            @if (selectedProduct) {
+
+              <div class="selected-product-card">
+
+
+                <div class="selected-product-header">
+
+                  <div class="selected-product-title">
+
+                    <div class="selected-product-icon">
+
+                      📦
+
+                    </div>
+
+                    <div>
+
+                      <span>
+                        SELECTED PRODUCT
+                      </span>
+
+                      <h3>
+                        {{ selectedProduct.name }}
+                      </h3>
+
+                    </div>
+
+                  </div>
+
+
+                  <span class="product-status">
+
+                    {{ selectedProduct.status }}
+
+                  </span>
+
+                </div>
+
+
+                <div class="product-details-grid">
+
+
+                  <div class="product-detail">
+
+                    <span class="detail-icon">
+                      🏢
+                    </span>
+
+                    <div>
+
+                      <small>
+                        Supplier
+                      </small>
+
+                      <strong>
+
+                        {{
+                          selectedProduct.supplier?.name
+                          || 'Not Assigned'
+                        }}
+
+                      </strong>
+
+                    </div>
+
+                  </div>
+
+
+                  <div class="product-detail">
+
+                    <span class="detail-icon">
+                      ₹
+                    </span>
+
+                    <div>
+
+                      <small>
+                        Price Per Unit
+                      </small>
+
+                      <strong>
+
+                        ₹{{
+                          selectedProduct.pricePerProduct
+                          | number:'1.0-0'
+                        }}
+
+                      </strong>
+
+                    </div>
+
+                  </div>
+
+
+                  <div class="product-detail">
+
+                    <span class="detail-icon">
+                      📦
+                    </span>
+
+                    <div>
+
+                      <small>
+                        Available Quantity
+                      </small>
+
+                      <strong>
+
+                        {{
+                          selectedProduct.numberOfQuantities
+                        }}
+
+                      </strong>
+
+                    </div>
+
+                  </div>
+
+
+                  <div class="product-detail">
+
+                    <span class="detail-icon">
+                      #
+                    </span>
+
+                    <div>
+
+                      <small>
+                        Product ID
+                      </small>
+
+                      <strong>
+
+                        #{{ selectedProduct.productId }}
+
+                      </strong>
+
+                    </div>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+            }
+
+
+            <!-- QUANTITY -->
+
+            <div class="form-section quantity-section">
+
+              <div class="section-title">
+
+                <span class="section-number">
+                  02
+                </span>
+
+                <div>
+
+                  <h3>
+                    Required Quantity
+                  </h3>
+
+                  <p>
+                    Enter the number of units you require.
+                  </p>
+
+                </div>
+
+              </div>
+
+
+              <div class="form-group">
+
+                <label>
+
+                  Quantity
+
+                  <span class="required">
+                    *
+                  </span>
+
+                </label>
+
+
+                <div class="quantity-input-wrapper">
+
+                  <input
+                    type="number"
+                    name="quantity"
+                    [(ngModel)]="quantity"
+                    min="1"
+                    required>
+
+                  <span>
+                    Units
+                  </span>
+
+                </div>
+
+
+                @if (selectedProduct) {
+
+                  <small class="field-hint">
+
+                    Available:
+                    {{ selectedProduct.numberOfQuantities }}
+                    units
+
+                  </small>
+
+                }
+
+              </div>
+
+            </div>
+
+
+            <!-- ESTIMATED TOTAL -->
+
+            @if (
+              selectedProduct &&
+              quantity &&
+              quantity > 0
+            ) {
+
+              <div class="total-preview">
+
+                <div class="total-icon">
+
+                  ₹
+
+                </div>
+
+
+                <div class="total-info">
+
+                  <span>
+                    Estimated Total Amount
+                  </span>
+
+                  <small>
+                    {{ quantity }}
+                    ×
+                    ₹{{
+                      selectedProduct.pricePerProduct
+                      | number:'1.0-0'
+                    }}
+                  </small>
+
+                </div>
+
+
+                <strong>
+
+                  ₹{{
+                    selectedProduct.pricePerProduct
+                    * quantity
+                    | number:'1.0-0'
+                  }}
+
+                </strong>
+
+              </div>
+
+            }
+
+
+            <!-- ACTIONS -->
+
+            <div class="form-actions">
+
+              <button
+                type="button"
+                class="cancel-btn"
+                routerLink="/products">
+
+                Cancel
+
+              </button>
+
+
+              <button
+                type="submit"
+                class="submit-btn"
+                [disabled]="loading">
+
+                @if (loading) {
+
+                  Creating Request...
+
+                } @else {
+
+                  Submit Purchase Request →
+
+                }
+
+              </button>
+
+            </div>
+
+          </form>
+
+        </div>
+
+
+        <!-- RIGHT SIDE -->
+
+        <aside class="request-sidebar">
+
+
+          <!-- REQUEST SUMMARY -->
+
+          <div class="sidebar-card">
+
+            <div class="sidebar-title">
+
+              <span>
+                📋
+              </span>
+
+              <h3>
+                Request Summary
+              </h3>
+
+            </div>
+
+
+            <div class="summary-row">
+
+              <span>
+                Product
+              </span>
+
+              <strong>
+
+                {{
+                  selectedProduct?.name
+                  || 'Not selected'
+                }}
+
+              </strong>
+
+            </div>
+
+
+            <div class="summary-row">
+
+              <span>
+                Quantity
+              </span>
+
+              <strong>
+
+                {{
+                  quantity
+                  || 0
+                }}
+
+                units
+
+              </strong>
+
+            </div>
+
+
+            <div class="summary-row">
+
+              <span>
+                Supplier
+              </span>
+
+              <strong>
+
+                {{
+                  selectedProduct?.supplier?.name
+                  || 'Not selected'
+                }}
+
+              </strong>
+
+            </div>
+
+
+            <div class="summary-total">
+
+              <span>
+                Estimated Total
+              </span>
+
+              <strong>
+
+                ₹{{
+                  (
+                    (selectedProduct?.pricePerProduct || 0)
+                    *
+                    (quantity || 0)
+                  )
+                  | number:'1.0-0'
+                }}
+
+              </strong>
+
+            </div>
+
+          </div>
+
+
+          <!-- INFORMATION -->
+
+          <div class="sidebar-card info-card">
+
+            <div class="sidebar-title">
+
+              <span>
+                💡
+              </span>
+
+              <h3>
+                Before You Submit
+              </h3>
+
+            </div>
+
+
+            <ul>
+
+              <li>
+                Verify the selected product.
+              </li>
+
+              <li>
+                Ensure the required quantity is correct.
+              </li>
+
+              <li>
+                Your request will be sent for processing.
+              </li>
+
+              <li>
+                You can track the status in
+                <strong>My Requests</strong>.
+              </li>
+
+            </ul>
+
+          </div>
+
+
+          <!-- QUICK LINK -->
+
+          <a
+            routerLink="/products"
+            class="browse-products-link">
+
+            <span>
+              📦
+            </span>
+
+            <div>
+
+              <strong>
+                Browse More Products
+              </strong>
+
+              <small>
+                Explore available inventory
+              </small>
+
+            </div>
+
+            <b>
+              →
+            </b>
+
+          </a>
+
+        </aside>
+
+      </div>
+
+    </div>
+
+  }
+
+</div>

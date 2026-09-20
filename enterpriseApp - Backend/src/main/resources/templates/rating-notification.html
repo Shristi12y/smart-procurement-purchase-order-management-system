@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f8;
+            padding: 30px;
+        }
+
+        .container {
+            max-width: 650px;
+            margin: auto;
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+        }
+
+        h2 {
+            color: #333333;
+        }
+
+        .rating {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        td {
+            padding: 10px;
+            border: 1px solid #dddddd;
+        }
+
+        .label {
+            font-weight: bold;
+            width: 35%;
+        }
+
+        .footer {
+            margin-top: 25px;
+            color: #777777;
+            font-size: 13px;
+        }
+    </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h2>⭐ New Product Rating Received</h2>
+
+    <p>
+        Dear <strong>{{RECIPIENT_NAME}}</strong>,
+    </p>
+
+    <p>
+        A product rating has been submitted by
+        <strong>{{USER_NAME}}</strong>.
+    </p>
+
+    <table>
+
+        <tr>
+            <td class="label">Purchase Order ID</td>
+            <td>{{PURCHASE_ORDER_ID}}</td>
+        </tr>
+
+        <tr>
+            <td class="label">Product</td>
+            <td>{{PRODUCT_NAME}}</td>
+        </tr>
+
+        <tr>
+            <td class="label">Rated By</td>
+            <td>{{USER_NAME}}</td>
+        </tr>
+
+        <tr>
+            <td class="label">Rating</td>
+            <td>
+                <span class="rating">
+                    {{RATING}} / 5 ⭐
+                </span>
+            </td>
+        </tr>
+
+        <tr>
+            <td class="label">Remark</td>
+            <td>{{REMARK}}</td>
+        </tr>
+
+    </table>
+
+    <p class="footer">
+        Thank you for using the Enterprise Procurement System.
+        <br><br>
+        Enterprise Procurement System
+    </p>
+
+</div>
+
+</body>
+</html>

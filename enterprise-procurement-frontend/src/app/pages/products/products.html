@@ -1,0 +1,394 @@
+
+<div class="products-page">
+
+  <!-- PAGE HEADER -->
+
+  <section class="products-hero">
+
+    <div class="hero-content">
+
+      <div class="page-badge">
+        <span>📦</span>
+        PRODUCT CATALOG
+      </div>
+
+      <h1>
+        Explore Available Products
+      </h1>
+
+      <p>
+        Browse products, check availability, compare details,
+        and create purchase requests easily.
+      </p>
+
+    </div>
+
+
+    <div class="hero-stat">
+
+      <span class="stat-number">
+        {{ products.length }}
+      </span>
+
+      <span class="stat-label">
+        Total Products
+      </span>
+
+    </div>
+
+  </section>
+
+
+  <!-- TOOLBAR -->
+
+  <div class="products-toolbar">
+
+    <div class="search-box">
+
+      <span class="search-icon">
+        🔍
+      </span>
+
+      <input
+        type="text"
+        placeholder="Search by product, supplier or category..."
+        [(ngModel)]="searchText">
+
+    </div>
+
+
+    <div class="header-actions">
+
+      <div class="product-count">
+
+        {{ filteredProducts.length }}
+        Product{{ filteredProducts.length !== 1 ? 's' : '' }}
+
+      </div>
+
+
+      @if (
+        userRole === 'ADMIN' ||
+        userRole === 'SUPPLIER'
+      ) {
+
+        <button
+          class="add-product-btn"
+          routerLink="/add-product">
+
+          <span>＋</span>
+          Add Product
+
+        </button>
+
+      }
+
+    </div>
+
+  </div>
+
+
+  <!-- PRODUCT GRID -->
+
+  @if (filteredProducts.length > 0) {
+
+    <div class="products-grid">
+
+      @for (
+        product of filteredProducts;
+        track product.productId
+      ) {
+
+        <div class="product-card">
+
+          <!-- CARD TOP -->
+
+          <div class="card-top">
+
+            <div class="product-icon">
+              📦
+            </div>
+
+
+            <div class="card-badges">
+
+              <span
+                class="status"
+                [class.active]="
+                  product.status === 'ACTIVE'
+                ">
+
+                {{ product.status }}
+
+              </span>
+
+
+              <span
+                class="stock-status"
+                [class.low-stock]="
+                  product.numberOfQuantities > 0 &&
+                  product.numberOfQuantities <= 10
+                "
+                [class.out-stock]="
+                  product.numberOfQuantities === 0
+                ">
+
+                {{
+                  getStockStatus(
+                    product.numberOfQuantities
+                  )
+                }}
+
+              </span>
+
+            </div>
+
+          </div>
+
+
+          <!-- PRODUCT DETAILS -->
+
+          <div class="product-details">
+
+            <span class="category-tag">
+
+              {{
+                product.category?.categoryName ||
+                'Uncategorized'
+              }}
+
+            </span>
+
+
+            <h2>
+              {{ product.name }}
+            </h2>
+
+
+            <p class="description">
+
+              {{
+                product.description ||
+                'No description available for this product.'
+              }}
+
+            </p>
+
+          </div>
+
+
+          <!-- PRICE & QUANTITY -->
+
+          <div class="product-info">
+
+            <div class="info-item">
+
+              <span class="label">
+                Price
+              </span>
+
+              <strong class="price">
+
+                ₹{{
+                  product.pricePerProduct
+                }}
+
+              </strong>
+
+            </div>
+
+
+            <div class="info-divider"></div>
+
+
+            <div class="info-item">
+
+              <span class="label">
+                Available
+              </span>
+
+              <strong>
+
+                {{
+                  product.numberOfQuantities
+                }}
+
+                Units
+
+              </strong>
+
+            </div>
+
+          </div>
+
+
+          <!-- SUPPLIER -->
+
+          <div class="supplier-info">
+
+            <div class="supplier-avatar">
+
+              {{
+                product.supplier?.name?.charAt(0) ||
+                'S'
+              }}
+
+            </div>
+
+
+            <div>
+
+              <span>
+                Supplier
+              </span>
+
+              <strong>
+
+                {{
+                  product.supplier?.name ||
+                  'Not Assigned'
+                }}
+
+              </strong>
+
+            </div>
+
+          </div>
+          @if (userRole === 'USER') {
+
+}
+
+
+          <!-- FOOTER -->
+
+          <div class="card-footer">
+
+            <div class="product-meta">
+
+              <span>
+                #{{ product.productId }}
+              </span>
+
+              <span>
+                {{
+                  product.createdDate |
+                  date:'dd MMM yyyy'
+                }}
+              </span>
+
+            </div>
+
+
+            <!-- USER ACTION -->
+
+            @if (userRole === 'USER') {
+
+              <button
+    class="request-btn"
+    (click)="createPurchaseRequest(product.productId)">
+
+    <span>Request Product</span>
+    <span>→</span>
+
+  </button>
+
+            }
+
+
+            <!-- ADMIN / SUPPLIER ACTIONS -->
+
+            @if (canModifyProduct(product)) {
+
+              <div class="product-actions">
+
+                <button
+                  class="edit-btn"
+                  (click)="
+                    editProduct(
+                      product.productId
+                    )
+                  ">
+
+                  ✏ Edit
+
+                </button>
+
+
+                <button
+                  class="delete-btn"
+                  (click)="
+                    deleteProduct(
+                      product.productId
+                    )
+                  ">
+
+                  🗑 Delete
+
+                </button>
+
+              </div>
+
+            }
+
+          </div>
+
+        </div>
+
+      }
+
+    </div>
+
+  }
+
+
+  <!-- EMPTY STATE -->
+
+  @if (
+    filteredProducts.length === 0 &&
+    products.length > 0
+  ) {
+
+    <div class="empty-state">
+
+      <div class="empty-icon">
+        🔍
+      </div>
+
+      <h2>
+        No Matching Products
+      </h2>
+
+      <p>
+        Try searching with a different product,
+        supplier, or category name.
+      </p>
+
+    </div>
+
+  }
+
+
+  @if (
+    products.length === 0
+  ) {
+
+    <div class="empty-state">
+
+      <div class="empty-icon">
+        📦
+      </div>
+
+      <h2>
+        No Products Found
+      </h2>
+
+      <p>
+        There are currently no products available.
+      </p>
+
+    </div>
+
+  }
+
+</div>
+

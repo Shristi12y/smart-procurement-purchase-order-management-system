@@ -1,0 +1,1295 @@
+<div class="my-orders-page">
+  <!-- PAGE HEADER -->
+  <div class="orders-header">
+
+    <div>
+
+      <span class="page-label">
+        ORDER MANAGEMENT
+      </span>
+
+      <h1>
+        My Orders
+      </h1>
+
+      <p>
+        Track and monitor the status of all your orders.
+      </p>
+
+    </div>
+
+
+    <a
+      routerLink="/purchase-request"
+      class="new-request-btn">
+
+      + New Request
+
+    </a>
+
+  </div>
+
+  <!-- ORDER DETAILS / TRACKING MODAL -->
+
+  @if (showOrderDetails && selectedOrder) {
+
+    <div
+      class="order-modal-overlay"
+      (click)="closeOrderDetails()">
+
+      <div
+        class="order-details-modal"
+        (click)="$event.stopPropagation()">
+
+
+        <!-- MODAL HEADER -->
+
+        <div class="modal-header">
+
+          <div>
+
+            <span class="page-label">
+              ORDER DETAILS
+            </span>
+
+            <h2>
+              Order #{{ selectedOrder.purchaseOrderId }}
+            </h2>
+
+            <p>
+              Track the current progress of your order.
+            </p>
+
+          </div>
+
+
+          <button
+            type="button"
+            class="close-modal-btn"
+            (click)="closeOrderDetails()">
+
+            ✕
+
+          </button>
+
+        </div>
+
+        <!-- ORDER SUMMARY -->
+
+        <div class="order-details-grid">
+
+
+          <!-- PRODUCT -->
+
+          <div class="order-detail-card">
+
+            <span class="detail-label">
+              Product
+            </span>
+
+            <strong>
+
+              {{
+                selectedOrder.product?.name
+                || 'Product'
+              }}
+
+            </strong>
+
+          </div>
+
+
+
+          <!-- SUPPLIER -->
+
+          <div class="order-detail-card">
+
+            <span class="detail-label">
+              Supplier
+            </span>
+
+            <strong>
+
+              {{
+                selectedOrder.supplier?.name
+                || 'Not Assigned'
+              }}
+
+            </strong>
+
+          </div>
+
+
+
+          <!-- QUANTITY -->
+
+          <div class="order-detail-card">
+
+            <span class="detail-label">
+              Quantity
+            </span>
+
+            <strong>
+
+              {{ selectedOrder.quantity }}
+
+            </strong>
+
+          </div>
+
+
+
+          <!-- TOTAL AMOUNT -->
+
+          <div class="order-detail-card">
+
+            <span class="detail-label">
+              Total Amount
+            </span>
+
+            <strong>
+
+              ₹{{
+                selectedOrder.totalAmount
+                | number:'1.0-0'
+              }}
+
+            </strong>
+
+          </div>
+
+
+
+          <!-- ORDER DATE -->
+
+          <div class="order-detail-card">
+
+            <span class="detail-label">
+              Order Date
+            </span>
+
+            <strong>
+
+              {{
+                selectedOrder.orderDate
+                | date:'dd MMM yyyy'
+              }}
+
+            </strong>
+
+          </div>
+
+
+
+          <!-- CURRENT STATUS -->
+
+          <div class="order-detail-card">
+
+            <span class="detail-label">
+              Current Status
+            </span>
+
+            <span
+              class="order-status"
+              [ngClass]="
+                getStatusClass(
+                  selectedOrder.status
+                )
+              ">
+
+              {{
+                formatStatus(
+                  selectedOrder.status
+                )
+              }}
+
+            </span>
+
+          </div>
+
+
+        </div>
+
+        <!-- ORDER PROGRESS -->
+
+        <div class="tracking-section">
+
+          <div class="tracking-header">
+
+            <div>
+
+              <h3>
+                Order Progress
+              </h3>
+
+              <p>
+                Follow your order from creation to delivery.
+              </p>
+
+            </div>
+
+
+            <span
+              class="order-status"
+              [ngClass]="
+                getStatusClass(
+                  selectedOrder.status
+                )
+              ">
+
+              {{
+                formatStatus(
+                  selectedOrder.status
+                )
+              }}
+
+            </span>
+
+          </div>
+
+
+
+          <!-- TIMELINE -->
+
+          <div class="tracking-timeline">
+
+
+            @for (
+              step of orderTrackingSteps;
+              track step.status;
+              let last = $last
+            ) {
+
+              <div
+                class="tracking-step"
+
+                [class.completed]="
+                  isStepCompleted(
+                    step.status,
+                    selectedOrder.status
+                  )
+                "
+
+                [class.current]="
+                  isCurrentStep(
+                    step.status,
+                    selectedOrder.status
+                  )
+                ">
+
+
+                <!-- LEFT TIMELINE -->
+
+                <div class="tracking-step-left">
+
+
+                  <!-- ICON -->
+
+                  <div class="tracking-icon">
+
+                    @if (
+                      isStepCompleted(
+                        step.status,
+                        selectedOrder.status
+                      )
+                    ) {
+
+                      ✓
+
+                    }
+
+                    @else {
+
+                      {{ step.icon }}
+
+                    }
+
+                  </div>
+
+
+
+                  <!-- CONNECTING LINE -->
+
+                  @if (!last) {
+
+                    <div
+                      class="tracking-line"
+
+                      [class.completed-line]="
+                        isStepCompleted(
+                          step.status,
+                          selectedOrder.status
+                        )
+                      ">
+
+                    </div>
+
+                  }
+
+                </div>
+
+
+
+                <!-- TIMELINE CONTENT -->
+
+                <div class="tracking-content">
+
+                  <h4>
+                    {{ step.label }}
+                  </h4>
+
+
+                  <p>
+
+                    @if (
+                      isCurrentStep(
+                        step.status,
+                        selectedOrder.status
+                      )
+                    ) {
+
+                      Current order status
+
+                    }
+
+                    @else if (
+                      isStepCompleted(
+                        step.status,
+                        selectedOrder.status
+                      )
+                    ) {
+
+                      Completed
+
+                    }
+
+                    @else {
+
+                      Pending
+
+                    }
+
+                  </p>
+
+                </div>
+
+
+              </div>
+
+            }
+
+          </div>
+
+        </div>
+
+
+
+        <!-- RATING SECTION FOR DELIVERED ORDER -->
+
+        @if (
+          selectedOrder.status === 'DELIVERED'
+        ) {
+
+          <div class="modal-rating-section">
+
+            @if (
+              !isOrderRated(selectedOrder)
+            ) {
+
+              <div class="rating-prompt">
+
+                <div class="rating-prompt-icon">
+                  ⭐
+                </div>
+
+                <div class="rating-prompt-content">
+
+                  <h3>
+                    How was your order?
+                  </h3>
+
+                  <p>
+                    Your order has been delivered.
+                    Share your experience by rating the product.
+                  </p>
+
+                </div>
+
+
+                <button
+                  type="button"
+                  class="rate-order-btn"
+                  (click)="openRatingModal(selectedOrder)">
+
+                  ★ Rate Product
+
+                </button>
+
+              </div>
+
+            }
+
+            @else {
+
+              <div class="already-rated-box">
+
+                <span class="already-rated-icon">
+                  ✓
+                </span>
+
+                <div>
+
+                  <strong>
+                    Product Rated
+                  </strong>
+
+                  <p>
+                    Thank you for sharing your feedback.
+                  </p>
+
+                </div>
+
+              </div>
+
+            }
+
+          </div>
+
+        }
+
+        <!-- MODAL FOOTER -->
+
+        <div class="modal-footer">
+
+          <button
+            type="button"
+            class="close-details-btn"
+            (click)="closeOrderDetails()">
+
+            Close
+
+          </button>
+
+        </div>
+
+
+      </div>
+
+    </div>
+
+  }
+
+
+
+  <!-- RATING MODAL -->
+
+  @if (showRatingModal && selectedOrder) {
+
+    <div
+      class="rating-modal-overlay"
+      (click)="closeRatingModal()">
+
+      <div
+        class="rating-modal"
+        (click)="$event.stopPropagation()">
+
+
+        <!-- RATING HEADER -->
+
+        <div class="rating-modal-header">
+
+          <div>
+
+            <span class="page-label">
+              PRODUCT FEEDBACK
+            </span>
+
+            <h2>
+              Rate Your Product
+            </h2>
+
+            <p>
+              Order #{{ selectedOrder.purchaseOrderId }}
+            </p>
+
+          </div>
+
+
+          <button
+            type="button"
+            class="close-modal-btn"
+            (click)="closeRatingModal()">
+
+            ✕
+
+          </button>
+
+        </div>
+
+
+
+        <!-- PRODUCT INFO -->
+
+        <div class="rating-product-card">
+
+          <div class="rating-product-icon">
+            📦
+          </div>
+
+          <div>
+
+            <span>
+              Product
+            </span>
+
+            <strong>
+
+              {{
+                selectedOrder.product?.name
+                || 'Product'
+              }}
+
+            </strong>
+
+          </div>
+
+        </div>
+
+
+
+        <!-- STAR RATING -->
+
+        <div class="rating-input-section">
+
+          <h3>
+            How would you rate this product?
+          </h3>
+
+<div class="star-rating">
+
+  @for (
+    star of [1, 2, 3, 4, 5];
+    track star
+  ) {
+
+    <button
+      type="button"
+      class="star-btn"
+
+      [class.active]="
+        star <= selectedRating
+      "
+
+      (click)="
+        selectedRating = star
+      "
+
+      [attr.aria-label]="
+        'Rate ' + star + ' stars'
+      ">
+
+      ★
+
+    </button>
+
+  }
+
+</div>
+
+
+
+          @if (selectedRating > 0) {
+
+            <div class="rating-label">
+
+              @if (selectedRating === 1) {
+
+                Poor
+
+              }
+
+              @else if (selectedRating === 2) {
+
+                Fair
+
+              }
+
+              @else if (selectedRating === 3) {
+
+                Good
+
+              }
+
+              @else if (selectedRating === 4) {
+
+                Very Good
+
+              }
+
+              @else {
+
+                Excellent
+
+              }
+
+            </div>
+
+          }
+
+        </div>
+
+
+
+        <!-- REMARK -->
+
+        <div class="remark-section">
+
+          <label for="ratingRemark">
+            Your Feedback
+            <span>(Optional)</span>
+          </label>
+
+
+          <textarea
+            id="ratingRemark"
+            rows="4"
+            maxlength="500"
+            placeholder="Tell us about your experience with this product..."
+            [(ngModel)]="ratingRemark">
+          </textarea>
+
+
+          <div class="remark-counter">
+
+            {{ ratingRemark.length }}/500
+
+          </div>
+
+        </div>
+
+
+
+        <!-- RATING ERROR -->
+
+        @if (selectedRating === 0) {
+
+          <p class="rating-hint">
+            Please select a star rating before submitting.
+          </p>
+
+        }
+
+
+
+        <!-- RATING ACTIONS -->
+
+        <div class="rating-modal-footer">
+
+          <button
+            type="button"
+            class="cancel-rating-btn"
+            (click)="closeRatingModal()"
+            [disabled]="ratingSubmitting">
+
+            Cancel
+
+          </button>
+
+
+          <button
+            type="button"
+            class="submit-rating-btn"
+
+            [disabled]="
+              selectedRating === 0 ||
+              ratingSubmitting
+            "
+
+            (click)="submitRating()">
+
+
+            @if (ratingSubmitting) {
+
+              Submitting...
+
+            }
+
+            @else {
+
+              ★ Submit Rating
+
+            }
+
+          </button>
+
+        </div>
+
+
+      </div>
+
+    </div>
+
+  }
+
+
+
+  <!-- ================================= -->
+  <!-- LOADING -->
+  <!-- ================================= -->
+
+  @if (loading) {
+
+    <div class="loading-state">
+
+      <div class="loading-icon">
+        📦
+      </div>
+
+      <p>
+        Loading your orders...
+      </p>
+
+    </div>
+
+  }
+
+
+
+  <!-- ================================= -->
+  <!-- ORDERS AVAILABLE -->
+  <!-- ================================= -->
+
+  @else if (orders.length > 0) {
+
+
+    <!-- ================================= -->
+    <!-- SUMMARY CARDS -->
+    <!-- ================================= -->
+
+    <section class="orders-summary">
+
+
+      <!-- TOTAL -->
+
+      <div class="summary-card total-card">
+
+        <div class="summary-icon">
+          📦
+        </div>
+
+        <div>
+
+          <span>
+            Total Orders
+          </span>
+
+          <strong>
+            {{ orders.length }}
+          </strong>
+
+        </div>
+
+      </div>
+
+
+
+      <!-- CREATED -->
+
+      <div class="summary-card created-card">
+
+        <div class="summary-icon">
+          📋
+        </div>
+
+        <div>
+
+          <span>
+            Created
+          </span>
+
+          <strong>
+            {{ getCreatedOrdersCount() }}
+          </strong>
+
+        </div>
+
+      </div>
+
+
+
+      <!-- IN PROGRESS -->
+
+      <div class="summary-card progress-card">
+
+        <div class="summary-icon">
+          🚚
+        </div>
+
+        <div>
+
+          <span>
+            In Progress
+          </span>
+
+          <strong>
+            {{ getInProgressOrdersCount() }}
+          </strong>
+
+        </div>
+
+      </div>
+
+
+
+      <!-- DELIVERED -->
+
+      <div class="summary-card delivered-card">
+
+        <div class="summary-icon">
+          ✅
+        </div>
+
+        <div>
+
+          <span>
+            Delivered
+          </span>
+
+          <strong>
+            {{ getDeliveredOrdersCount() }}
+          </strong>
+
+        </div>
+
+      </div>
+
+
+    </section>
+
+
+
+    <!-- ================================= -->
+    <!-- SEARCH & FILTER -->
+    <!-- ================================= -->
+
+    <section class="filter-section">
+
+
+      <!-- SEARCH -->
+
+      <div class="search-box">
+
+        <span>
+          🔍
+        </span>
+
+        <input
+          type="text"
+          placeholder="Search by Order ID, Product or Supplier..."
+          [(ngModel)]="searchText"
+          (input)="filterOrders()">
+
+      </div>
+
+
+
+      <!-- STATUS -->
+
+      <div class="status-filter">
+
+        <select
+          [(ngModel)]="selectedStatus"
+          (change)="filterOrders()">
+
+          <option value="ALL">
+            All Statuses
+          </option>
+
+          <option value="CREATED">
+            Created
+          </option>
+
+          <option value="ACCEPTED">
+            Accepted
+          </option>
+
+          <option value="PACKED">
+            Packed
+          </option>
+
+          <option value="DISPATCHED">
+            Dispatched
+          </option>
+
+          <option value="OUT_FOR_DELIVERY">
+            Out For Delivery
+          </option>
+
+          <option value="DELIVERED">
+            Delivered
+          </option>
+
+        </select>
+
+      </div>
+
+
+    </section>
+
+
+
+    <!-- ================================= -->
+    <!-- ORDERS TABLE -->
+    <!-- ================================= -->
+
+    <section class="orders-table-card">
+
+
+      <!-- TABLE HEADER -->
+
+      <div class="table-header">
+
+        <div>
+
+          <h2>
+            All Orders
+          </h2>
+
+          <p>
+
+            {{ filteredOrders.length }}
+            of
+            {{ orders.length }}
+            orders shown
+
+          </p>
+
+        </div>
+
+
+        <span class="orders-count">
+
+          {{ filteredOrders.length }}
+
+          Orders
+
+        </span>
+
+      </div>
+
+
+
+      <!-- ORDERS EXIST -->
+
+      @if (filteredOrders.length > 0) {
+
+        <div class="table-wrapper">
+
+          <table>
+
+
+            <!-- TABLE HEAD -->
+
+            <thead>
+
+              <tr>
+
+                <th>
+                  Order ID
+                </th>
+
+                <th>
+                  Product
+                </th>
+
+                <th>
+                  Supplier
+                </th>
+
+                <th>
+                  Quantity
+                </th>
+
+                <th>
+                  Amount
+                </th>
+
+                <th>
+                  Order Date
+                </th>
+
+                <th>
+                  Status
+                </th>
+
+                <th>
+                  Action
+                </th>
+
+              </tr>
+
+            </thead>
+
+
+
+            <!-- TABLE BODY -->
+
+            <tbody>
+
+              @for (
+                order of filteredOrders;
+                track order.purchaseOrderId
+              ) {
+
+                <tr>
+
+
+                  <!-- ORDER ID -->
+
+                  <td class="order-id">
+
+                    #{{ order.purchaseOrderId }}
+
+                  </td>
+
+
+
+                  <!-- PRODUCT -->
+
+                  <td>
+
+                    <div class="product-cell">
+
+                      <span class="product-icon">
+                        📦
+                      </span>
+
+                      <strong>
+
+                        {{
+                          order.product?.name
+                          || 'Product'
+                        }}
+
+                      </strong>
+
+                    </div>
+
+                  </td>
+
+
+
+                  <!-- SUPPLIER -->
+
+                  <td>
+
+                    {{
+                      order.supplier?.name
+                      || 'Not Assigned'
+                    }}
+
+                  </td>
+
+
+
+                  <!-- QUANTITY -->
+
+                  <td>
+
+                    {{ order.quantity }}
+
+                  </td>
+
+
+
+                  <!-- AMOUNT -->
+
+                  <td class="amount">
+
+                    ₹{{
+                      order.totalAmount
+                      | number:'1.0-0'
+                    }}
+
+                  </td>
+
+
+
+                  <!-- ORDER DATE -->
+
+                  <td>
+
+                    {{
+                      order.orderDate
+                      | date:'dd MMM yyyy'
+                    }}
+
+                  </td>
+
+
+
+                  <!-- STATUS -->
+
+                  <td>
+
+                    <span
+                      class="order-status"
+
+                      [ngClass]="
+                        getStatusClass(
+                          order.status
+                        )
+                      ">
+
+                      {{
+                        formatStatus(
+                          order.status
+                        )
+                      }}
+
+                    </span>
+
+                  </td>
+
+
+
+                  <!-- ACTIONS -->
+
+                  <td>
+
+                    <div class="order-actions">
+
+
+                      <!-- TRACK ORDER -->
+
+                      <button
+                        type="button"
+                        class="track-order-btn"
+                        (click)="openOrderDetails(order)">
+
+                        Track Order
+
+                      </button>
+
+
+
+                      <!-- RATE PRODUCT -->
+
+                      @if (
+                        order.status === 'DELIVERED' &&
+                        !isOrderRated(order)
+                      ) {
+
+                        <button
+                          type="button"
+                          class="rate-order-btn"
+                          (click)="openRatingModal(order)">
+
+                          ★ Rate Product
+
+                        </button>
+
+                      }
+
+
+
+                      <!-- ALREADY RATED -->
+
+                      @else if (
+                        order.status === 'DELIVERED' &&
+                        isOrderRated(order)
+                      ) {
+
+                        <span class="already-rated">
+
+                          ✓ Rated
+
+                        </span>
+
+                      }
+
+
+                    </div>
+
+                  </td>
+
+
+                </tr>
+
+              }
+
+            </tbody>
+
+
+          </table>
+
+        </div>
+
+      }
+
+
+
+      <!-- ================================= -->
+      <!-- NO SEARCH RESULTS -->
+      <!-- ================================= -->
+
+      @else {
+
+        <div class="no-results">
+
+          <div class="no-results-icon">
+            🔍
+          </div>
+
+          <h3>
+            No Orders Found
+          </h3>
+
+          <p>
+            Try changing your search or status filter.
+          </p>
+
+        </div>
+
+      }
+
+
+    </section>
+
+  }
+
+
+
+  <!-- ================================= -->
+  <!-- EMPTY STATE -->
+  <!-- ================================= -->
+
+  @else {
+
+    <div class="empty-state">
+
+      <div class="empty-icon">
+        📦
+      </div>
+
+      <h2>
+        No Orders Yet
+      </h2>
+
+      <p>
+        You haven't created any purchase orders yet.
+      </p>
+
+      <a
+        routerLink="/purchase-request"
+        class="new-request-btn">
+
+        Create Your First Request
+
+      </a>
+
+    </div>
+
+  }
+
+</div>

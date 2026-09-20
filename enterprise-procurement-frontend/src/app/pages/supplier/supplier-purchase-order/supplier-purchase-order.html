@@ -1,0 +1,602 @@
+
+<div class="supplier-orders">
+
+
+  <!-- ======================================
+       PAGE HEADER
+  ======================================= -->
+
+  <div class="page-header">
+
+    <div>
+
+      <span class="page-label">
+        PROCUREMENT
+      </span>
+
+      <h1>
+        Purchase Orders
+      </h1>
+
+      <p>
+        View and manage purchase orders assigned to you.
+      </p>
+
+    </div>
+
+  </div>
+
+
+
+  <!-- ======================================
+       SUMMARY
+  ======================================= -->
+
+  <section class="summary-grid">
+
+
+    <div class="summary-card">
+
+      <div class="summary-icon orders-icon">
+        📋
+      </div>
+
+      <div class="summary-content">
+
+        <span>
+          Total Orders
+        </span>
+
+        <strong>
+          {{ orders.length }}
+        </strong>
+
+        <small>
+          Assigned to you
+        </small>
+
+      </div>
+
+    </div>
+
+
+
+    <div class="summary-card">
+
+      <div class="summary-icon pending-icon">
+        ⏳
+      </div>
+
+      <div class="summary-content">
+
+        <span>
+          Pending
+        </span>
+
+        <strong>
+  {{ pendingOrders }}
+</strong>
+
+        <small>
+          Awaiting acceptance
+        </small>
+
+      </div>
+
+    </div>
+
+
+
+    <div class="summary-card">
+
+      <div class="summary-icon progress-icon">
+        🚚
+      </div>
+
+      <div class="summary-content">
+
+        <span>
+          In Progress
+        </span>
+
+        <strong>
+  {{ inProgressOrders }}
+</strong>
+
+        <small>
+          Orders in process
+        </small>
+
+      </div>
+
+    </div>
+
+
+
+    <div class="summary-card">
+
+      <div class="summary-icon delivered-icon">
+        ✓
+      </div>
+
+      <div class="summary-content">
+
+        <span>
+          Delivered
+        </span>
+
+        <strong>
+  {{ deliveredOrders }}
+</strong>
+
+        <small>
+          Completed orders
+        </small>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+
+  <!-- ======================================
+       ORDERS CARD
+  ======================================= -->
+
+  <section class="orders-card">
+
+
+    <!-- CARD HEADER -->
+
+    <div class="card-header">
+
+      <div>
+
+        <h2>
+          Your Purchase Orders
+        </h2>
+
+        <p>
+          Manage the orders received from the procurement system.
+        </p>
+
+      </div>
+
+      <span class="order-count">
+
+        {{ filteredOrders.length }}
+
+        Orders
+
+      </span>
+
+    </div>
+
+
+
+    <!-- ======================================
+         FILTERS
+    ======================================= -->
+
+    <div class="filters">
+
+
+      <!-- SEARCH -->
+
+      <div class="search-box">
+
+        <span class="search-icon">
+          🔍
+        </span>
+
+        <input
+          type="text"
+          placeholder="Search order, product or requester..."
+          [(ngModel)]="searchText"
+          (input)="onSearch()">
+
+      </div>
+
+
+
+      <!-- STATUS -->
+
+      <div class="status-filter">
+
+        <select
+          [(ngModel)]="selectedStatus"
+          (change)="onStatusChange()">
+
+          <option value="ALL">
+            All Status
+          </option>
+
+          <option value="CREATED">
+            Created
+          </option>
+
+          <option value="ACCEPTED">
+            Accepted
+          </option>
+
+          <option value="PACKED">
+            Packed
+          </option>
+
+          <option value="DISPATCHED">
+            Dispatched
+          </option>
+
+          <option value="OUT_FOR_DELIVERY">
+            Out For Delivery
+          </option>
+
+          <option value="DELIVERED">
+            Delivered
+          </option>
+
+        </select>
+
+      </div>
+
+
+    </div>
+
+
+
+    <!-- ======================================
+         LOADING
+    ======================================= -->
+
+    @if (loading) {
+
+      <div class="loading-state">
+
+        <div class="loading-icon">
+          ⚙️
+        </div>
+
+        <p>
+          Loading purchase orders...
+        </p>
+
+      </div>
+
+    }
+
+
+
+    @else {
+
+
+      <!-- ======================================
+           TABLE
+      ======================================= -->
+
+      @if (filteredOrders.length > 0) {
+
+        <div class="table-wrapper">
+
+          <table>
+
+            <thead>
+
+              <tr>
+
+                <th>
+                  Order ID
+                </th>
+
+                <th>
+                  Product
+                </th>
+
+                <th>
+                  Requester
+                </th>
+
+                <th>
+                  Quantity
+                </th>
+
+                <th>
+                  Amount
+                </th>
+
+                <th>
+                  Order Date
+                </th>
+
+                <th>
+                  Status
+                </th>
+
+                <th>
+                  Action
+                </th>
+
+              </tr>
+
+            </thead>
+
+
+            <tbody>
+
+              @for (
+                order of filteredOrders;
+                track order.purchaseOrderId
+              ) {
+
+                <tr>
+
+
+                  <!-- ORDER ID -->
+
+                  <td>
+
+                    <span class="order-id">
+
+                      #{{ order.purchaseOrderId }}
+
+                    </span>
+
+                  </td>
+
+
+
+                  <!-- PRODUCT -->
+
+                  <td>
+
+                    <div class="product-cell">
+
+                      <span class="product-icon">
+                        📦
+                      </span>
+
+                      <div>
+
+                        <strong>
+                          {{
+                            order.product?.name ||
+                            'Product'
+                          }}
+                        </strong>
+
+                        <small>
+                          Product ID:
+                          {{
+                            order.product?.productId ||
+                            '-'
+                          }}
+                        </small>
+
+                      </div>
+
+                    </div>
+
+                  </td>
+
+
+
+                  <!-- REQUESTER -->
+
+                  <td>
+
+                    <div class="requester-cell">
+
+                      <span class="requester-icon">
+                        👤
+                      </span>
+
+                      <div>
+
+                        <strong>
+                          {{
+                            order.createdBy?.name ||
+                            'User'
+                          }}
+                        </strong>
+
+                        <small>
+                          {{
+                            order.createdBy?.email ||
+                            ''
+                          }}
+                        </small>
+
+                      </div>
+
+                    </div>
+
+                  </td>
+
+
+
+                  <!-- QUANTITY -->
+
+                  <td>
+
+                    <span class="quantity">
+
+                      {{ order.quantity }}
+
+                    </span>
+
+                  </td>
+
+
+
+                  <!-- AMOUNT -->
+
+                  <td>
+
+                    <span class="amount">
+
+                      ₹{{
+                        order.totalAmount
+                        | number:'1.0-0'
+                      }}
+
+                    </span>
+
+                  </td>
+
+
+
+                  <!-- DATE -->
+
+                  <td>
+
+                    <span class="date">
+
+                      {{
+                        order.orderDate
+                        | date:'dd MMM yyyy'
+                      }}
+
+                    </span>
+
+                  </td>
+
+
+
+                  <!-- STATUS -->
+
+                  <td>
+
+                    <span
+                      class="status-badge"
+                      [ngClass]="
+                        getStatusClass(
+                          order.status
+                        )
+                      ">
+
+                      <span class="status-dot"></span>
+
+                      {{
+                        formatStatus(
+                          order.status
+                        )
+                      }}
+
+                    </span>
+
+                  </td>
+
+
+
+                  <!-- ACTION -->
+
+                  <td>
+
+                    @if (
+                      canUpdateStatus(
+                        order.status
+                      )
+                    ) {
+
+                      <button
+                        class="action-btn"
+                        [disabled]="
+                          isUpdating(
+                            order.purchaseOrderId
+                          )
+                        "
+                        (click)="
+                          updateStatus(order)
+                        ">
+
+                        @if (
+                          isUpdating(
+                            order.purchaseOrderId
+                          )
+                        ) {
+
+                          Updating...
+
+                        }
+
+                        @else {
+
+                          {{ getActionText(order.status) }}
+
+                        }
+
+                      </button>
+
+                    }
+
+                    @else {
+
+                      <span class="completed-text">
+                        ✓ Completed
+                      </span>
+
+                    }
+
+                  </td>
+
+
+                </tr>
+
+              }
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      }
+
+
+
+      <!-- ======================================
+           NO RESULTS
+      ======================================= -->
+
+      @else {
+
+        <div class="empty-state">
+
+          <div class="empty-icon">
+            📋
+          </div>
+
+          <h3>
+            No Purchase Orders Found
+          </h3>
+
+          @if (
+            searchText ||
+            selectedStatus !== 'ALL'
+          ) {
+
+            <p>
+              No orders match your current search or filter.
+            </p>
+
+          }
+
+          @else {
+
+            <p>
+              You don't have any purchase orders yet.
+            </p>
+
+          }
+
+        </div>
+
+      }
+
+    }
+
+  </section>
+
+</div>
+

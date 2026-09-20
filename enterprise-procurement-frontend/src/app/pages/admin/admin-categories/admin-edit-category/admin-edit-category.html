@@ -1,0 +1,325 @@
+<div class="admin-category-form-page">
+
+
+  <!-- ========================================= -->
+  <!-- PAGE HEADER -->
+  <!-- ========================================= -->
+
+  <div class="page-header">
+
+    <div>
+
+      <span class="page-label">
+        CATEGORY MANAGEMENT
+      </span>
+
+      <h1>
+        Edit Category
+      </h1>
+
+      <p>
+        Update category information and department assignment.
+      </p>
+
+    </div>
+
+
+    <button
+      type="button"
+      class="back-btn"
+      (click)="cancel()">
+
+      <mat-icon>
+        arrow_back
+      </mat-icon>
+
+      Back to Categories
+
+    </button>
+
+  </div>
+
+
+
+  <!-- ========================================= -->
+  <!-- LOADING -->
+  <!-- ========================================= -->
+
+  @if (loadingCategory || loadingDepartments) {
+
+    <div class="loading-state">
+
+      <div class="loading-icon">
+
+        <mat-icon>
+          category
+        </mat-icon>
+
+      </div>
+
+      <h3>
+        Loading Category
+      </h3>
+
+      <p>
+        Please wait while we load the category information.
+      </p>
+
+    </div>
+
+  }
+
+
+
+  <!-- ========================================= -->
+  <!-- FORM -->
+  <!-- ========================================= -->
+
+  @else {
+
+    <section class="form-card">
+
+
+      <!-- HEADER -->
+
+      <div class="form-card-header">
+
+        <div class="form-icon">
+
+          <mat-icon>
+            edit
+          </mat-icon>
+
+        </div>
+
+
+        <div>
+
+          <span class="section-label">
+            CATEGORY DETAILS
+          </span>
+
+          <h2>
+            Update Category
+          </h2>
+
+          <p>
+            Modify the category information below.
+          </p>
+
+        </div>
+
+      </div>
+
+
+
+      <form
+        (ngSubmit)="updateCategory()"
+        #categoryForm="ngForm">
+
+
+        <!-- ========================================= -->
+        <!-- CATEGORY NAME -->
+        <!-- ========================================= -->
+
+        <div class="form-group">
+
+          <label>
+
+            Category Name
+
+            <span>*</span>
+
+          </label>
+
+
+          <div class="input-wrapper">
+
+            <mat-icon>
+              category
+            </mat-icon>
+
+
+            <input
+              type="text"
+              name="categoryName"
+              [(ngModel)]="category.categoryName"
+              placeholder="Enter category name"
+              maxlength="100"
+              required>
+
+          </div>
+
+        </div>
+
+
+
+        <!-- ========================================= -->
+        <!-- DEPARTMENT -->
+        <!-- ========================================= -->
+
+        <div class="form-group">
+
+          <label>
+
+            Department
+
+            <span>*</span>
+
+          </label>
+
+
+          <div class="input-wrapper">
+
+            <mat-icon>
+              business
+            </mat-icon>
+
+
+            <select
+              name="department"
+              [(ngModel)]="category.departmentId"
+              required>
+
+              <option
+                [ngValue]="null">
+
+                Select Department
+
+              </option>
+
+
+              @for (
+
+                department of departments;
+
+                track department.departmentId
+
+              ) {
+
+                <option
+                  [ngValue]="department.departmentId">
+
+                  {{ department.departmentName }}
+
+                </option>
+
+              }
+
+            </select>
+
+          </div>
+
+        </div>
+
+
+
+        <!-- ========================================= -->
+        <!-- DEPARTMENT PREVIEW -->
+        <!-- ========================================= -->
+
+        @if (getSelectedDepartment()) {
+
+          <div class="department-preview">
+
+            <div class="preview-icon">
+
+              <mat-icon>
+                business
+              </mat-icon>
+
+            </div>
+
+
+            <div class="preview-content">
+
+              <span>
+                Selected Department
+              </span>
+
+              <strong>
+
+                {{
+                  getSelectedDepartment()?.departmentName
+                }}
+
+              </strong>
+
+
+              <small>
+
+                Manager:
+
+                {{
+                  getSelectedDepartment()?.manager
+                  || 'Not Assigned'
+                }}
+
+              </small>
+
+            </div>
+
+          </div>
+
+        }
+
+
+
+        <!-- ========================================= -->
+        <!-- ACTIONS -->
+        <!-- ========================================= -->
+
+        <div class="form-actions">
+
+
+          <button
+            type="button"
+            class="cancel-btn"
+            (click)="cancel()">
+
+            <mat-icon>
+              close
+            </mat-icon>
+
+            Cancel
+
+          </button>
+
+
+          <button
+            type="submit"
+            class="save-btn"
+            [disabled]="
+              loading ||
+              !categoryForm.valid
+            ">
+
+            @if (loading) {
+
+              <mat-icon>
+                hourglass_top
+              </mat-icon>
+
+              Updating...
+
+            } @else {
+
+              <mat-icon>
+                save
+              </mat-icon>
+
+              Save Changes
+
+            }
+
+          </button>
+
+        </div>
+
+      </form>
+
+    </section>
+
+  }
+
+</div>

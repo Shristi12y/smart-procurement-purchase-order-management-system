@@ -1,0 +1,352 @@
+<div class="admin-edit-department-page">
+
+
+  <!-- ========================================= -->
+  <!-- PAGE HEADER -->
+  <!-- ========================================= -->
+
+  <div class="page-header">
+
+    <div class="header-left">
+
+      <span class="page-label">
+        DEPARTMENT MANAGEMENT
+      </span>
+
+      <h1>
+        Edit Department
+      </h1>
+
+      <p>
+        Update department information and manager details.
+      </p>
+
+    </div>
+
+
+    <button
+      type="button"
+      class="back-btn"
+      (click)="cancel()">
+
+      <mat-icon>
+        arrow_back
+      </mat-icon>
+
+      Back to Departments
+
+    </button>
+
+  </div>
+
+
+
+  <!-- ========================================= -->
+  <!-- LOADING DEPARTMENT -->
+  <!-- ========================================= -->
+
+  @if (loadingDepartment) {
+
+    <section class="loading-card">
+
+      <div class="loading-icon">
+
+        <mat-icon>
+          sync
+        </mat-icon>
+
+      </div>
+
+      <h3>
+        Loading Department
+      </h3>
+
+      <p>
+        Please wait while we load the department information.
+      </p>
+
+    </section>
+
+  }
+
+
+
+  <!-- ========================================= -->
+  <!-- EDIT FORM -->
+  <!-- ========================================= -->
+
+  @if (!loadingDepartment) {
+
+    <section class="department-form-card">
+
+
+      <!-- CARD HEADER -->
+
+      <div class="form-card-header">
+
+        <div class="header-icon">
+
+          <mat-icon>
+            edit
+          </mat-icon>
+
+        </div>
+
+
+        <div>
+
+          <span class="section-label">
+            DEPARTMENT DETAILS
+          </span>
+
+          <h2>
+            Update Department
+          </h2>
+
+          <p>
+            Modify the information for this department.
+          </p>
+
+        </div>
+
+      </div>
+
+
+
+      <!-- FORM -->
+
+      <form
+        #departmentForm="ngForm"
+        (ngSubmit)="updateDepartment()">
+
+
+        <!-- DEPARTMENT ID -->
+
+        <div class="department-id">
+
+          <div class="id-icon">
+
+            <mat-icon>
+              tag
+            </mat-icon>
+
+          </div>
+
+          <div>
+
+            <span>
+              Department ID
+            </span>
+
+            <strong>
+              #{{ department.departmentId }}
+            </strong>
+
+          </div>
+
+        </div>
+
+
+
+        <!-- FORM GRID -->
+
+        <div class="form-grid">
+
+
+          <!-- DEPARTMENT NAME -->
+
+          <div class="form-group">
+
+            <label for="departmentName">
+
+              Department Name
+
+              <span>
+                *
+              </span>
+
+            </label>
+
+
+            <div class="input-wrapper">
+
+              <mat-icon>
+                apartment
+              </mat-icon>
+
+              <input
+                id="departmentName"
+                type="text"
+                name="departmentName"
+                placeholder="Enter department name"
+                [(ngModel)]="department.departmentName"
+                required
+                autocomplete="off">
+
+            </div>
+
+
+            <small>
+              Enter a unique department name.
+            </small>
+
+          </div>
+
+
+
+          <!-- MANAGER -->
+
+          <div class="form-group">
+
+            <label for="manager">
+
+              Department Manager
+
+              <span>
+                *
+              </span>
+
+            </label>
+
+
+            <div class="input-wrapper">
+
+              <mat-icon>
+                person
+              </mat-icon>
+
+              <input
+                id="manager"
+                type="text"
+                name="manager"
+                placeholder="Enter manager name"
+                [(ngModel)]="department.manager"
+                required
+                autocomplete="off">
+
+            </div>
+
+
+            <small>
+              Enter the person responsible for this department.
+            </small>
+
+          </div>
+
+
+        </div>
+
+
+
+        <!-- ========================================= -->
+        <!-- INFORMATION BOX -->
+        <!-- ========================================= -->
+
+        <div class="info-box">
+
+          <div class="info-icon">
+
+            <mat-icon>
+              info
+            </mat-icon>
+
+          </div>
+
+          <div>
+
+            <strong>
+              Department Information
+            </strong>
+
+            <p>
+              Make sure the department name and manager
+              information are correct before saving changes.
+            </p>
+
+          </div>
+
+        </div>
+
+
+
+        <!-- ========================================= -->
+        <!-- FORM FOOTER -->
+        <!-- ========================================= -->
+
+        <div class="form-footer">
+
+
+          <!-- CANCEL -->
+
+          <button
+            type="button"
+            class="cancel-btn"
+            (click)="cancel()">
+
+            <mat-icon>
+              close
+            </mat-icon>
+
+            Cancel
+
+          </button>
+
+
+
+          <!-- UPDATE -->
+
+          <button
+            type="submit"
+            class="save-btn"
+            [disabled]="
+              loading ||
+              !departmentForm.valid
+            ">
+
+            @if (!loading) {
+
+              <mat-icon>
+                save
+              </mat-icon>
+
+              Save Changes
+
+            }
+
+            @if (loading) {
+
+              <mat-icon class="loading-icon">
+                sync
+              </mat-icon>
+
+              Saving...
+
+            }
+
+          </button>
+
+
+        </div>
+
+      </form>
+
+    </section>
+
+  }
+
+
+
+  <!-- ========================================= -->
+  <!-- REQUIRED NOTE -->
+  <!-- ========================================= -->
+
+  <div class="required-note">
+
+    <span>*</span>
+
+    Required fields
+
+  </div>
+
+
+</div>

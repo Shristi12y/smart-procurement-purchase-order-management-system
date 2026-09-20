@@ -1,0 +1,862 @@
+.supplier-add-product-page {
+
+  min-height: 100vh;
+
+  padding: 32px;
+
+  background: #f7f8fc;
+
+  box-sizing: border-box;
+
+}
+
+
+// =========================================================
+// PAGE HEADER
+// =========================================================
+
+.page-header {
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  gap: 24px;
+
+  margin-bottom: 28px;
+
+}
+
+
+.page-label {
+
+  display: inline-block;
+
+  font-size: 11px;
+
+  font-weight: 700;
+
+  letter-spacing: 1.5px;
+
+  color: #667085;
+
+  margin-bottom: 7px;
+
+}
+
+
+.page-header h1 {
+
+  margin: 0;
+
+  font-size: 32px;
+
+  font-weight: 700;
+
+  color: #172033;
+
+}
+
+
+.page-header p {
+
+  margin: 7px 0 0;
+
+  color: #667085;
+
+  font-size: 14px;
+
+}
+
+
+// =========================================================
+// BACK BUTTON
+// =========================================================
+
+.back-btn {
+
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  padding: 11px 17px;
+
+  border: 1px solid #d9dee8;
+
+  border-radius: 9px;
+
+  background: #ffffff;
+
+  color: #344054;
+
+  font-size: 14px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: 0.2s ease;
+
+}
+
+
+.back-btn mat-icon {
+
+  font-size: 19px;
+
+  width: 19px;
+
+  height: 19px;
+
+}
+
+
+.back-btn:hover {
+
+  background: #f2f4f7;
+
+  border-color: #c5cad5;
+
+}
+
+
+// =========================================================
+// MAIN CARD
+// =========================================================
+
+.add-product-card {
+
+  max-width: 1100px;
+
+  margin: 0 auto;
+
+  background: #ffffff;
+
+  border: 1px solid #e4e7ec;
+
+  border-radius: 16px;
+
+  box-shadow:
+    0 5px 18px rgba(16, 24, 40, 0.05);
+
+  overflow: hidden;
+
+}
+
+
+// =========================================================
+// FORM HEADER
+// =========================================================
+
+.form-header {
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  padding: 26px 30px;
+
+  border-bottom: 1px solid #eaecf0;
+
+  background: #fcfcfd;
+
+}
+
+
+.section-label {
+
+  display: inline-block;
+
+  font-size: 10px;
+
+  font-weight: 700;
+
+  letter-spacing: 1.4px;
+
+  color: #667085;
+
+  margin-bottom: 6px;
+
+}
+
+
+.form-header h2 {
+
+  margin: 0;
+
+  font-size: 21px;
+
+  font-weight: 700;
+
+  color: #1d2939;
+
+}
+
+
+.form-header p {
+
+  margin: 6px 0 0;
+
+  font-size: 13px;
+
+  color: #667085;
+
+}
+
+
+.product-header-icon {
+
+  width: 50px;
+
+  height: 50px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border-radius: 12px;
+
+  background: #eef2ff;
+
+  color: #4f46e5;
+
+}
+
+
+.product-header-icon mat-icon {
+
+  font-size: 25px;
+
+  width: 25px;
+
+  height: 25px;
+
+}
+
+
+// =========================================================
+// FORM SECTION
+// =========================================================
+
+.form-section {
+
+  padding: 30px;
+
+  border-bottom: 1px solid #eaecf0;
+
+}
+
+
+.form-section-title {
+
+  display: flex;
+
+  align-items: flex-start;
+
+  gap: 12px;
+
+  margin-bottom: 24px;
+
+}
+
+
+.form-section-title > mat-icon {
+
+  width: 38px;
+
+  height: 38px;
+
+  padding: 8px;
+
+  box-sizing: border-box;
+
+  border-radius: 9px;
+
+  background: #f2f4f7;
+
+  color: #475467;
+
+  font-size: 21px;
+
+}
+
+
+.form-section-title h3 {
+
+  margin: 0;
+
+  font-size: 16px;
+
+  font-weight: 700;
+
+  color: #1d2939;
+
+}
+
+
+.form-section-title p {
+
+  margin: 4px 0 0;
+
+  color: #667085;
+
+  font-size: 13px;
+
+}
+
+
+// =========================================================
+// FORM GRID
+// =========================================================
+
+.form-grid {
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 22px;
+
+}
+
+
+.form-group {
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 7px;
+
+}
+
+
+.full-width {
+
+  grid-column: 1 / -1;
+
+}
+
+
+.form-group label {
+
+  font-size: 13px;
+
+  font-weight: 600;
+
+  color: #344054;
+
+}
+
+
+.form-group label span {
+
+  color: #d92d20;
+
+  margin-left: 2px;
+
+}
+
+
+// =========================================================
+// INPUTS
+// =========================================================
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+
+  width: 100%;
+
+  box-sizing: border-box;
+
+  border: 1px solid #d0d5dd;
+
+  border-radius: 9px;
+
+  background: #ffffff;
+
+  color: #101828;
+
+  font-family: inherit;
+
+  font-size: 14px;
+
+  outline: none;
+
+  transition: 0.2s ease;
+
+}
+
+
+.form-group input,
+.form-group select {
+
+  height: 44px;
+
+  padding: 0 13px;
+
+}
+
+
+.form-group textarea {
+
+  padding: 12px 13px;
+
+  resize: vertical;
+
+  min-height: 105px;
+
+}
+
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+
+  border-color: #6366f1;
+
+  box-shadow:
+    0 0 0 3px rgba(99, 102, 241, 0.10);
+
+}
+
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+
+  color: #98a2b3;
+
+}
+
+
+// =========================================================
+// PRICE PREFIX
+// =========================================================
+
+.input-with-prefix {
+
+  display: flex;
+
+  align-items: center;
+
+  height: 44px;
+
+  border: 1px solid #d0d5dd;
+
+  border-radius: 9px;
+
+  overflow: hidden;
+
+  background: #ffffff;
+
+  transition: 0.2s ease;
+
+}
+
+
+.input-with-prefix:focus-within {
+
+  border-color: #6366f1;
+
+  box-shadow:
+    0 0 0 3px rgba(99, 102, 241, 0.10);
+
+}
+
+
+.input-with-prefix > span {
+
+  height: 100%;
+
+  display: flex;
+
+  align-items: center;
+
+  padding: 0 13px;
+
+  background: #f9fafb;
+
+  border-right: 1px solid #eaecf0;
+
+  color: #667085;
+
+  font-weight: 600;
+
+}
+
+
+.input-with-prefix input {
+
+  border: none;
+
+  box-shadow: none;
+
+  height: 100%;
+
+  border-radius: 0;
+
+}
+
+
+.input-with-prefix input:focus {
+
+  border: none;
+
+  box-shadow: none;
+
+}
+
+
+// =========================================================
+// SUPPLIER LOCKED FIELD
+// =========================================================
+
+.supplier-locked {
+
+  height: 44px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 9px;
+
+  padding: 0 13px;
+
+  box-sizing: border-box;
+
+  border: 1px solid #d0d5dd;
+
+  border-radius: 9px;
+
+  background: #f9fafb;
+
+  color: #667085;
+
+  font-size: 14px;
+
+}
+
+
+.supplier-locked mat-icon {
+
+  font-size: 18px;
+
+  width: 18px;
+
+  height: 18px;
+
+  color: #98a2b3;
+
+}
+
+
+.field-hint {
+
+  color: #98a2b3;
+
+  font-size: 11px;
+
+}
+
+
+// =========================================================
+// ERROR
+// =========================================================
+
+.error-text {
+
+  color: #d92d20;
+
+  font-size: 12px;
+
+  margin-top: -2px;
+
+}
+
+
+// =========================================================
+// FORM FOOTER
+// =========================================================
+
+.form-footer {
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  gap: 20px;
+
+  padding: 22px 30px;
+
+  background: #fcfcfd;
+
+}
+
+
+.required-note {
+
+  color: #667085;
+
+  font-size: 12px;
+
+}
+
+
+.required-note span {
+
+  color: #d92d20;
+
+  font-weight: 700;
+
+}
+
+
+.footer-actions {
+
+  display: flex;
+
+  gap: 12px;
+
+}
+
+
+// =========================================================
+// BUTTONS
+// =========================================================
+
+.cancel-btn,
+.save-btn {
+
+  min-height: 42px;
+
+  padding: 0 17px;
+
+  border-radius: 9px;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 8px;
+
+  font-size: 14px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: 0.2s ease;
+
+}
+
+
+.cancel-btn {
+
+  border: 1px solid #d0d5dd;
+
+  background: #ffffff;
+
+  color: #344054;
+
+}
+
+
+.cancel-btn:hover:not(:disabled) {
+
+  background: #f2f4f7;
+
+}
+
+
+.save-btn {
+
+  border: 1px solid #4f46e5;
+
+  background: #4f46e5;
+
+  color: #ffffff;
+
+}
+
+
+.save-btn:hover:not(:disabled) {
+
+  background: #4338ca;
+
+  border-color: #4338ca;
+
+}
+
+
+.cancel-btn:disabled,
+.save-btn:disabled {
+
+  opacity: 0.55;
+
+  cursor: not-allowed;
+
+}
+
+
+.cancel-btn mat-icon,
+.save-btn mat-icon {
+
+  font-size: 18px;
+
+  width: 18px;
+
+  height: 18px;
+
+}
+
+
+// =========================================================
+// SNACKBAR
+// =========================================================
+
+::ng-deep .success-snackbar {
+
+  --mdc-snackbar-container-color: #027a48;
+
+  --mdc-snackbar-supporting-text-color: #ffffff;
+
+}
+
+
+::ng-deep .error-snackbar {
+
+  --mdc-snackbar-container-color: #d92d20;
+
+  --mdc-snackbar-supporting-text-color: #ffffff;
+
+}
+
+
+// =========================================================
+// RESPONSIVE
+// =========================================================
+
+@media (max-width: 800px) {
+
+  .supplier-add-product-page {
+
+    padding: 20px;
+
+  }
+
+
+  .page-header {
+
+    align-items: flex-start;
+
+    flex-direction: column;
+
+  }
+
+
+  .back-btn {
+
+    width: 100%;
+
+  }
+
+
+  .form-grid {
+
+    grid-template-columns: 1fr;
+
+  }
+
+
+  .full-width {
+
+    grid-column: auto;
+
+  }
+
+
+  .form-header {
+
+    padding: 22px;
+
+  }
+
+
+  .form-section {
+
+    padding: 22px;
+
+  }
+
+
+  .form-footer {
+
+    align-items: stretch;
+
+    flex-direction: column;
+
+  }
+
+
+  .footer-actions {
+
+    width: 100%;
+
+  }
+
+
+  .cancel-btn,
+  .save-btn {
+
+    flex: 1;
+
+  }
+
+}
+
+
+@media (max-width: 500px) {
+
+  .supplier-add-product-page {
+
+    padding: 12px;
+
+  }
+
+
+  .page-header h1 {
+
+    font-size: 26px;
+
+  }
+
+
+  .form-header {
+
+    align-items: flex-start;
+
+  }
+
+
+  .product-header-icon {
+
+    display: none;
+
+  }
+
+}

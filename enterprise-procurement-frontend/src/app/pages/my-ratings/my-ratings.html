@@ -1,0 +1,642 @@
+<div class="my-ratings-page">
+
+  <!-- ================================= -->
+  <!-- HEADER -->
+  <!-- ================================= -->
+
+  <div class="ratings-header">
+
+    <div>
+
+      <span class="page-label">
+        FEEDBACK & EXPERIENCE
+      </span>
+
+      <h1>
+        My Ratings
+      </h1>
+
+      <p>
+        Review the feedback you've submitted for your delivered orders.
+      </p>
+
+    </div>
+
+
+    <a
+      routerLink="/my-orders"
+      class="orders-btn">
+
+      📦 My Orders
+
+    </a>
+
+  </div>
+
+
+
+  <!-- ================================= -->
+  <!-- LOADING -->
+  <!-- ================================= -->
+
+  @if (loading) {
+
+    <div class="loading-state">
+
+      <div class="loading-icon">
+        ⭐
+      </div>
+
+      <h3>
+        Loading your ratings...
+      </h3>
+
+      <p>
+        Please wait while we fetch your feedback.
+      </p>
+
+    </div>
+
+  }
+
+
+
+  <!-- ================================= -->
+  <!-- RATINGS AVAILABLE -->
+  <!-- ================================= -->
+
+  @else if (ratings.length > 0) {
+
+
+    <!-- ================================= -->
+    <!-- SUMMARY -->
+    <!-- ================================= -->
+
+    <section class="ratings-summary">
+
+
+      <div class="summary-card">
+
+        <div class="summary-icon">
+          ⭐
+        </div>
+
+        <div>
+
+          <span>
+            Total Ratings
+          </span>
+
+          <strong>
+            {{ ratings.length }}
+          </strong>
+
+        </div>
+
+      </div>
+
+
+
+      <div class="summary-card">
+
+        <div class="summary-icon">
+          🌟
+        </div>
+
+        <div>
+
+          <span>
+            Average Rating
+          </span>
+
+          <strong>
+            {{ getAverageRating() | number:'1.1-1' }}
+            <small>/ 5</small>
+          </strong>
+
+        </div>
+
+      </div>
+
+
+
+      <div class="summary-card">
+
+        <div class="summary-icon">
+          🏆
+        </div>
+
+        <div>
+
+          <span>
+            5 Star Ratings
+          </span>
+
+          <strong>
+            {{ getFiveStarCount() }}
+          </strong>
+
+        </div>
+
+      </div>
+
+      <div class="summary-card">
+
+        <div class="summary-icon">
+          📦
+        </div>
+
+        <div>
+
+          <span>
+            Rated Orders
+          </span>
+
+          <strong>
+            {{ ratings.length }}
+          </strong>
+
+        </div>
+
+      </div>
+
+
+    </section>
+
+    <!-- RATING OVERVIEW -->
+
+    <section class="rating-overview">
+
+      <div class="overview-title">
+
+        <div>
+
+          <h2>
+            Rating Overview
+          </h2>
+
+          <p>
+            Your overall rating distribution
+          </p>
+
+        </div>
+
+
+        <div class="overall-rating">
+
+          <strong>
+            {{ getAverageRating() | number:'1.1-1' }}
+          </strong>
+
+          <div>
+
+            <div class="big-stars">
+              ★★★★★
+            </div>
+
+            <span>
+              Based on {{ ratings.length }} ratings
+            </span>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+
+      <div class="rating-bars">
+
+        <!-- 5 STAR -->
+
+        <div class="rating-row">
+
+          <span>
+            5 ★
+          </span>
+
+          <div class="rating-progress">
+
+            <div
+              class="rating-progress-fill"
+              [style.width.%]="
+                getRatingPercentage(5)
+              ">
+            </div>
+
+          </div>
+
+          <strong>
+            {{ getFiveStarCount() }}
+          </strong>
+
+        </div>
+
+        <!-- 4 STAR -->
+
+        <div class="rating-row">
+
+          <span>
+            4 ★
+          </span>
+
+          <div class="rating-progress">
+
+            <div
+              class="rating-progress-fill"
+              [style.width.%]="
+                getRatingPercentage(4)
+              ">
+            </div>
+
+          </div>
+
+          <strong>
+            {{ getFourStarCount() }}
+          </strong>
+
+        </div>
+
+        <!-- 3 STAR -->
+
+        <div class="rating-row">
+
+          <span>
+            3 ★
+          </span>
+
+          <div class="rating-progress">
+
+            <div
+              class="rating-progress-fill"
+              [style.width.%]="
+                getRatingPercentage(3)
+              ">
+            </div>
+
+          </div>
+
+          <strong>
+            {{ getThreeStarCount() }}
+          </strong>
+
+        </div>
+
+        <!-- 2 STAR -->
+
+        <div class="rating-row">
+
+          <span>
+            2 ★
+          </span>
+
+          <div class="rating-progress">
+
+            <div
+              class="rating-progress-fill"
+              [style.width.%]="
+                getRatingPercentage(2)
+              ">
+            </div>
+
+          </div>
+
+          <strong>
+            {{ getTwoStarCount() }}
+          </strong>
+
+        </div>
+
+        <!-- 1 STAR -->
+
+        <div class="rating-row">
+
+          <span>
+            1 ★
+          </span>
+
+          <div class="rating-progress">
+
+            <div
+              class="rating-progress-fill"
+              [style.width.%]="
+                getRatingPercentage(1)
+              ">
+            </div>
+
+          </div>
+
+          <strong>
+            {{ getOneStarCount() }}
+          </strong>
+
+        </div>
+
+
+      </div>
+
+    </section>
+
+    <!-- SEARCH & FILTER -->
+
+    <section class="filter-section">
+
+
+      <div class="search-box">
+
+        <span>
+          🔍
+        </span>
+
+        <input
+          type="text"
+          placeholder="Search by product, order or remark..."
+          [(ngModel)]="searchText"
+          (input)="filterRatings()">
+
+      </div>
+
+
+
+      <div class="rating-filter">
+
+        <select
+          [(ngModel)]="selectedRating"
+          (change)="filterRatings()">
+
+          <option value="ALL">
+            All Ratings
+          </option>
+
+          <option value="5">
+            ⭐ 5 Stars
+          </option>
+
+          <option value="4">
+            ⭐ 4 Stars
+          </option>
+
+          <option value="3">
+            ⭐ 3 Stars
+          </option>
+
+          <option value="2">
+            ⭐ 2 Stars
+          </option>
+
+          <option value="1">
+            ⭐ 1 Star
+          </option>
+
+        </select>
+
+      </div>
+
+    </section>
+
+    <!-- RATINGS LIST -->
+
+    <section class="ratings-section">
+
+
+      <div class="section-header">
+
+        <div>
+
+          <h2>
+            My Feedback
+          </h2>
+
+          <p>
+            {{ filteredRatings.length }}
+            of
+            {{ ratings.length }}
+            ratings shown
+          </p>
+
+        </div>
+
+
+        <span class="rating-count">
+
+          {{ filteredRatings.length }}
+          Ratings
+
+        </span>
+
+      </div>
+
+
+
+      <!-- RATINGS -->
+
+      @if (filteredRatings.length > 0) {
+
+        <div class="ratings-list">
+
+          @for (
+            rating of filteredRatings;
+            track rating.ratingId
+          ) {
+
+            <div class="rating-card">
+
+
+              <!-- CARD TOP -->
+
+              <div class="rating-card-header">
+
+
+                <div class="product-info">
+
+                  <div class="product-icon">
+                    📦
+                  </div>
+
+                  <div>
+
+                    <h3>
+                      {{
+                        rating.productName
+                        || 'Product'
+                      }}
+                    </h3>
+
+                    <span>
+                      Purchase Order #
+                      {{
+                        rating.purchaseOrder?.purchaseOrderId
+                        || 'N/A'
+                      }}
+                    </span>
+
+                  </div>
+
+                </div>
+
+
+
+                <div class="rating-date">
+
+                  {{
+                    rating.ratingDate
+                    | date:'dd MMM yyyy'
+                  }}
+
+                </div>
+
+
+              </div>
+
+
+
+              <!-- RATING -->
+
+              <div class="rating-content">
+
+
+                <div class="star-rating">
+
+                  <span class="stars">
+                    {{
+                      getRatingStars(
+                        rating.rating
+                      )
+                    }}
+                  </span>
+
+                  <span class="rating-number">
+
+                    {{ rating.rating }}/5
+
+                  </span>
+
+                  <span class="rating-label">
+
+                    {{
+                      getRatingLabel(
+                        rating.rating
+                      )
+                    }}
+
+                  </span>
+
+                </div>
+
+
+
+                <!-- REMARK -->
+
+                @if (rating.remark) {
+
+                  <div class="remark">
+
+                    <span class="quote-icon">
+                      “
+                    </span>
+
+                    <p>
+                      {{ rating.remark }}
+                    </p>
+
+                  </div>
+
+                }
+
+                @else {
+
+                  <div class="no-remark">
+
+                    No additional comment provided.
+
+                  </div>
+
+                }
+
+
+              </div>
+
+
+
+              <!-- CARD FOOTER -->
+
+              <div class="rating-card-footer">
+
+                <span>
+                  Rated by {{ rating.userName || 'You' }}
+                </span>
+
+                <span class="rating-id">
+                  Rating #{{ rating.ratingId }}
+                </span>
+
+              </div>
+
+
+            </div>
+
+          }
+
+        </div>
+
+      }
+
+
+      <!-- NO FILTER RESULTS -->
+
+      @else {
+
+        <div class="no-results">
+
+          <div class="no-results-icon">
+            🔍
+          </div>
+
+          <h3>
+            No Ratings Found
+          </h3>
+
+          <p>
+            Try changing your search or rating filter.
+          </p>
+
+        </div>
+
+      }
+
+    </section>
+
+  }
+
+  <!-- EMPTY STATE -->
+
+  @else {
+
+    <div class="empty-state">
+
+      <div class="empty-icon">
+        ⭐
+      </div>
+
+      <h2>
+        No Ratings Yet
+      </h2>
+
+      <p>
+        You haven't rated any delivered orders yet.
+      </p>
+
+      <a
+        routerLink="/my-orders"
+        class="orders-btn">
+
+        View My Orders
+
+      </a>
+
+    </div>
+
+  }
+
+</div>

@@ -1,0 +1,991 @@
+<div class="admin-products-page">
+
+
+  <!-- ========================================= -->
+  <!-- PAGE HEADER -->
+  <!-- ========================================= -->
+
+  <div class="page-header">
+
+    <div>
+
+      <span class="page-label">
+        PRODUCT MANAGEMENT
+      </span>
+
+      <h1>
+        Products
+      </h1>
+
+      <p>
+        Manage products, suppliers, pricing and inventory.
+      </p>
+
+    </div>
+
+
+    <button
+      type="button"
+      class="add-product-btn"
+      (click)="addProduct()">
+
+      <mat-icon>
+        add
+      </mat-icon>
+
+      Add Product
+
+    </button>
+
+  </div>
+
+
+  <!-- ========================================= -->
+  <!-- SUMMARY -->
+  <!-- ========================================= -->
+
+  @if (!loading) {
+
+    <section class="products-summary">
+
+
+      <!-- TOTAL -->
+
+      <div class="summary-card total-card">
+
+        <div class="summary-icon">
+
+          <mat-icon>
+            inventory_2
+          </mat-icon>
+
+        </div>
+
+        <div class="summary-content">
+
+          <span>
+            Total Products
+          </span>
+
+          <strong>
+            {{ getTotalProductsCount() }}
+          </strong>
+
+          <small>
+            Products in catalog
+          </small>
+
+        </div>
+
+      </div>
+
+
+      <!-- ACTIVE -->
+
+      <div class="summary-card active-card">
+
+        <div class="summary-icon">
+
+          <mat-icon>
+            check_circle
+          </mat-icon>
+
+        </div>
+
+        <div class="summary-content">
+
+          <span>
+            Active Products
+          </span>
+
+          <strong>
+            {{ getActiveProductsCount() }}
+          </strong>
+
+          <small>
+            Currently available
+          </small>
+
+        </div>
+
+      </div>
+
+
+      <!-- LOW STOCK -->
+
+      <div class="summary-card low-stock-card">
+
+        <div class="summary-icon">
+
+          <mat-icon>
+            warning
+          </mat-icon>
+
+        </div>
+
+        <div class="summary-content">
+
+          <span>
+            Low Stock
+          </span>
+
+          <strong>
+            {{ getLowStockCount() }}
+          </strong>
+
+          <small>
+            10 units or less
+          </small>
+
+        </div>
+
+      </div>
+
+
+      <!-- OUT OF STOCK -->
+
+      <div class="summary-card out-stock-card">
+
+        <div class="summary-icon">
+
+          <mat-icon>
+            remove_shopping_cart
+          </mat-icon>
+
+        </div>
+
+        <div class="summary-content">
+
+          <span>
+            Out of Stock
+          </span>
+
+          <strong>
+            {{ getOutOfStockCount() }}
+          </strong>
+
+          <small>
+            No units available
+          </small>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  }
+
+
+  <!-- ========================================= -->
+  <!-- LOADING -->
+  <!-- ========================================= -->
+
+  @if (loading) {
+
+    <div class="loading-state">
+
+      <div class="loading-icon">
+
+        <mat-icon>
+          inventory_2
+        </mat-icon>
+
+      </div>
+
+      <h3>
+        Loading Products
+      </h3>
+
+      <p>
+        Please wait while we load the product catalog.
+      </p>
+
+    </div>
+
+  }
+
+
+  <!-- ========================================= -->
+  <!-- CONTENT -->
+  <!-- ========================================= -->
+
+  @else {
+
+    <section class="products-table-card">
+
+
+      <!-- TABLE HEADER -->
+
+      <div class="table-header">
+
+        <div>
+
+          <span class="section-label">
+            PRODUCT CATALOG
+          </span>
+
+          <h2>
+            All Products
+          </h2>
+
+          <p>
+
+            {{ filteredProducts.length }}
+
+            of
+
+            {{ products.length }}
+
+            products shown
+
+          </p>
+
+        </div>
+
+
+        <div class="table-count">
+
+          <mat-icon>
+            inventory_2
+          </mat-icon>
+
+          {{ filteredProducts.length }}
+
+          Products
+
+        </div>
+
+      </div>
+
+
+      <!-- ========================================= -->
+      <!-- FILTERS -->
+      <!-- ========================================= -->
+
+      <div class="filter-section">
+
+
+        <!-- SEARCH -->
+
+        <div class="search-box">
+
+          <mat-icon>
+            search
+          </mat-icon>
+
+          <input
+            type="text"
+            placeholder="Search by product, supplier or category..."
+            [(ngModel)]="searchText"
+            (input)="filterProducts()">
+
+        </div>
+
+
+        <!-- CATEGORY -->
+
+        <div class="filter-box">
+
+          <mat-icon>
+            category
+          </mat-icon>
+
+          <select
+            [(ngModel)]="selectedCategory"
+            (change)="filterProducts()">
+
+            <option value="ALL">
+              All Categories
+            </option>
+
+            @for (
+              category of categories;
+              track category
+            ) {
+
+              <option [value]="category">
+
+                {{ category }}
+
+              </option>
+
+            }
+
+          </select>
+
+        </div>
+
+
+        <!-- SUPPLIER -->
+
+        <div class="filter-box">
+
+          <mat-icon>
+            business
+          </mat-icon>
+
+          <select
+            [(ngModel)]="selectedSupplier"
+            (change)="filterProducts()">
+
+            <option value="ALL">
+              All Suppliers
+            </option>
+
+            @for (
+              supplier of suppliers;
+              track supplier
+            ) {
+
+              <option [value]="supplier">
+
+                {{ supplier }}
+
+              </option>
+
+            }
+
+          </select>
+
+        </div>
+
+
+        <!-- CLEAR -->
+
+        @if (
+
+          searchText ||
+
+          selectedCategory !== 'ALL' ||
+
+          selectedSupplier !== 'ALL'
+
+        ) {
+
+          <button
+            type="button"
+            class="clear-filter-btn"
+            (click)="clearFilters()">
+
+            <mat-icon>
+              close
+            </mat-icon>
+
+            Clear
+
+          </button>
+
+        }
+
+      </div>
+
+
+      <!-- ========================================= -->
+      <!-- TABLE -->
+      <!-- ========================================= -->
+
+      @if (filteredProducts.length > 0) {
+
+        <div class="table-wrapper">
+
+          <table>
+
+            <thead>
+
+              <tr>
+
+                <th>
+                  Product
+                </th>
+
+                <th>
+                  Category
+                </th>
+
+                <th>
+                  Supplier
+                </th>
+
+                <th>
+                  Price
+                </th>
+
+                <th>
+                  Stock
+                </th>
+
+                <th>
+                  Status
+                </th>
+
+                <th>
+                  Created Date
+                </th>
+
+                <th>
+                  Actions
+                </th>
+
+              </tr>
+
+            </thead>
+
+
+            <tbody>
+
+              @for (
+
+                product of filteredProducts;
+
+                track product.productId
+
+              ) {
+
+                <tr>
+
+
+                  <!-- PRODUCT -->
+
+                  <td>
+
+                    <div class="product-cell">
+
+                      <div class="product-icon">
+
+                        <mat-icon>
+                          inventory_2
+                        </mat-icon>
+
+                      </div>
+
+
+                      <div class="product-info">
+
+                        <strong>
+                          {{ product.name || 'Unknown Product' }}
+                        </strong>
+
+                        <span>
+
+                          #{{ product.productId }}
+
+                        </span>
+
+                      </div>
+
+                    </div>
+
+                  </td>
+
+
+                  <!-- CATEGORY -->
+
+                  <td>
+
+                    <span class="category-badge">
+
+                      {{
+                        product.category?.categoryName
+                        || 'Uncategorized'
+                      }}
+
+                    </span>
+
+                  </td>
+
+
+                  <!-- SUPPLIER -->
+
+                  <td>
+
+                    <div class="supplier-cell">
+
+                      <mat-icon>
+                        business
+                      </mat-icon>
+
+                      <span>
+
+                        {{
+                          product.supplier?.name
+                          || 'Not Assigned'
+                        }}
+
+                      </span>
+
+                    </div>
+
+                  </td>
+
+
+                  <!-- PRICE -->
+
+                  <td>
+
+                    <strong class="price">
+
+                      ₹{{
+                        product.pricePerProduct
+                        | number:'1.2-2'
+                      }}
+
+                    </strong>
+
+                  </td>
+
+
+                  <!-- STOCK -->
+
+                  <td>
+
+                    <div class="stock-cell">
+
+                      <strong>
+
+                        {{
+                          product.numberOfQuantities || 0
+                        }}
+
+                      </strong>
+
+                      <span
+                        [ngClass]="
+                          getStockClass(
+                            product.numberOfQuantities
+                          )
+                        ">
+
+                        {{
+                          getStockStatus(
+                            product.numberOfQuantities
+                          )
+                        }}
+
+                      </span>
+
+                    </div>
+
+                  </td>
+
+
+                  <!-- STATUS -->
+
+                  <td>
+
+                    <span
+                      class="status-badge"
+                      [ngClass]="
+                        getStatusClass(
+                          product.status
+                        )
+                      ">
+
+                      <span class="status-dot"></span>
+
+                      {{
+                        product.status
+                        || 'UNKNOWN'
+                      }}
+
+                    </span>
+
+                  </td>
+
+
+                  <!-- DATE -->
+
+                  <td>
+
+                    <span class="created-date">
+
+                      {{
+                        product.createdDate
+                        | date:'dd MMM yyyy'
+                      }}
+
+                    </span>
+
+                  </td>
+
+
+                  <!-- ACTIONS -->
+
+                  <td>
+
+                    <div class="action-buttons">
+
+
+                      <!-- VIEW -->
+
+                      <button
+                        type="button"
+                        class="view-btn"
+                        title="View Product"
+                        (click)="viewProduct(product)">
+
+                        <mat-icon>
+                          visibility
+                        </mat-icon>
+
+                      </button>
+
+
+                      <!-- EDIT -->
+
+                      <!-- <button
+                        type="button"
+                        class="edit-btn"
+                        title="Edit Product"
+                        (click)="
+                          editProduct(
+                            product.productId
+                          )
+                        ">
+
+                        <mat-icon>
+                          edit
+                        </mat-icon>
+
+                      </button> -->
+
+
+                      <!-- DELETE -->
+
+                      <!-- <button
+                        type="button"
+                        class="delete-btn"
+                        title="Delete Product"
+                        (click)="
+                          deleteProduct(product)
+                        ">
+
+                        <mat-icon>
+                          delete
+                        </mat-icon>
+
+                      </button> -->
+
+                    </div>
+
+                  </td>
+
+                </tr>
+
+              }
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      }
+
+
+      <!-- ========================================= -->
+      <!-- NO RESULTS -->
+      <!-- ========================================= -->
+
+      @else {
+
+        <div class="no-results">
+
+          <div class="no-results-icon">
+
+            <mat-icon>
+              search_off
+            </mat-icon>
+
+          </div>
+
+          <h3>
+            No Products Found
+          </h3>
+
+          <p>
+            No products match your current search or filters.
+          </p>
+
+          <button
+            type="button"
+            class="reset-btn"
+            (click)="clearFilters()">
+
+            <mat-icon>
+              refresh
+            </mat-icon>
+
+            Reset Filters
+
+          </button>
+
+        </div>
+
+      }
+
+    </section>
+
+  }
+
+
+  <!-- ========================================= -->
+  <!-- PRODUCT DETAILS MODAL -->
+  <!-- ========================================= -->
+
+  @if (
+
+    showProductDetails &&
+
+    selectedProduct
+
+  ) {
+
+    <div
+      class="modal-overlay"
+      (click)="closeProductDetails()">
+
+
+      <div
+        class="product-details-modal"
+        (click)="$event.stopPropagation()">
+
+
+        <!-- HEADER -->
+
+        <div class="modal-header">
+
+          <div>
+
+            <span class="page-label">
+              PRODUCT PROFILE
+            </span>
+
+            <h2>
+              {{ selectedProduct.name }}
+            </h2>
+
+            <p>
+              View product information.
+            </p>
+
+          </div>
+
+
+          <button
+            type="button"
+            class="close-modal-btn"
+            (click)="closeProductDetails()">
+
+            <mat-icon>
+              close
+            </mat-icon>
+
+          </button>
+
+        </div>
+
+
+        <!-- PRODUCT TOP -->
+
+        <div class="product-profile">
+
+          <div class="large-product-icon">
+
+            <mat-icon>
+              inventory_2
+            </mat-icon>
+
+          </div>
+
+
+          <div>
+
+            <h3>
+              {{ selectedProduct.name }}
+            </h3>
+
+            <p>
+
+              {{
+                selectedProduct.description
+                || 'No description available.'
+              }}
+
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <!-- DETAILS -->
+
+        <div class="details-grid">
+
+
+          <div class="detail-card">
+
+            <span>
+              Product ID
+            </span>
+
+            <strong>
+              #{{ selectedProduct.productId }}
+            </strong>
+
+          </div>
+
+
+          <div class="detail-card">
+
+            <span>
+              Category
+            </span>
+
+            <strong>
+
+              {{
+                selectedProduct.category?.categoryName
+                || 'Not Assigned'
+              }}
+
+            </strong>
+
+          </div>
+
+
+          <div class="detail-card">
+
+            <span>
+              Supplier
+            </span>
+
+            <strong>
+
+              {{
+                selectedProduct.supplier?.name
+                || 'Not Assigned'
+              }}
+
+            </strong>
+
+          </div>
+
+
+          <div class="detail-card">
+
+            <span>
+              Price Per Product
+            </span>
+
+            <strong>
+
+              ₹{{
+                selectedProduct.pricePerProduct
+                | number:'1.2-2'
+              }}
+
+            </strong>
+
+          </div>
+
+
+          <div class="detail-card">
+
+            <span>
+              Available Quantity
+            </span>
+
+            <strong>
+
+              {{
+                selectedProduct.numberOfQuantities
+                || 0
+              }}
+
+              Units
+
+            </strong>
+
+          </div>
+
+
+          <div class="detail-card">
+
+            <span>
+              Status
+            </span>
+
+            <strong>
+
+              {{
+                selectedProduct.status
+                || 'Unknown'
+              }}
+
+            </strong>
+
+          </div>
+
+
+          <div class="detail-card">
+
+            <span>
+              Created Date
+            </span>
+
+            <strong>
+
+              {{
+                selectedProduct.createdDate
+                | date:'dd MMM yyyy'
+              }}
+
+            </strong>
+
+          </div>
+
+        </div>
+
+
+        <!-- FOOTER -->
+
+        <div class="modal-footer">
+
+          <!-- <button
+            type="button"
+            class="edit-product-btn"
+            (click)="
+              editProduct(
+                selectedProduct.productId
+              )
+            ">
+
+            <mat-icon>
+              edit
+            </mat-icon>
+
+            Edit Product
+
+          </button> -->
+
+
+          <button
+            type="button"
+            class="close-btn"
+            (click)="closeProductDetails()">
+
+            Close
+
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  }
+
+</div>

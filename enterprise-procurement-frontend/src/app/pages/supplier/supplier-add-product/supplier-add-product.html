@@ -1,0 +1,506 @@
+<div class="supplier-add-product-page">
+
+
+  <!-- PAGE HEADER -->
+
+  <div class="page-header">
+
+    <div>
+
+      <span class="page-label">
+        SUPPLIER PRODUCT MANAGEMENT
+      </span>
+
+      <h1>
+        Add Product
+      </h1>
+
+      <p>
+        Add a new product to your supplier catalog.
+      </p>
+
+    </div>
+
+
+    <button
+      type="button"
+      class="back-btn"
+      (click)="cancel()">
+
+      <mat-icon>
+        arrow_back
+      </mat-icon>
+
+      Back to Products
+
+    </button>
+
+  </div>
+
+
+
+  <!-- ================================================= -->
+  <!-- MAIN CARD -->
+  <!-- ================================================= -->
+
+  <section class="add-product-card">
+
+
+    <!-- ================================================= -->
+    <!-- FORM HEADER -->
+    <!-- ================================================= -->
+
+    <div class="form-header">
+
+      <div>
+
+        <span class="section-label">
+          PRODUCT INFORMATION
+        </span>
+
+        <h2>
+          New Product
+        </h2>
+
+        <p>
+          Enter the product details below.
+        </p>
+
+      </div>
+
+
+      <div class="product-header-icon">
+
+        <mat-icon>
+          inventory_2
+        </mat-icon>
+
+      </div>
+
+    </div>
+
+
+
+    <!-- ================================================= -->
+    <!-- FORM -->
+    <!-- ================================================= -->
+
+    <form
+      [formGroup]="productForm"
+      (ngSubmit)="addProduct()">
+
+
+      <!-- ================================================= -->
+      <!-- BASIC INFORMATION -->
+      <!-- ================================================= -->
+
+      <div class="form-section">
+
+        <div class="form-section-title">
+
+          <mat-icon>
+            info
+          </mat-icon>
+
+          <div>
+
+            <h3>
+              Basic Information
+            </h3>
+
+            <p>
+              Product name and description.
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div class="form-grid">
+
+
+          <!-- PRODUCT NAME -->
+
+          <div class="form-group full-width">
+
+            <label>
+              Product Name
+              <span>*</span>
+            </label>
+
+            <input
+              type="text"
+              formControlName="name"
+              placeholder="Enter product name">
+
+            @if (
+              isFieldInvalid('name')
+            ) {
+
+              <small class="error-text">
+
+                Product name is required.
+
+              </small>
+
+            }
+
+          </div>
+
+
+          <!-- DESCRIPTION -->
+
+          <div class="form-group full-width">
+
+            <label>
+              Description
+            </label>
+
+            <textarea
+              rows="4"
+              formControlName="description"
+              placeholder="Enter product description">
+            </textarea>
+
+          </div>
+
+
+        </div>
+
+      </div>
+
+
+
+      <!-- ================================================= -->
+      <!-- PRODUCT DETAILS -->
+      <!-- ================================================= -->
+
+      <div class="form-section">
+
+        <div class="form-section-title">
+
+          <mat-icon>
+            tune
+          </mat-icon>
+
+          <div>
+
+            <h3>
+              Product Details
+            </h3>
+
+            <p>
+              Configure pricing, stock and classification.
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div class="form-grid">
+
+
+          <!-- PRICE -->
+
+          <div class="form-group">
+
+            <label>
+              Price Per Product
+              <span>*</span>
+            </label>
+
+            <div class="input-with-prefix">
+
+              <span>
+                ₹
+              </span>
+
+              <input
+                type="number"
+                formControlName="pricePerProduct"
+                min="0.01"
+                step="0.01"
+                placeholder="0.00">
+
+            </div>
+
+
+            @if (
+              isFieldInvalid('pricePerProduct')
+            ) {
+
+              <small class="error-text">
+
+                Enter a valid price.
+
+              </small>
+
+            }
+
+          </div>
+
+
+
+          <!-- QUANTITY -->
+
+          <div class="form-group">
+
+            <label>
+              Available Quantity
+              <span>*</span>
+            </label>
+
+            <input
+              type="number"
+              formControlName="numberOfQuantities"
+              min="0"
+              placeholder="Enter quantity">
+
+
+            @if (
+              isFieldInvalid('numberOfQuantities')
+            ) {
+
+              <small class="error-text">
+
+                Quantity cannot be negative.
+
+              </small>
+
+            }
+
+          </div>
+
+          <div class="form-group">
+
+  <label>
+    Department
+    <span>*</span>
+  </label>
+
+  <select
+    formControlName="departmentId">
+
+    <option value="">
+      Select Department
+    </option>
+
+    @for (
+      department of departments;
+      track department.departmentId
+    ) {
+
+      <option
+        [value]="department.departmentId">
+
+        {{ department.departmentName }}
+
+      </option>
+
+    }
+
+  </select>
+
+  @if (
+    isFieldInvalid('departmentId')
+  ) {
+
+    <small class="error-text">
+
+      Please select a department.
+
+    </small>
+
+  }
+
+</div>
+
+
+          <!-- CATEGORY -->
+
+          <div class="form-group">
+
+            <label>
+              Category
+              <span>*</span>
+            </label>
+
+            <select
+              formControlName="categoryId">
+
+              <option value="">
+                Select Category
+              </option>
+
+              @for (
+                category of categories;
+                track category.categoryId
+              ) {
+
+                <option
+                  [value]="category.categoryId">
+
+                  {{ category.categoryName }}
+
+                </option>
+
+              }
+
+            </select>
+
+
+            @if (
+              isFieldInvalid('categoryId')
+            ) {
+
+              <small class="error-text">
+
+                Please select a category.
+
+              </small>
+
+            }
+
+          </div>
+
+
+
+          <!-- SUPPLIER -->
+
+          <div class="form-group">
+
+            <label>
+              Supplier
+            </label>
+
+            <div class="supplier-locked">
+
+              <mat-icon>
+                lock
+              </mat-icon>
+
+              <span>
+                Your Supplier Account
+              </span>
+
+            </div>
+
+            <small class="field-hint">
+              The product will automatically be assigned
+              to your supplier account.
+            </small>
+
+          </div>
+
+
+
+          <!-- STATUS -->
+
+          <div class="form-group">
+
+            <label>
+              Status
+              <span>*</span>
+            </label>
+
+            <select
+              formControlName="status">
+
+              <option value="ACTIVE">
+                Active
+              </option>
+
+              <option value="INACTIVE">
+                Inactive
+              </option>
+
+            </select>
+
+          </div>
+
+
+        </div>
+
+      </div>
+
+
+
+      <!-- ================================================= -->
+      <!-- FORM FOOTER -->
+      <!-- ================================================= -->
+
+      <div class="form-footer">
+
+
+        <div class="required-note">
+
+          <span>*</span>
+
+          Required fields
+
+        </div>
+
+
+        <div class="footer-actions">
+
+
+          <!-- CANCEL -->
+
+          <button
+            type="button"
+            class="cancel-btn"
+            [disabled]="saving"
+            (click)="cancel()">
+
+            <mat-icon>
+              close
+            </mat-icon>
+
+            Cancel
+
+          </button>
+
+
+
+          <!-- SAVE -->
+
+          <button
+            type="submit"
+            class="save-btn"
+            [disabled]="saving || productForm.invalid">
+
+            @if (saving) {
+
+              <mat-icon>
+                sync
+              </mat-icon>
+
+              Saving...
+
+            }
+
+            @else {
+
+              <mat-icon>
+                add
+              </mat-icon>
+
+              Add Product
+
+            }
+
+          </button>
+
+
+        </div>
+
+      </div>
+
+
+    </form>
+
+  </section>
+
+</div>

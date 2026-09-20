@@ -1,0 +1,591 @@
+<div class="profile-page">
+
+  <!-- PAGE HEADER -->
+
+  <div class="page-header">
+
+    <div class="header-left">
+
+      <div class="header-icon">
+        <mat-icon>person</mat-icon>
+      </div>
+
+      <div>
+
+        <h1>My Profile</h1>
+
+        <p>
+          View and manage your supplier profile
+        </p>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!--   LOADING-->
+
+  <div
+    class="loading-container"
+    *ngIf="loading">
+
+    <mat-icon class="loading-icon">
+      sync
+    </mat-icon>
+
+    <p>
+      Loading profile...
+    </p>
+
+  </div>
+
+
+  <!--  PROFILE -->
+
+  <div
+    class="profile-container"
+    *ngIf="!loading && supplier">
+
+
+    <!--  PROFILE HEADER CARD-->
+
+    <div class="profile-header-card">
+
+      <div class="profile-main">
+
+        <div class="profile-avatar">
+
+          <mat-icon>
+            business
+          </mat-icon>
+
+        </div>
+
+
+        <div class="profile-title">
+
+          <h2>
+            {{ supplier.name }}
+          </h2>
+
+          <p>
+            Supplier ID: #{{ supplier.supplierId }}
+          </p>
+
+          <span
+            class="status-badge"
+            [ngClass]="getStatusClass()">
+
+            <span class="status-dot"></span>
+
+            {{ supplier.status }}
+
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <!-- EDIT BUTTON -->
+
+      <div class="profile-actions">
+
+        <button
+          mat-raised-button
+          class="edit-btn"
+          *ngIf="!editing"
+          (click)="editProfile()">
+
+          <mat-icon>
+            edit
+          </mat-icon>
+
+          Edit Profile
+
+        </button>
+
+
+        <div
+          class="edit-actions"
+          *ngIf="editing">
+
+          <button
+            mat-button
+            class="cancel-btn"
+            (click)="cancelEdit()">
+
+            Cancel
+
+          </button>
+
+          <button
+            mat-raised-button
+            class="save-btn"
+            (click)="updateProfile()">
+
+            <mat-icon>
+              save
+            </mat-icon>
+
+            Save Changes
+
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!--  CONTACT INFORMATION -->
+
+    <div class="profile-card">
+
+      <div class="card-title">
+
+        <div class="title-icon contact-icon">
+
+          <mat-icon>
+            contact_phone
+          </mat-icon>
+
+        </div>
+
+        <div>
+
+          <h2>
+            Contact Information
+          </h2>
+
+          <p>
+            Your primary contact details
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <div class="details-grid">
+
+
+        <!-- NAME -->
+
+        <div class="detail-item">
+
+          <label>
+            Supplier Name
+          </label>
+
+          <div
+            class="edit-field"
+            *ngIf="editing">
+
+            <input
+              type="text"
+              [(ngModel)]="supplier.name"
+            />
+
+          </div>
+
+          <div
+            class="detail-value"
+            *ngIf="!editing">
+
+            <mat-icon>
+              business
+            </mat-icon>
+
+            <span>
+              {{ supplier.name || 'N/A' }}
+            </span>
+
+          </div>
+
+        </div>
+
+
+        <!-- EMAIL -->
+
+        <div class="detail-item">
+
+          <label>
+            Email Address
+          </label>
+
+          <div
+            class="edit-field"
+            *ngIf="editing">
+
+            <input
+              type="email"
+              [(ngModel)]="supplier.email"
+            />
+
+          </div>
+
+          <div
+            class="detail-value"
+            *ngIf="!editing">
+
+            <mat-icon>
+              email
+            </mat-icon>
+
+            <span>
+              {{ supplier.email || 'N/A' }}
+            </span>
+
+          </div>
+
+        </div>
+
+
+        <!-- PHONE -->
+
+        <div class="detail-item">
+
+          <label>
+            Phone Number
+          </label>
+
+          <div
+            class="edit-field"
+            *ngIf="editing">
+
+            <input
+              type="text"
+              [(ngModel)]="supplier.phone"
+            />
+
+          </div>
+
+          <div
+            class="detail-value"
+            *ngIf="!editing">
+
+            <mat-icon>
+              phone
+            </mat-icon>
+
+            <span>
+              {{ supplier.phone || 'N/A' }}
+            </span>
+
+          </div>
+
+        </div>
+
+
+        <!-- ADDRESS -->
+
+        <div class="detail-item full-width">
+
+          <label>
+            Address
+          </label>
+
+          <div
+            class="edit-field"
+            *ngIf="editing">
+
+            <input
+              type="text"
+              [(ngModel)]="supplier.address"
+            />
+
+          </div>
+
+          <div
+            class="detail-value"
+            *ngIf="!editing">
+
+            <mat-icon>
+              location_on
+            </mat-icon>
+
+            <span>
+              {{ supplier.address || 'N/A' }}
+            </span>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- BUSINESS INFORMATION -->
+
+    <div class="profile-card">
+
+      <div class="card-title">
+
+        <div class="title-icon business-icon">
+
+          <mat-icon>
+            business_center
+          </mat-icon>
+
+        </div>
+
+        <div>
+
+          <h2>
+            Business Information
+          </h2>
+
+          <p>
+            Registered supplier information
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <div class="details-grid">
+
+
+        <!-- SUPPLIER ID -->
+
+        <div class="detail-item">
+
+          <label>
+            Supplier ID
+          </label>
+
+          <div class="detail-value">
+
+            <mat-icon>
+              badge
+            </mat-icon>
+
+            <span>
+              #{{ supplier.supplierId }}
+            </span>
+
+          </div>
+
+        </div>
+
+
+        <!-- GST -->
+
+        <div class="detail-item">
+
+          <label>
+            GST Number
+          </label>
+
+          <div
+            class="edit-field"
+            *ngIf="editing">
+
+            <input
+              type="text"
+              [(ngModel)]="supplier.gstNumber"
+            />
+
+          </div>
+
+          <div
+            class="detail-value"
+            *ngIf="!editing">
+
+            <mat-icon>
+              receipt_long
+            </mat-icon>
+
+            <span>
+              {{ supplier.gstNumber || 'N/A' }}
+            </span>
+
+          </div>
+
+        </div>
+
+
+        <!-- STATUS -->
+
+        <div class="detail-item">
+
+          <label>
+            Account Status
+          </label>
+
+          <div class="detail-value">
+
+            <mat-icon>
+              verified
+            </mat-icon>
+
+            <span
+              class="status-text"
+              [ngClass]="getStatusClass()">
+
+              {{ supplier.status }}
+
+            </span>
+
+          </div>
+
+        </div>
+
+
+        <!-- ACCOUNT -->
+
+        <div class="detail-item">
+
+          <label>
+            Account Number
+          </label>
+
+          <div
+            class="edit-field"
+            *ngIf="editing">
+
+            <input
+              type="text"
+              [(ngModel)]="supplier.accountNo"
+            />
+
+          </div>
+
+          <div
+            class="detail-value"
+            *ngIf="!editing">
+
+            <mat-icon>
+              account_balance
+            </mat-icon>
+
+            <span>
+              {{ formatAccountNumber(supplier.accountNo) }}
+            </span>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- PERFORMANCE CARD -->
+
+    <div class="performance-grid">
+
+
+      <!-- RATING -->
+
+      <div class="performance-card rating-card">
+
+        <div class="performance-icon">
+
+          <mat-icon>
+            star
+          </mat-icon>
+
+        </div>
+
+        <div class="performance-content">
+
+          <span>
+            Supplier Rating
+          </span>
+
+          <div class="rating-value">
+
+            <strong>
+              {{ supplierAverageRating | number:'1.1-1' }}
+            </strong>
+
+            <span>
+              / 5
+            </span>
+
+          </div>
+
+
+          <div class="stars">
+
+            <mat-icon
+              *ngFor="let star of getRatingStars()">
+
+              {{ star ? 'star' : 'star_border' }}
+
+            </mat-icon>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- FEEDBACK -->
+
+      <div class="performance-card feedback-card">
+
+        <div class="performance-icon">
+
+          <mat-icon>
+            comment
+          </mat-icon>
+
+        </div>
+
+        <div class="performance-content">
+
+          <span>
+            Latest Feedback
+          </span>
+
+          <p>
+            {{ supplier.feedback || 'No feedback available.' }}
+          </p>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+  </div>
+
+
+  <!-- EMPTY -->
+
+  <div
+    class="empty-state"
+    *ngIf="!loading && !supplier">
+
+    <div class="empty-icon">
+
+      <mat-icon>
+        person_off
+      </mat-icon>
+
+    </div>
+
+    <h3>
+      Profile Not Found
+    </h3>
+
+    <p>
+      Unable to load supplier profile information.
+    </p>
+
+  </div>
+
+</div>
+

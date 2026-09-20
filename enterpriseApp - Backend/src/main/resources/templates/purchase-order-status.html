@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+
+    <title>Purchase Order Status Update</title>
+
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #f4f6f8;
+            margin: 0;
+            padding: 30px;
+        }
+
+        .container {
+            max-width: 650px;
+            margin: auto;
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .header h2 {
+            margin: 0;
+        }
+
+        .status-box {
+            text-align: center;
+            padding: 15px;
+            margin: 25px 0;
+            background-color: #e8f4ff;
+            border-radius: 6px;
+        }
+
+        .status {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th,
+        td {
+            padding: 12px;
+            border: 1px solid #dddddd;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f1f1f1;
+            width: 40%;
+        }
+
+        .footer {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 13px;
+            color: #777777;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="header">
+        <h2>Purchase Order Status Update</h2>
+    </div>
+
+    <p>
+        Dear <strong>{{RECIPIENT_NAME}}</strong>,
+    </p>
+
+    <p>
+        The status of your Purchase Order has been updated.
+    </p>
+
+    <div class="status-box">
+
+        <div>
+            Current Order Status
+        </div>
+
+        <div class="status">
+            {{STATUS}}
+        </div>
+
+    </div>
+
+    <table>
+
+        <tr>
+            <th>Purchase Order ID</th>
+            <td>{{PURCHASE_ORDER_ID}}</td>
+        </tr>
+
+        <tr>
+            <th>Product</th>
+            <td>{{PRODUCT_NAME}}</td>
+        </tr>
+
+        <tr>
+            <th>Quantity</th>
+            <td>{{QUANTITY}}</td>
+        </tr>
+
+        <tr>
+            <th>Status</th>
+            <td>{{STATUS}}</td>
+        </tr>
+
+    </table>
+
+    <p style="margin-top: 25px;">
+        We will continue to keep you updated as the order progresses.
+    </p>
+
+    <p>
+        Thank you for using the Enterprise Procurement System.
+    </p>
+
+    <div class="footer">
+        Enterprise Procurement System
+    </div>
+
+</div>
+
+</body>
+</html>
